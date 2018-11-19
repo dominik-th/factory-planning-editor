@@ -14,6 +14,7 @@ library.add(faTable)
 
 window.$ = require('jquery')
 window.joint = require('jointjs')
+window.svgPanZoom = require('svg-pan-zoom')
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(BootstrapVue)
