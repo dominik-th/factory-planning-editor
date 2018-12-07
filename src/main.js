@@ -3,6 +3,7 @@ import BootstrapVue from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUpload, faSave, faTable } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { store } from './store/store';
 import App from './App.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -21,5 +22,6 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
 new Vue({
+  store,
   render: h => h(App)
 }).$mount('#app')

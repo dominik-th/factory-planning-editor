@@ -1,129 +1,218 @@
 <template>
-  <div class="container-modelling-canvas myholder" id="myholder"></div>
+  <div class="container-modelling-canvas" id="container-modelling-canvas"></div>
 </template>
 
 <script>
 
 export default {
   name: 'ModelingCanvas',
+  computed: {
+    modules() {
+      return JSON.stringify(this.$store.getters.planningModules)
+    }
+  },
   mounted() {
-
-    let { joint, $ } = window;
-
-    let graph = new joint.dia.Graph;
-    var paper = new joint.dia.Paper({
-        el: document.getElementById('myholder'),
-        model: graph,
-        width: '100%',
-        gridSize: 10,
-        drawGrid: true,
-                    background: {
-                color: 'rgba(0, 255, 0, 0.3)'
-            }
+    this.$root.$on('addModule', data => {
+        console.log(data);
     });
 
-// let dragStartPosition = false
+    let { joint, $ } = window;
+    let gridsize = 10
 
-// paper.on('blank:pointerdown',
-//     function(event, x, y) {
-//         dragStartPosition = { x: x, y: y};
-//     }
-// );
+// https://codepen.io/fxaeberard/pen/reGvjm
 
-// paper.on('cell:pointerup blank:pointerup', function() {
-//     dragStartPosition = false;
-// });
+    let graph = new joint.dia.Graph;
+    let paper = new joint.dia.Paper({
+      el: document.getElementById('container-modelling-canvas'),
+      model: graph,
+      width: '100%',
+      height: '100%',
+      gridSize: 10,
+      drawGrid: true,
+      background: {
+        color: 'rgba(0, 255, 0, 0.3)'
+      }
+    });
 
-// $("#myholder")
-//     .mousemove(function(event) {
-//         if (dragStartPosition)
-//             paper.translate(
-//                 event.offsetX - dragStartPosition.x,
-//                 event.offsetY - dragStartPosition.y);
-//     });
-
-
-
-
-// paper.on('blank:mousewheel',
-//     function(event, x, y, delta) {
-//         paper.scale(paper.scale().sx + (delta * .1), paper.scale().sy + (delta * .1));
-//     }
-// );
-
-
-
-let gridsize = 10
-let targetElement = $("#myholder")[0];
-var currentScale = 1;
-var panAndZoom = window.svgPanZoom(targetElement.childNodes[2],
-{
-    viewportSelector: targetElement.childNodes[0].childNodes[0],
-    fit: false,
-    zoomScaleSensitivity: 0.4,
-    panEnabled: false,
-    onZoom: function(scale){
+    let targetElement = $("#container-modelling-canvas")[0];
+    let currentScale = 1;
+    let panAndZoom = window.svgPanZoom(targetElement.childNodes[2], {
+      viewportSelector: targetElement.childNodes[0].childNodes[0],
+      fit: false,
+      zoomScaleSensitivity: 1,
+      maxZoom: 3,
+      minZoom: 0.1,
+      dblClickZoomEnabled: false,
+      panEnabled: true,
+      onZoom: function(scale){
         currentScale = scale;
         setGrid(paper, 10*15*currentScale, '#808080');
-    },
-    beforePan: function(oldpan, newpan){
+      },
+      beforePan: function(oldpan, newpan){
         setGrid(paper, 10*15*currentScale, '#808080', newpan);
+      }
+    });
+
+    if (localStorage.getItem('graph')) {
+      graph.fromJSON(JSON.parse(localStorage.getItem('graph')));
     }
-});
 
-paper.on('blank:pointerdown', function () {
-    panAndZoom.enablePan();
-});
-
-paper.on('cell:pointerup blank:pointerup', function() {
-  panAndZoom.disablePan();
-});
-
-function setGrid(paper, size, color, offset) {
-    // Set grid size on the JointJS paper object (joint.dia.Paper instance)
-    paper.options.gridsize = gridsize;
-    // Draw a grid into the HTML 5 canvas and convert it to a data URI image
-    var canvas = $('<canvas/>', { width: size, height: size });
-    canvas[0].width = size;
-    canvas[0].height = size;
-    var context = canvas[0].getContext('2d');
-    context.beginPath();
-    context.rect(1, 1, 1, 1);
-    context.fillStyle = color || '#AAAAAA';
-    context.fill();
-    // Finally, set the grid background image of the paper container element.
-    var gridBackgroundImage = canvas[0].toDataURL('image/png');
-    $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
-    if(typeof(offset) != 'undefined'){
-        $(paper.el.childNodes[0]).css('background-position', offset.x + 'px ' + offset.y + 'px');
+    if (localStorage.getItem('window')) {
+      let windowProperties = JSON.parse(localStorage.getItem('window'));
+      // console.log(paper)
+      // panAndZoom.enablePan();
+      setGrid(paper, windowProperties.size, '#808080', windowProperties.offset)
     }
+
+    graph.on('add', function() {
+      console.log('xx')
+      console.log(graph.toJSON())
+      localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
+    })
+    var that = this;
+    paper.on('blank:pointerdown', function () {
+    // console.log(that.$store.getters.planningModules[0].id)
+      panAndZoom.enablePan();
+    });
+
+    paper.on('cell:pointerup blank:pointerup', function() {
+      panAndZoom.disablePan();
+    });
+let lastEle = null;
+// Single port definition
+var port = {
+    // id: 'abc', // generated if `id` value is not present
+    group: 'a',
+    args: {}, // extra arguments for the port layout function, see `layout.Port` section
+    label: {
+        position: {
+            name: 'right',
+            args: { y: 6 } // extra arguments for the label layout function, see `layout.PortLabel` section
+        },
+        markup: '<text class="label-text" fill="blue"/>'
+    },
+    attrs: { text: { text: 'port1' } },
+    markup: '<rect width="16" height="16" x="-8" strokegit ="red" fill="red"/>'
+};
+    paper.on('blank:pointerclick', function(evt, x, y) {
+      let rect = new joint.shapes.standard.Rectangle({
+          position: { x, y},
+          size: { width: 90, height: 90 },
+          ports: {
+              groups: {
+                  'a': {}
+              },
+              items: [port]
+          }
+      });
+      // rect.position(x, y);
+      // rect.resize(100, 100);
+      // rect.attr({
+      //     body: {
+      //         fill: 'green'
+      //     },
+      //     label: {
+      //         text: 'x' + Math.random(),
+      //         fill: 'white'
+      //     }
+      // });
+      rect.addTo(graph);
+      // let a = rect.addPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+      // console.log(a)
+      console.log(rect)
+
+
+if (lastEle !== null) {
+  console.log(lastEle.id)
+  // console.log(rect.id)
+  // var link = new joint.shapes.standard.Link({
+  //     source: { id: lastEle.id },
+  //     target: { id: rect.id },
+  //     router: { name: 'manhattan' },
+  //     connector: { name: 'rounded' },
+  //     attrs: {
+  //         line: {
+  //             stroke: '#333333',
+  //             strokeWidth: 3
+  //         }
+  //     }
+  // });
+  // link.addTo(graph)
 }
 
 
 
-    var rect = new joint.shapes.standard.Rectangle();
-    rect.position(100, 30);
-    rect.resize(100, 40);
-    rect.attr({
-        body: {
-            fill: 'blue'
-        },
-        label: {
-            text: 'Hello2',
-            fill: 'white'
-        }
+
+      lastEle = rect;
     });
-    rect.addTo(graph);
 
-    var rect2 = rect.clone();
-    rect2.translate(300, 0);
-    rect2.attr('label/text', 'World!');
-    rect2.addTo(graph);
+    let clickEle = null;
+    paper.on('element:pointerclick', function(evt, x, y) {
+      function link(source, target, label, vertices) {
+          console.log(source.id)
+          console.log(target)
+          var cell = new joint.shapes.standard.Link({
+              source: { id: source.id },
+              target: { id: target.id },
+              labels: [{ position: .5, attrs: { text: { text: label || '', 'font-weight': 'bold' } } }],
+              vertices: vertices || [],
+              router: { name: 'manhattan' },
+              connector: { name: 'rounded' }
+          });
+          graph.addCell(cell);
+          return cell;
+      }
 
-    var link = new joint.shapes.standard.Link();
-    link.source(rect);
-    link.target(rect2);
-    link.addTo(graph);
+      // lastEle.attr({
+      //     body: {
+      //         fill: 'red'
+      //     },
+      //     label: {
+      //         text: 'x' + Math.random(),
+      //         fill: 'white'
+      //     }
+      // });
+      // evt.model.attr('label/text', 'World!');
+      // console.log(evt)
+      // console.log(x)
+      // console.log(y)
+      if (!clickEle) {
+        console.log('set click ele')
+        clickEle = evt.model
+      } else {
+        console.log('link both')
+        console.log(graph.toJSON())
+        link(clickEle, evt.model, '');
+        clickEle = null;
+      }
+    });
+
+    function setGrid(paper, size, color, offset) {
+      localStorage.setItem('window', JSON.stringify({
+        size,
+        offset
+      }));
+      console.log(size)
+      console.log(offset)
+      // Set grid size on the JointJS paper object (joint.dia.Paper instance)
+      paper.options.gridsize = gridsize;
+      // Draw a grid into the HTML 5 canvas and convert it to a data URI image
+      let canvas = $('<canvas/>', { width: size, height: size });
+      canvas[0].width = size;
+      canvas[0].height = size;
+      let context = canvas[0].getContext('2d');
+      context.beginPath();
+      context.rect(1, 1, 1, 1);
+      context.fillStyle = color || '#AAAAAA';
+      context.fill();
+      // Finally, set the grid background image of the paper container element.
+      let gridBackgroundImage = canvas[0].toDataURL('image/png');
+      $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
+      if(typeof(offset) != 'undefined'){
+        $(paper.el.childNodes[0]).css('background-position', offset.x + 'px ' + offset.y + 'px');
+      }
+    }
+
 
   }
 }
