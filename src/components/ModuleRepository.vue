@@ -20,13 +20,18 @@
         <button type="button" class="btn btn-secondary" v-on:click="removeSelectedModule"><i class="fas fa-minus"></i></button>
       </div>
     </div>
+    <b-btn v-b-modal="'myModal'">Launch demo modal</b-btn>
+    <ModuleEditModal />
   </div>
 </template>
 
 <script>
-
+import ModuleEditModal from './ModuleEditModal.vue'
 export default {
   name: 'ModelRepository',
+  components: {
+    ModuleEditModal
+  },
   computed: {
     modules() {
       if (this.filter) {

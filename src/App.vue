@@ -6,6 +6,7 @@
       <ModelingCanvas />
       <ModuleAttributes />
     </div>
+    <!-- <ModuleEditModal /> -->
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import NavBar from './components/NavBar.vue'
 import ModuleRepository from './components/ModuleRepository.vue'
 import ModuleAttributes from './components/ModuleAttributes.vue'
 import ModelingCanvas from './components/ModelingCanvas.vue'
+import ModuleEditModal from './components/ModuleEditModal.vue'
 
 export default {
   name: 'app',
@@ -23,7 +25,8 @@ export default {
     NavBar,
     ModelingCanvas,
     ModuleRepository,
-    ModuleAttributes
+    ModuleAttributes,
+    ModuleEditModal
   },
   created() {
     if (localStorage.getItem('graph')) {
