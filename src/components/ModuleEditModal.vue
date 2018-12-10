@@ -1,23 +1,240 @@
 <template>
   <div>
-    <b-modal id="myModal" title="Bootstrap-Vue">
-      <p class="my-4">{{ $t("message.hello") }}</p>
+    <b-modal
+      id="myModal"
+      size="lg"
+      ref="myModalRef"
+      :title="title"
+      :ok-title="$t('generic.save')"
+      :cancel-title="$t('generic.cancel')"
+      @ok="save"
+    >
+      <div>
+        <div class="modal-body module-edit-wrapper">
+          <div class="information-picker-wrapper">
+            <InformationPicker
+              :placeholder="$t('modal.information_picker_in')"
+              :pool="informationPool"
+              :blacklist="informationBlacklist"
+              @add-information="addInputInformation"
+              @create-information="createInputInformation"
+            />
+            <div class="information-list">
+              <b-list-group>
+                <b-list-group-item
+                  class="d-flex justify-content-between align-items-center"
+                  v-for="informationId in module.inputInformation"
+                  :key="informationId"
+                >
+                  {{ $store.getters.informationTypes[informationId].name }}
+                  <font-awesome-icon
+                    class="text-danger"
+                    icon="trash-alt"
+                    @click="removeInformation('in', informationId)"
+                  />
+                </b-list-group-item>
+              </b-list-group>
+            </div>
+          </div>
+          <div class="module-edit-name">
+            <div class="repository-component">
+              <div class="component-title">
+                <b-form-input v-model="module.name"
+                  size="sm"
+                  type="text"
+                  :placeholder="$t('modal.module_placeholder')" />
+              </div>
+              <div class="component-info">
+                {{ $tc('modal.in_information', module.inputInformation.length) }} / {{ $tc('modal.out_information', module.outputInformation.length) }}
+              </div>
+            </div>
+          </div>
+          <div class="information-picker-wrapper">
+            <InformationPicker
+              :placeholder="$t('modal.information_picker_in')"
+              :pool="informationPool"
+              :blacklist="informationBlacklist"
+              @add-information="addOutputInformation"
+              @create-information="createOutputInformation"
+            />
+            <div class="information-list">
+              <b-list-group>
+                <b-list-group-item
+                  class="d-flex justify-content-between align-items-center"
+                  v-for="informationId in module.outputInformation"
+                  :key="informationId"
+                >
+                  {{ $store.getters.informationTypes[informationId].name }}
+                  <font-awesome-icon
+                    class="text-danger"
+                    icon="trash-alt"
+                    @click="removeInformation('out', informationId)"
+                  />
+                </b-list-group-item>
+              </b-list-group>
+            </div>
+          </div>
+        </div>
+      </div>
     </b-modal>
-    <!-- <b-btn v-b-modal.modal1>Launch demo modal</b-btn> -->
   </div>
 </template>
 
 <script>
+import InformationPicker from './InformationPicker.vue'
 export default {
   name: 'ModuleEditModal',
-  props: {
+  components: {
+    InformationPicker
+  },
+  data() {
+    return {
+      moduleId: null,
+      module: {
+        inputInformation: [],
+        outputInformation: [],
+        name: null,
+        abbreviation: null
+      }
+    }
+  },
+  computed: {
+    title() {
+      return this.moduleId ? this.$t('modal.edit_module') : this.$t('modal.create_module')
+    },
+    informationBlacklist() {
+      return this.module.inputInformation
+        .concat(this.module.outputInformation)
+        .map(id => this.$store.getters.informationTypes[id].name);
+    },
+    informationPool() {
+      let informationPool = [];
+      for (let id in this.$store.getters.informationTypes) {
+        if (this.module.inputInformation.indexOf(parseInt(id)) < 0 &&
+            this.module.outputInformation.indexOf(parseInt(id)) < 0) {
+          informationPool.push({
+            id: parseInt(id),
+            ...this.$store.getters.informationTypes[id]
+          });
+        }
+      }
+      return informationPool;
+    },
   },
   mounted() {
-    console.log(this.$t("message.hello"))
+    this.$root.$on('modal.editModule', (moduleId) => {
+      console.log('edit module')
+      this.moduleId = moduleId;
+      // todo: fetch module information
+      this.module = JSON.parse(JSON.stringify(this.$store.getters.planningModuleById(moduleId)));
+      this.$refs.myModalRef.show();
+    });
+    this.$root.$on('modal.createModule', () => {
+      this.moduleId = null;
+      this.module = {
+        inputInformation: [],
+        outputInformation: [],
+        name: null,
+        abbreviation: null
+      }
+      this.$refs.myModalRef.show();
+    });
+  },
+  beforeDestroy() {
+    this.$root.$off('modal.editModule');
+    this.$root.$off('modal.createModule');
+  },
+  methods: {
+    save: function(evt) {
+      // todo: form validation
+      if (this.moduleId) {
+        // update existing module
+        this.$store.commit('EDIT_PLANNING_MODULE', this.module);
+      } else {
+        // create a new module
+        this.$store.commit('ADD_PLANNING_MODULE', this.module);
+      }
+    },
+    addInputInformation: function(id) {
+      this.module.inputInformation.push(id);
+    },
+    createInputInformation: async function(name) {
+      this.module.inputInformation.push(await this.$store.dispatch('addInformation', name));
+    },
+    addOutputInformation: function(id) {
+      this.module.outputInformation.push(id);
+    },
+    createOutputInformation: async function(name) {
+      this.module.outputInformation.push(await this.$store.dispatch('addInformation', name));
+    },
+    removeInformation: function(type, id) {
+
+      if (type === 'in') {
+        this.module.inputInformation = this.module.inputInformation.filter(module => module !== id)
+      } else if (type === 'out') {
+        this.module.outputInformation = this.module.outputInformation.filter(module => module !== id)
+      }
+    }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.repository-component {
+  border: 1px solid #999;
+  border-radius: 1rem;
+  text-align: center;
+  min-height: 5rem;
+  vertical-align: middle;
+  margin: 1.25rem .5rem 1.25rem .5rem;
+
+}
+.information-trash {
+  color: red;
+}
+.information-picker-wrapper {
+  flex: 3;
+}
+.component-title {
+  font-weight: bold;
+}
+.component-info {
+  font-size: .7rem;
+}
+.module-edit-wrapper {
+  display: flex;
+  max-height: 70vh;
+}
+.module-edit-information-in {
+  flex: 1;
+}
+.information-picker {
+  padding: 1.25em 0em .2em 0em;
+}
+.information-list {
+  /*max-height: 50vh;*/
+  height: 200px;
+  overflow-y: auto;
+}
+.information-list > .list-group > .list-group-item {
+  padding-top: .50rem;
+  padding-bottom: .50rem;
+}
+.information-list i {
+  color: red;
+}
+.module-edit-name {
+  align-self: center;
+  flex: 2;
+}
+.module-edit-name > .repository-component > .component-title {
+  margin: .5em 1em .2em 1em;
+  text-align: center;
+}
+.component-title input {
+  text-align: center;
+}
+.module-edit-information-out {
+  flex: 3;
+}
 </style>

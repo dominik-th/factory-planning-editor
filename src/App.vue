@@ -44,6 +44,12 @@ export default {
 </script>
 
 <style>
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+    max-width:1200px;
+  }
+}
 body {
   height: 100vh;
 }

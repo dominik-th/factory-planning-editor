@@ -6,21 +6,20 @@
     <div class="repository-components">
       <div class="repository-component" v-for="item in modules" v-on:click="selectModule(item.id)" v-bind:class="{'selected': item.id === selected}">
         <div class="component-title">
-          {{ item.name }}<br/>{{ item.id }}
+          {{ item.name }}
         </div>
         <div class="component-info">
-          6 Eingabe- / 8 Ausgabeinformationen
+          {{ $tc('modal.in_information', item.inputInformation.length) }} / {{ $tc('modal.out_information', item.outputInformation.length) }}
         </div>
       </div>
     </div>
     <div class="repository-actions">
       <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary" v-on:click="addModule"><i class="fas fa-plus"></i></button>
-        <button type="button" class="btn btn-secondary action-component-edit"><i class="fas fa-pen"></i> Edit</button>
-        <button type="button" class="btn btn-secondary" v-on:click="removeSelectedModule"><i class="fas fa-minus"></i></button>
+        <button type="button" class="btn btn-secondary" v-on:click="addModule"><font-awesome-icon icon="plus" /></button>
+        <button type="button" class="btn btn-secondary action-component-edit" @click="editSelectedModule"><font-awesome-icon icon="pen" /> {{ $t('generic.edit') }}</button>
+        <button type="button" class="btn btn-secondary" v-on:click="removeSelectedModule"><font-awesome-icon icon="minus" /></button>
       </div>
     </div>
-    <b-btn v-b-modal="'myModal'">Launch demo modal</b-btn>
     <ModuleEditModal />
   </div>
 </template>
@@ -46,17 +45,14 @@ export default {
   data() {
     return {
       selected: null,
+      modal: null,
       filter: ''
     }
   },
   methods: {
     addModule: function(evt) {
-      let randomNames  = ['Zielplanung', 'Brandschutzplanung', 'Testplanung', 'Planung 9001']
-      this.$store.commit('ADD_PLANNING_MODULE', {
-        id: Math.random(),
-        name: randomNames[Math.floor(Math.random() * randomNames.length)]
-      });
       this.$root.$emit('addModule', 'payload');
+      this.$root.$emit('modal.createModule');
     },
     selectModule: function(evt) {
       this.selected = evt
@@ -66,19 +62,24 @@ export default {
         this.$store.commit('REMOVE_PLANNING_MODULE', this.selected);
         this.selected = null;
       }
+    },
+    editSelectedModule: function(evt,a,b) {
+      if (this.selected) {
+        this.$root.$emit('modal.editModule', this.selected);
+      } else {
+        // todo: err, no module selected
+      }
     }
   }
 }
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container-repository {
   flex-direction: column;
   display: flex;
   align-items: stretch;
-  /*background-color: red;*/
   width: 240px;
   border-right: 1px solid rgba(68, 68, 68, 0.25);
 }
@@ -86,7 +87,7 @@ export default {
   flex: 1;
   border-top: 1px solid rgba(68, 68, 68, 0.25);
   border-bottom: 1px solid rgba(68, 68, 68, 0.25);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .repository-actions > div {
   display: flex;
@@ -107,7 +108,9 @@ export default {
   margin: 1.25rem .5rem 1.25rem .5rem;
 }
 .repository-component.selected {
-  background-color: rgba(0, 255, 0, .2);
+  box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+  border-color: #28a745;
+  background-color: rgba(0, 255, 0, .1);
 }
 .component-title {
   font-weight: bold;

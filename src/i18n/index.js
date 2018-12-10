@@ -1,12 +1,7 @@
-module.exports = {
-  'en-US': {
-    message: {
-      hello: 'hello world'
-    }
-  },
-  'de-DE': {
-    message: {
-      hello: 'こんにちは、世界'
-    }
-  }
+import enUS from './en-US';
+import deDE from './de-DE';
+
+export default {
+  'en-US': enUS,
+  'de-DE': deDE
 }
