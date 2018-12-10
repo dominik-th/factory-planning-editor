@@ -6,9 +6,9 @@
         size="sm"
       >
         <b-form-input
-          :placeholder="placeholder"
           v-model="query"
-          :state="!isBlacklisted"
+          :placeholder="placeholder"
+          @keyup.enter.native="submit(query)"
           @focus.native="focus = true"
           @blur.native="focus = false"
         />
@@ -31,9 +31,13 @@
           <b-btn
             size="sm"
             :variant="isBlacklisted ? 'danger' : 'success'"
-            @click="isBlacklisted ? null : $emit('create-information', query)"
+            @click="submit(query)"
           >
-            Add
+            <font-awesome-icon
+              icon="plus"
+              class="information-picker-add-icon"
+              :class="{ tilted: isBlacklisted }"
+            />
           </b-btn>
         </b-input-group-append>
       </b-input-group>
@@ -67,13 +71,14 @@ export default {
   },
   computed: {
     filteredInformation() {
-      // todo: better search
+      // todo: better search with fuse
       if (this.query.length === 0) return [];
       return this.pool.filter((ele) => {
         return ele.name.toLowerCase().indexOf(this.query.trim().toLowerCase()) >= 0
       });
     },
     isBlacklisted() {
+      // check if current query is in the (via props given) blacklist
       return this.blacklist.findIndex((ele) => {
         return ele.toLowerCase() === this.query.trim().toLowerCase();
       }) >= 0;
@@ -83,6 +88,33 @@ export default {
     this.$on('create-information', function() {
       this.query = '';
     });
+  },
+  methods: {
+    clear: function() {
+      this.query = '';
+      this.focus = false;
+      this.hover = false;
+    },
+    submit: async function() {
+      // block any empty strings / null values
+      if (!this.query.length) {
+        return this.$notify({
+          type: 'warn',
+          text: this.$t('warning.empty_information_type')
+        });
+      }
+      // ignore any submission with blacklistet information
+      if (!this.isBlacklisted) {
+        // search if the query is identical to one of the information in pool
+        for (let information of this.pool) {
+          if (information.name.toLowerCase() === this.query) {
+            return this.$emit('add-information', information.id);
+          }
+        }
+        // otherwise create a new information for the current query
+        this.$emit('create-information', this.query);
+      }
+    }
   }
 }
 </script>
@@ -90,6 +122,12 @@ export default {
 <style scoped>
 .information-picker {
   padding: 1.25em 0em .2em 0em;
+}
+.information-picker-add-icon {
+  transition: all 0.5s;
+}
+.information-picker-add-icon.tilted {
+  transform: rotate(45deg);
 }
 .dropdown-list {
   position: absolute;

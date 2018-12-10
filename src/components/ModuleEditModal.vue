@@ -8,11 +8,13 @@
       :ok-title="$t('generic.save')"
       :cancel-title="$t('generic.cancel')"
       @ok="save"
+      @show="clearInformationPicker"
     >
       <div>
         <div class="modal-body module-edit-wrapper">
           <div class="information-picker-wrapper">
             <InformationPicker
+              ref="inputPicker"
               :placeholder="$t('modal.information_picker_in')"
               :pool="informationPool"
               :blacklist="informationBlacklist"
@@ -42,7 +44,8 @@
                 <b-form-input v-model="module.name"
                   size="sm"
                   type="text"
-                  :placeholder="$t('modal.module_placeholder')" />
+                  :placeholder="$t('modal.module_placeholder')"
+                />
               </div>
               <div class="component-info">
                 {{ $tc('modal.in_information', module.inputInformation.length) }} / {{ $tc('modal.out_information', module.outputInformation.length) }}
@@ -51,6 +54,7 @@
           </div>
           <div class="information-picker-wrapper">
             <InformationPicker
+              ref="outputPicker"
               :placeholder="$t('modal.information_picker_in')"
               :pool="informationPool"
               :blacklist="informationBlacklist"
@@ -103,11 +107,13 @@ export default {
       return this.moduleId ? this.$t('modal.edit_module') : this.$t('modal.create_module')
     },
     informationBlacklist() {
+      // blacklist consisting of all already assigned input and output information
       return this.module.inputInformation
         .concat(this.module.outputInformation)
         .map(id => this.$store.getters.informationTypes[id].name);
     },
     informationPool() {
+      // all the remaining existing information types which arent blacklisted
       let informationPool = [];
       for (let id in this.$store.getters.informationTypes) {
         if (this.module.inputInformation.indexOf(parseInt(id)) < 0 &&
@@ -124,10 +130,12 @@ export default {
   mounted() {
     this.$root.$on('modal.editModule', (moduleId) => {
       this.moduleId = moduleId;
+      // clone module so we dont change vuex state directly
       this.module = JSON.parse(JSON.stringify(this.$store.getters.planningModuleById(moduleId)));
       this.$refs.myModalRef.show();
     });
     this.$root.$on('modal.createModule', () => {
+      // create a blank module which will be filled in this modal
       this.moduleId = null;
       this.module = {
         inputInformation: [],
@@ -139,12 +147,27 @@ export default {
     });
   },
   beforeDestroy() {
+    // unlink the event subscriptions
+    // otherwise it could cause duplicate responses on remounting (live reloading for example)
     this.$root.$off('modal.editModule');
     this.$root.$off('modal.createModule');
   },
   methods: {
+    clearInformationPicker: function() {
+      // the modal component itself is never unmounted so we clear previous data manually
+      this.$refs.inputPicker.clear();
+      this.$refs.outputPicker.clear();
+    },
     save: function(evt) {
-      // todo: form validation
+      // empty names are not allowed
+      if (!this.module.name) {
+        this.$notify({
+          type: 'warn',
+          text: this.$t('warning.empty_module_name')
+        });
+        // prevent closing the modal
+        return evt.preventDefault();
+      }
       if (this.moduleId) {
         // update existing module
         this.$store.commit('EDIT_PLANNING_MODULE', this.module);

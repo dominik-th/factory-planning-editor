@@ -1,6 +1,9 @@
 <template>
   <div class="navigation">
-    <b-navbar type="dark" variant="dark">
+    <b-navbar
+      type="dark"
+      variant="dark"
+    >
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
           <b-button variant="outline-primary">

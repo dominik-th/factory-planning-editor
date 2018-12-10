@@ -1,24 +1,40 @@
 <template>
   <div class="container-repository">
     <div class="repository-filter">
-      <input type="text" class="form-control form-control-sm" id="repository-filter-textbox" placeholder="Filter..." v-model="filter">
+      <b-form-input
+        size="sm"
+        v-model="filter"
+        :placeholder="$t('generic.filter')"
+      />
     </div>
     <div class="repository-components">
-      <div class="repository-component" v-for="item in modules" v-on:click="selectModule(item.id)" v-bind:class="{'selected': item.id === selected}">
+      <div
+        class="repository-component"
+        v-for="item in modules"
+        :key="item.id"
+        :class="{'selected': item.id === selected}"
+        @click="selectModule(item.id)"
+        @dblclick="editSelectedModule"
+      >
         <div class="component-title">
           {{ item.name }}
         </div>
         <div class="component-info">
-          {{ $tc('modal.in_information', item.inputInformation.length) }} / {{ $tc('modal.out_information', item.outputInformation.length) }}
+          {{ $tc('modal.in_information', item.inputInformation.length) }}<br />{{ $tc('modal.out_information', item.outputInformation.length) }}
         </div>
       </div>
     </div>
     <div class="repository-actions">
-      <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary" v-on:click="addModule"><font-awesome-icon icon="plus" /></button>
-        <button type="button" class="btn btn-secondary action-component-edit" @click="editSelectedModule"><font-awesome-icon icon="pen" /> {{ $t('generic.edit') }}</button>
-        <button type="button" class="btn btn-secondary" v-on:click="removeSelectedModule"><font-awesome-icon icon="minus" /></button>
-      </div>
+      <b-button-group size="sm">
+        <b-button @click="addModule"><font-awesome-icon icon="plus" /></b-button>
+        <b-button
+          class="action-component-edit"
+          @click="editSelectedModule"
+        >
+          <font-awesome-icon icon="pen" /> {{ $t('generic.edit') }}
+        </b-button>
+        <b-button @click="removeSelectedModule"><font-awesome-icon icon="minus" /></b-button>
+      </b-button-group>
     </div>
     <ModuleEditModal />
   </div>
@@ -50,29 +66,36 @@ export default {
     }
   },
   methods: {
-    addModule: function(evt) {
+    addModule: function() {
       this.$root.$emit('addModule', 'payload');
       this.$root.$emit('modal.createModule');
     },
-    selectModule: function(evt) {
-      this.selected = evt
+    selectModule: function(id) {
+      this.selected = id
     },
-    removeSelectedModule: function(evt) {
+    removeSelectedModule: function() {
       if (this.selected) {
         this.$store.commit('REMOVE_PLANNING_MODULE', this.selected);
         this.selected = null;
+      } else {
+        this.$notify({
+          type: 'warn',
+          text: this.$t('warning.no_module_selected')
+        });
       }
     },
-    editSelectedModule: function(evt,a,b) {
+    editSelectedModule: function() {
       if (this.selected) {
         this.$root.$emit('modal.editModule', this.selected);
       } else {
-        // todo: err, no module selected
+        this.$notify({
+          type: 'warn',
+          text: this.$t('warning.no_module_selected')
+        });
       }
     }
   }
 }
-
 </script>
 
 <style scoped>
@@ -100,12 +123,13 @@ export default {
 }
 .repository-component {
   cursor: pointer;
+  user-select: none;
   border: 1px solid #999;
-  border-radius: 1rem;
+  border-radius: .25rem;
   text-align: center;
   min-height: 5rem;
   vertical-align: middle;
-  margin: 1.25rem .5rem 1.25rem .5rem;
+  margin: .75rem .5rem .75rem .5rem;
 }
 .repository-component.selected {
   box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);

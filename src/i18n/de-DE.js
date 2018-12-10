@@ -11,6 +11,12 @@ export default {
   'generic': {
     'cancel': 'Abbrechen',
     'save': 'Speichern',
-    'edit': 'Editieren'
+    'edit': 'Editieren',
+    'filter': 'Filter...'
+  },
+  'warning': {
+    'empty_module_name': 'Der Name des Planungsmoduls darf keine leere Zeichenfolge sein!',
+    'empty_information_type': 'Der Informationstyp darf keine leere Zeichenfolge sein!',
+    'no_module_selected': 'Es wurde kein Planungsmodul ausgewählt!'
   }
 }

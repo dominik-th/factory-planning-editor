@@ -45,17 +45,9 @@ export const store = new Vuex.Store({
     },
     ADD_INFORMATION_TYPE(state, { id, name }) {
       Vue.set(state.informationTypes, id, {name});
-      // let max = state.informationTypes.reduce((max, ele) => ele.id > max ? ele.id : max, 0);
-      // state.informationTypes.push({
-      //   id: max + 1,
-      //   name: type
-      // });
     }
   },
   actions: {
-    editModule({ commit, state }) {
-
-    },
     addInformation({ commit, state }, name) {
       // get highest id in use by information types
       let max = Math.max(0, ...Object.keys(state.informationTypes));

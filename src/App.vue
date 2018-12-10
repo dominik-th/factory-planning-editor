@@ -23,18 +23,6 @@ export default {
     ModelingCanvas,
     ModuleRepository,
     ModuleAttributes
-  },
-  created() {
-    if (localStorage.getItem('graph')) {
-      console.log('load app')
-      console.log(JSON.parse(localStorage.getItem('graph')));
-    }
-
-    if (localStorage.getItem('window')) {
-      console.log('load app')
-      let windowProperties = JSON.parse(localStorage.getItem('window'));
-      console.log(windowProperties)
-    }
   }
 }
 </script>
