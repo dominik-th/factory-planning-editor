@@ -123,9 +123,7 @@ export default {
   },
   mounted() {
     this.$root.$on('modal.editModule', (moduleId) => {
-      console.log('edit module')
       this.moduleId = moduleId;
-      // todo: fetch module information
       this.module = JSON.parse(JSON.stringify(this.$store.getters.planningModuleById(moduleId)));
       this.$refs.myModalRef.show();
     });
@@ -168,7 +166,6 @@ export default {
       this.module.outputInformation.push(await this.$store.dispatch('addInformation', name));
     },
     removeInformation: function(type, id) {
-
       if (type === 'in') {
         this.module.inputInformation = this.module.inputInformation.filter(module => module !== id)
       } else if (type === 'out') {

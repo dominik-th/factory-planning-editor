@@ -6,27 +6,23 @@
       <ModelingCanvas />
       <ModuleAttributes />
     </div>
-    <!-- <ModuleEditModal /> -->
+    <AppNotifications position="bottom left" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import NavBar from './components/NavBar.vue'
 import ModuleRepository from './components/ModuleRepository.vue'
 import ModuleAttributes from './components/ModuleAttributes.vue'
 import ModelingCanvas from './components/ModelingCanvas.vue'
-import ModuleEditModal from './components/ModuleEditModal.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
     NavBar,
     ModelingCanvas,
     ModuleRepository,
-    ModuleAttributes,
-    ModuleEditModal
+    ModuleAttributes
   },
   created() {
     if (localStorage.getItem('graph')) {
