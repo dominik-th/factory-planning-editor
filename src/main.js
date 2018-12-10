@@ -1,3 +1,5 @@
+// fixes IE issues
+import 'es6-promise/auto'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import BootstrapVue from 'bootstrap-vue'
