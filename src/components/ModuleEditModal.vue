@@ -22,7 +22,7 @@
               @create-information="createInputInformation"
             />
             <div class="information-list">
-              <b-list-group>
+              <b-list-group v-if="module.inputInformation.length">
                 <b-list-group-item
                   class="d-flex justify-content-between align-items-center"
                   v-for="informationId in module.inputInformation"
@@ -30,12 +30,20 @@
                 >
                   {{ $store.getters.informationTypes[informationId].name }}
                   <font-awesome-icon
-                    class="text-danger"
+                    class="text-danger information-trash"
                     icon="trash-alt"
                     @click="removeInformation('in', informationId)"
                   />
                 </b-list-group-item>
               </b-list-group>
+              <div v-else>
+                <div class="empty-list text-secondary">
+                  <font-awesome-icon icon="list" />
+                  <div>
+                    {{ $t('modal.no_in_information') }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="module-edit-name">
@@ -48,21 +56,21 @@
                 />
               </div>
               <div class="component-info">
-                {{ $tc('modal.in_information', module.inputInformation.length) }} / {{ $tc('modal.out_information', module.outputInformation.length) }}
+                {{ $tc('modal.in_information', module.inputInformation.length) }}<br />{{ $tc('modal.out_information', module.outputInformation.length) }}
               </div>
             </div>
           </div>
           <div class="information-picker-wrapper">
             <InformationPicker
               ref="outputPicker"
-              :placeholder="$t('modal.information_picker_in')"
+              :placeholder="$t('modal.information_picker_out')"
               :pool="informationPool"
               :blacklist="informationBlacklist"
               @add-information="addOutputInformation"
               @create-information="createOutputInformation"
             />
             <div class="information-list">
-              <b-list-group>
+              <b-list-group v-if="module.outputInformation.length">
                 <b-list-group-item
                   class="d-flex justify-content-between align-items-center"
                   v-for="informationId in module.outputInformation"
@@ -70,12 +78,20 @@
                 >
                   {{ $store.getters.informationTypes[informationId].name }}
                   <font-awesome-icon
-                    class="text-danger"
+                    class="text-danger information-trash"
                     icon="trash-alt"
                     @click="removeInformation('out', informationId)"
                   />
                 </b-list-group-item>
               </b-list-group>
+              <div v-else>
+                <div class="empty-list text-secondary">
+                  <font-awesome-icon icon="list" />
+                  <div>
+                    {{ $t('modal.no_out_information') }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -200,23 +216,36 @@ export default {
 </script>
 
 <style scoped>
+.empty-list {
+  padding-top: 1.25em;
+  text-align: center;
+}
+.empty-list svg {
+  font-size: 3em;
+}
 .repository-component {
+  transition: all .2s ease;
+  user-select: none;
   border: 1px solid #999;
-  border-radius: 1rem;
+  border-radius: .25rem;
   text-align: center;
   min-height: 5rem;
   vertical-align: middle;
-  margin: 1.25rem .5rem 1.25rem .5rem;
-
+  margin: .75rem .5rem .75rem .5rem;
 }
 .information-trash {
-  color: red;
+  cursor: pointer;
 }
 .information-picker-wrapper {
   flex: 3;
 }
 .component-title {
   font-weight: bold;
+  margin: .5em .5em .2em .5em;
+  text-align: center;
+}
+.component-title input {
+  text-align: center;
 }
 .component-info {
   font-size: .7rem;
@@ -246,13 +275,6 @@ export default {
 .module-edit-name {
   align-self: center;
   flex: 2;
-}
-.module-edit-name > .repository-component > .component-title {
-  margin: .5em 1em .2em 1em;
-  text-align: center;
-}
-.component-title input {
-  text-align: center;
 }
 .module-edit-information-out {
   flex: 3;

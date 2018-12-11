@@ -6,11 +6,11 @@
     >
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
-          <b-button variant="outline-primary">
+          <b-button variant="outline-primary" @click="$root.$emit('modal.import')">
             <font-awesome-icon icon="upload" />
             Import JSON
           </b-button>
-          <b-button variant="outline-success">
+          <b-button variant="outline-success" @click="$root.$emit('modal.export')">
             <font-awesome-icon icon="save" />
             Export JSON
           </b-button>
@@ -21,12 +21,20 @@
         </b-nav-form>
       </b-navbar-nav>
     </b-navbar>
+    <ImportModal />
+    <ExportModal />
   </div>
 </template>
 
 <script>
+import ImportModal from './ImportModal.vue'
+import ExportModal from './ExportModal.vue'
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  components: {
+    ImportModal,
+    ExportModal
+  },
 }
 </script>
 

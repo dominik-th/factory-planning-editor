@@ -1,18 +1,29 @@
 export default {
   'modal': {
+    import: {
+      title: 'Planung importieren'
+    },
+    export: {
+      title: 'Planung exportieren'
+    },
     'information_picker_in': 'Eingangsinformationen suchen...',
     'information_picker_out': 'Ausgangsinformationen suchen...',
     'module_placeholder': 'Modulname',
     'create_module': 'Neues Planungsmodul erstellen',
     'edit_module': 'Planungsmodul editieren',
-    'in_information': 'Keine Eingabeinformationen | 1 Eingabeinformation | {count} Eingabeinformationen',
-    'out_information': 'Keine Ausgabeinformationen | 1 Ausgabeinformation | {count} Ausgabeinformationen'
+    'in_information': 'Keine Eingangsinformationen | 1 Eingabeinformation | {count} Eingangsinformationen',
+    'out_information': 'Keine Ausgangsinformationen | 1 Ausgangsinformation | {count} Ausgangsinformationen',
+    'no_in_information': 'Füge dem Modul Eingangsinformationen hinzu!',
+    'no_out_information': 'Füge dem Modul Ausgangsinformationen hinzu!'
   },
   'generic': {
     'cancel': 'Abbrechen',
     'save': 'Speichern',
     'edit': 'Editieren',
-    'filter': 'Filter...'
+    'filter': 'Filter...',
+    'close': 'Schließen',
+    'import': 'Importieren',
+    'save_to_file': 'Speichern unter...'
   },
   'warning': {
     'empty_module_name': 'Der Name des Planungsmoduls darf keine leere Zeichenfolge sein!',

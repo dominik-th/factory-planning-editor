@@ -14,6 +14,11 @@ export const store = new Vuex.Store({
     informationTypes: {}
   },
   mutations: {
+    SET_FULL_STATE(state, importedState) {
+      for (let key in importedState) {
+        state[key] = importedState[key];
+      };
+    },
     SET_PLANNING_MODULES(state, modules) {
       state.planningModules = modules;
     },
@@ -57,6 +62,9 @@ export const store = new Vuex.Store({
     }
   },
   getters: {
+    fullState(state) {
+      return state;
+    },
     planningModules(state) {
       return state.planningModules;
     },
