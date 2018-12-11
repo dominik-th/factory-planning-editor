@@ -10,15 +10,16 @@
     <div class="repository-components">
       <div
         class="repository-component"
-        v-for="item in modules"
+        v-for="(item, index) in modules"
         :key="item.id"
         :class="{'selected': item.id === selected}"
         @click="selectModule(item.id)"
         @dblclick="editSelectedModule"
       >
-        <div class="component-title">
-          {{ item.name }}
-        </div>
+        <FuseHighlight
+          :result="item.name"
+          :indices="fuseIndices(index)"
+        />
         <div class="component-info">
           {{ $tc('modal.in_information', item.inputInformation.length) }}<br />{{ $tc('modal.out_information', item.outputInformation.length) }}
         </div>
@@ -41,16 +42,21 @@
 </template>
 
 <script>
+import FuseHighlight from './FuseHighlight'
 import ModuleEditModal from './ModuleEditModal.vue'
 export default {
   name: 'ModelRepository',
   components: {
+    FuseHighlight,
     ModuleEditModal
   },
   computed: {
     modules() {
       if (this.filter) {
-        return this.$store.getters.filteredPlanningModules(this.filter);
+        // the filtered list also contains meta information
+        // check fuse.js docs for more information
+        return this.$store.getters.filteredPlanningModules(this.filter)
+          .map(result => result.item);
       } else {
         return this.$store.getters.planningModules;
       }
@@ -66,6 +72,15 @@ export default {
     }
   },
   methods: {
+    fuseIndices: function(index) {
+      if (this.filter) {
+        // we only search the module.name key, thus there is only going to be one match
+        // once we also search different keys (abbreviation maybe?), we have to modify this
+        return this.$store.getters.filteredPlanningModules(this.filter)[index].matches[0].indices;
+      } else {
+        return [];
+      }
+    },
     addModule: function() {
       this.$root.$emit('addModule', 'payload');
       this.$root.$emit('modal.createModule');
@@ -122,6 +137,7 @@ export default {
   flex: 1 !important;
 }
 .repository-component {
+  transition: all .2s ease;
   cursor: pointer;
   user-select: none;
   border: 1px solid #999;

@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
@@ -66,9 +67,18 @@ export const store = new Vuex.Store({
       })[0];
     },
     filteredPlanningModules(state) {
-      return keyword => state.planningModules.filter(item => {
-        return (item.name + '').indexOf(keyword) >= 0;
-      });
+      let fuseOptions = {
+        shouldSort: true,
+        includeMatches: true,
+        threshold: 0.6,
+        location: 0,
+        minMatchCharLength: 1,
+        keys: [
+          "name"
+        ]
+      };
+      let fuse = new Fuse(state.planningModules, fuseOptions);
+      return keyword => fuse.search(keyword);
     },
     informationTypes(state) {
       return state.informationTypes;

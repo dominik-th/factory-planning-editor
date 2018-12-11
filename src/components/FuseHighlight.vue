@@ -1,0 +1,45 @@
+<template>
+  <span :inner-html.prop="result | hightlight(indices)"></span>
+</template>
+
+<script>
+export default {
+  name: 'FuseHighlight',
+  filters: {
+    hightlight(text, indices) {
+      // todo: improve this
+      let highlighted = '';
+      let flatIndices = indices.flat().map((y,i) => i % 2 === 0 ? y : y+1);
+      let flatIndicesIndex = 0;
+
+      [...text].forEach((char, index) => {
+        if (index === flatIndices[flatIndicesIndex]) {
+          highlighted += flatIndicesIndex % 2 === 0 ? '<b>' : '</b>';
+          flatIndicesIndex++;
+        }
+        highlighted += char
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      });
+
+      return highlighted;
+    }
+  },
+  props: {
+    result: {
+      type: String,
+      default: ''
+    },
+    indices: {
+      type: Array,
+      default: () => []
+    }
+  }
+}
+</script>
+
+<style scoped>
+</style>
