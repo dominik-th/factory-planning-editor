@@ -4,7 +4,7 @@
     <div class="content">
       <ModuleRepository />
       <ModelingCanvas />
-      <ModuleAttributes />
+      <!-- <ModuleAttributes /> -->
     </div>
     <AppNotifications position="bottom left" />
   </div>

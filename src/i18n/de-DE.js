@@ -28,6 +28,10 @@ export default {
   'warning': {
     'empty_module_name': 'Der Name des Planungsmoduls darf keine leere Zeichenfolge sein!',
     'empty_information_type': 'Der Informationstyp darf keine leere Zeichenfolge sein!',
-    'no_module_selected': 'Es wurde kein Planungsmodul ausgewählt!'
+    'no_module_selected': 'Es wurde kein Planungsmodul ausgewählt!',
+    'not_yet_implemented': 'Diese Funktion wurde noch nicht implementiert.'
+  },
+  'error': {
+    'json_invalid': 'Der eingegebene JSON String ist ungültig!'
   }
 }

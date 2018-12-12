@@ -4,6 +4,7 @@
       id="myModal"
       size="lg"
       ref="myModalRef"
+      ok-variant="success"
       :title="title"
       :ok-title="$t('generic.save')"
       :cancel-title="$t('generic.cancel')"

@@ -4,7 +4,11 @@
       id="myModal"
       size="lg"
       ref="myModalRef"
+      ok-variant="success"
       :title="$t('modal.export.title')"
+      :ok-title="$t('generic.save_to_file')"
+      :cancel-title="$t('generic.cancel')"
+      @ok="exportData"
     >
       <div>
         <b-form-textarea
@@ -13,15 +17,8 @@
           :rows="9"
           :value="applicationState"
           @click.native="$event.target.select()"
+          @dblclick.native="exportDataToClipboard"
         />
-      </div>
-      <div slot="modal-footer" class="w-100">
-        <b-btn class="float-right" variant="primary" @click="show=false">
-          {{ $t('generic.close') }}
-        </b-btn>
-        <b-btn class="float-right" variant="primary" @click="show=false">
-          {{ $t('generic.save_to_file') }}
-        </b-btn>
       </div>
     </b-modal>
   </div>
@@ -33,6 +30,20 @@ export default {
   computed: {
     applicationState() {
       return JSON.stringify(this.$store.getters.fullState)
+    }
+  },
+  methods: {
+    exportData: function(evt) {
+      // https://stackoverflow.com/a/18197341
+      this.$notify({
+        type: 'warn',
+        text: this.$t('warning.not_yet_implemented')
+      });
+      return evt.preventDefault();
+    },
+    exportDataToClipboard: function() {
+      // assuming the textarea is selected
+      document.execCommand('copy');
     }
   },
   mounted() {

@@ -82,7 +82,6 @@ export default {
       }
     },
     addModule: function() {
-      this.$root.$emit('addModule', 'payload');
       this.$root.$emit('modal.createModule');
     },
     selectModule: function(id) {

@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
     SET_FULL_STATE(state, importedState) {
       for (let key in importedState) {
         state[key] = importedState[key];
-      };
+      }
     },
     SET_PLANNING_MODULES(state, modules) {
       state.planningModules = modules;

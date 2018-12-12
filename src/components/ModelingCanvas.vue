@@ -12,10 +12,6 @@ export default {
     }
   },
   mounted() {
-    this.$root.$on('addModule', data => {
-        console.log(data);
-    });
-
     let { joint, $ } = window;
     let gridsize = 10
 
@@ -30,7 +26,7 @@ export default {
       gridSize: 10,
       drawGrid: true,
       background: {
-        color: 'rgba(0, 255, 0, 0.3)'
+        color: 'rgba(0, 0, 0, 0.1)'
       }
     });
 
@@ -65,8 +61,8 @@ export default {
     }
 
     graph.on('add', function() {
-      console.log('xx')
-      console.log(graph.toJSON())
+      // console.log('xx')
+      // console.log(graph.toJSON())
       localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
     })
     var that = this;
@@ -119,11 +115,11 @@ var port = {
       rect.addTo(graph);
       // let a = rect.addPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
       // console.log(a)
-      console.log(rect)
+      // console.log(rect)
 
 
 if (lastEle !== null) {
-  console.log(lastEle.id)
+  // console.log(lastEle.id)
   // console.log(rect.id)
   // var link = new joint.shapes.standard.Link({
   //     source: { id: lastEle.id },
@@ -149,8 +145,8 @@ if (lastEle !== null) {
     let clickEle = null;
     paper.on('element:pointerclick', function(evt, x, y) {
       function link(source, target, label, vertices) {
-          console.log(source.id)
-          console.log(target)
+          // console.log(source.id)
+          // console.log(target)
           var cell = new joint.shapes.standard.Link({
               source: { id: source.id },
               target: { id: target.id },
@@ -177,11 +173,11 @@ if (lastEle !== null) {
       // console.log(x)
       // console.log(y)
       if (!clickEle) {
-        console.log('set click ele')
+        // console.log('set click ele')
         clickEle = evt.model
       } else {
-        console.log('link both')
-        console.log(graph.toJSON())
+        // console.log('link both')
+        // console.log(graph.toJSON())
         link(clickEle, evt.model, '');
         clickEle = null;
       }
@@ -192,8 +188,8 @@ if (lastEle !== null) {
         size,
         offset
       }));
-      console.log(size)
-      console.log(offset)
+      // console.log(size)
+      // console.log(offset)
       // Set grid size on the JointJS paper object (joint.dia.Paper instance)
       paper.options.gridsize = gridsize;
       // Draw a grid into the HTML 5 canvas and convert it to a data URI image
@@ -222,19 +218,13 @@ if (lastEle !== null) {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container-modelling-canvas {
-  width: 100vw;
-  height: 95vh;
-  overflow: hidden;
 /*  background-color:#fff;
   background-image: linear-gradient(white 0px, transparent 0px),
   linear-gradient(90deg, white 0px, transparent 0px),
   linear-gradient(rgba(200,200,200,.3) 1px, transparent 1px),
   linear-gradient(90deg, rgba(200,200,200,.3) 1px, transparent 1px);
   background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
-  background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px*/
+  background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px
   /*background-color: green;*/
-}
-#myholder {
-  height: 90vh !important;
 }
 </style>
