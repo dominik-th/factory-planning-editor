@@ -1,4 +1,13 @@
 export default {
+  'generic': {
+    'cancel': 'Abbrechen',
+    'save': 'Speichern',
+    'edit': 'Editieren',
+    'filter': 'Filter...',
+    'close': 'Schließen',
+    'import': 'Importieren',
+    'save_to_file': 'Speichern unter...'
+  },
   'modal': {
     import: {
       title: 'Planung importieren'
@@ -16,14 +25,11 @@ export default {
     'no_in_information': 'Füge dem Modul Eingangsinformationen hinzu!',
     'no_out_information': 'Füge dem Modul Ausgangsinformationen hinzu!'
   },
-  'generic': {
-    'cancel': 'Abbrechen',
-    'save': 'Speichern',
-    'edit': 'Editieren',
-    'filter': 'Filter...',
-    'close': 'Schließen',
-    'import': 'Importieren',
-    'save_to_file': 'Speichern unter...'
+  attributes: {
+    'num_employees': 'Anzahl Mitarbeiter:',
+    'cost': 'Kosten:',
+    'duration': 'Dauer:',
+    'custom': 'Benutzerdefiniert {0}:'
   },
   'warning': {
     'empty_module_name': 'Der Name des Planungsmoduls darf keine leere Zeichenfolge sein!',

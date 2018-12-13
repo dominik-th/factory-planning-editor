@@ -218,6 +218,7 @@ if (lastEle !== null) {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container-modelling-canvas {
+  flex: 1;
 /*  background-color:#fff;
   background-image: linear-gradient(white 0px, transparent 0px),
   linear-gradient(90deg, white 0px, transparent 0px),

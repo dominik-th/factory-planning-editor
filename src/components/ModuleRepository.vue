@@ -117,8 +117,8 @@ export default {
   flex-direction: column;
   display: flex;
   align-items: stretch;
-  width: 240px;
-  border-right: 1px solid rgba(68, 68, 68, 0.25);
+  width: 13rem;
+  border-right: 2px solid rgba(68, 68, 68, 0.25);
 }
 .repository-components {
   flex: 1;
@@ -129,7 +129,7 @@ export default {
 .repository-actions > div {
   display: flex;
 }
-.repository-actions > div > button{
+.repository-actions > div > button {
   border-radius: 0rem !important;
 }
 .action-component-edit {
