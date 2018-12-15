@@ -14,10 +14,6 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-window.$ = require('jquery')
-window.joint = require('jointjs')
-window.svgPanZoom = require('svg-pan-zoom')
-
 library.add(fas)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -31,7 +27,7 @@ const i18n = new VueI18n({
 })
 
 new Vue({
-  store,
-  i18n,
+  store, // vuex store
+  i18n, // vue-i18n localized content
   render: h => h(App)
 }).$mount('#app')

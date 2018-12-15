@@ -12,6 +12,11 @@ export default {
     }
   },
   mounted() {
+
+    window.$ = require('jquery')
+    window.joint = require('jointjs')
+    window.svgPanZoom = require('svg-pan-zoom')
+
     let { joint, $ } = window;
     let gridsize = 10
 
