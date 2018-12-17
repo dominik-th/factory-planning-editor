@@ -8,13 +8,16 @@
       />
     </div>
     <div class="repository-components">
-      <div
+      <drag
         class="repository-component"
         v-for="(item, index) in modules"
+        drop-effect="copy"
+        :effect-allowed="['copy']"
+        :transfer-data="item.id"
         :key="item.id"
         :class="{'selected': item.id === selected}"
-        @click="selectModule(item.id)"
-        @dblclick="editSelectedModule"
+        @click.native="selectModule(item.id)"
+        @dblclick.native="editSelectedModule"
       >
         <FuseHighlight
           :result="item.name"
@@ -23,7 +26,7 @@
         <div class="component-info">
           {{ $tc('modal.in_information', item.inputInformation.length) }}<br />{{ $tc('modal.out_information', item.outputInformation.length) }}
         </div>
-      </div>
+      </drag>
     </div>
     <div class="repository-actions">
       <b-button-group size="sm">
@@ -44,11 +47,15 @@
 <script>
 import FuseHighlight from './FuseHighlight'
 import ModuleEditModal from './ModuleEditModal.vue'
+
+import { Drag } from 'vue-drag-drop';
+
 export default {
   name: 'ModelRepository',
   components: {
     FuseHighlight,
-    ModuleEditModal
+    ModuleEditModal,
+    Drag
   },
   computed: {
     modules() {

@@ -1,14 +1,51 @@
 <template>
-  <div class="container-modelling-canvas" id="container-modelling-canvas"></div>
+  <drop
+    class="container-modelling-canvas"
+    id="container-modelling-canvas"
+    @drop="drop"
+  />
 </template>
 
 <script>
+import { Drop } from 'vue-drag-drop';
 
 export default {
   name: 'ModelingCanvas',
+  components: {
+    Drop
+  },
   computed: {
     modules() {
       return JSON.stringify(this.$store.getters.planningModules)
+    }
+  },
+  data() {
+    return {
+      panAndZoom: null,
+      graph: null
+    }
+  },
+  methods: {
+    drop: function(moduleId, evt) {
+      let canvas = document.getElementById('container-modelling-canvas').children[2];
+      let canvasRect = canvas.getBoundingClientRect();
+      let pan = this.panAndZoom.getPan();
+      let x = (evt.clientX - pan.x - canvasRect.left) / this.panAndZoom.getZoom();
+      let y = (evt.clientY - pan.y - canvasRect.top) / this.panAndZoom.getZoom();
+      let rect = new joint.shapes.standard.Rectangle({
+        position: { x, y},
+        size: { width: 120, height: 90 },
+      });
+      rect.attr({
+        body: {
+          fill: 'blue'
+        },
+        label: {
+          text: moduleId,
+          fill: 'white'
+        }
+      });
+      rect.addTo(this.graph);
     }
   },
   mounted() {
@@ -30,14 +67,18 @@ export default {
       height: '100%',
       gridSize: 10,
       drawGrid: true,
+      drawGrid: { name: 'mesh', args: { color: 'black' }},
       background: {
         color: 'rgba(0, 0, 0, 0.1)'
       }
     });
 
+    this.graph = graph;
+
     let targetElement = $("#container-modelling-canvas")[0];
     let currentScale = 1;
-    let panAndZoom = window.svgPanZoom(targetElement.childNodes[2], {
+    var that = this;
+    that.panAndZoom = window.svgPanZoom(targetElement.childNodes[2], {
       viewportSelector: targetElement.childNodes[0].childNodes[0],
       fit: false,
       zoomScaleSensitivity: 1,
@@ -70,14 +111,21 @@ export default {
       // console.log(graph.toJSON())
       localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
     })
-    var that = this;
     paper.on('blank:pointerdown', function () {
     // console.log(that.$store.getters.planningModules[0].id)
-      panAndZoom.enablePan();
+      that.panAndZoom.enablePan();
     });
 
+
+
+
+    paper.on('blank:mouseover', function(evt, x, y) {
+      // console.log(`X: ${x} Y: ${y}`)
+    })
+
+
     paper.on('cell:pointerup blank:pointerup', function() {
-      panAndZoom.disablePan();
+      that.panAndZoom.disablePan();
     });
 let lastEle = null;
 // Single port definition
@@ -96,6 +144,8 @@ var port = {
     markup: '<rect width="16" height="16" x="-8" strokegit ="red" fill="red"/>'
 };
     paper.on('blank:pointerclick', function(evt, x, y) {
+      console.log(x)
+      console.log(y)
       let rect = new joint.shapes.standard.Rectangle({
           position: { x, y},
           size: { width: 90, height: 90 },
@@ -117,7 +167,7 @@ var port = {
       //         fill: 'white'
       //     }
       // });
-      rect.addTo(graph);
+      // rect.addTo(graph);
       // let a = rect.addPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
       // console.log(a)
       // console.log(rect)
