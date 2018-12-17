@@ -101,9 +101,8 @@ export default {
 
     if (localStorage.getItem('window')) {
       let windowProperties = JSON.parse(localStorage.getItem('window'));
-      // console.log(paper)
-      // panAndZoom.enablePan();
-      setGrid(paper, windowProperties.size, '#808080', windowProperties.offset)
+      that.panAndZoom.zoom(windowProperties.size / 150)
+      that.panAndZoom.pan(windowProperties.offset)
     }
 
     graph.on('add', function() {
