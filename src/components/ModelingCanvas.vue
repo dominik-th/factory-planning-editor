@@ -73,7 +73,7 @@ new joint.shapes.qad.Question({
     let { joint, $ } = window;
     let gridsize = 10
 
-    require('../jointjs/init')
+    Util.initShapes(joint)
 
 // https://codepen.io/fxaeberard/pen/reGvjm
 

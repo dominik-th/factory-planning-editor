@@ -156,21 +156,20 @@ class Util {
             // We mark every new attribute object with the `dynamic` flag set to `true`.
             // This is how we recognize previously set attributes.
             var attrs = this.get('attrs');
+            var that = this;
             _.each(attrs, function(attrs, selector) {
 
                 if (attrs.dynamic) {
                     // Remove silently because we're going to update `attrs`
                     // later in this method anyway.
-                    this.removeAttr(selector, { silent: true });
+                    that.removeAttr(selector, { silent: true });
                 }
-            }, this);
+            }, that);
 
             // Collect new attrs for the new options.
             var offsetY = 0;
             var attrsUpdate = {};
             var questionHeight = this.get('questionHeight');
-
-            let that = this;
 
             _.each(options, function(option) {
 
@@ -260,14 +259,15 @@ class Util {
 
             this.$options.empty();
 
+            var that = this;
             _.each(this.model.get('options'), function(option, index) {
 
                 var className = 'option-' + option.id;
-                var elOption = this.elOption.clone().addClass(className);
+                var elOption = that.elOption.clone().addClass(className);
                 elOption.attr('option-id', option.id);
-                this.$options.append(elOption.node);
+                that.$options.append(elOption.node);
 
-            }, this);
+            }, that);
 
             // Apply `attrs` to the newly created SVG elements.
             this.update();
