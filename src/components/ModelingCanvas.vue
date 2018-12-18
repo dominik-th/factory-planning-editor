@@ -101,7 +101,7 @@ export default {
       maxZoom: 3,
       minZoom: 0.05,
       dblClickZoomEnabled: false,
-      panEnabled: true,
+      panEnabled: false,
       onZoom: function(scale){
         currentScale = scale;
         setGrid(paper, 10*15*currentScale, '#808080');
