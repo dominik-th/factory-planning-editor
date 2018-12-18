@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import 'jointjs/dist/joint.css'
 import { Drop } from 'vue-drag-drop';
 
 export default {
@@ -32,20 +33,121 @@ export default {
       let pan = this.panAndZoom.getPan();
       let x = (evt.clientX - pan.x - canvasRect.left) / this.panAndZoom.getZoom();
       let y = (evt.clientY - pan.y - canvasRect.top) / this.panAndZoom.getZoom();
-      let rect = new joint.shapes.standard.Rectangle({
-        position: { x, y},
-        size: { width: 120, height: 90 },
-      });
-      rect.attr({
-        body: {
-          fill: 'blue'
-        },
-        label: {
-          text: moduleId,
-          fill: 'white'
-        }
-      });
-      rect.addTo(this.graph);
+      // let rect = new joint.shapes.standard.Rectangle({
+      //   position: { x, y},
+      //   size: { width: 120, height: 90 },
+      // });
+      // rect.attr({
+      //   body: {
+      //     fill: 'blue'
+      //   },
+      //   label: {
+      //     text: moduleId,
+      //     fill: 'white'
+      //   }
+      // });
+//         let table = new joint.shapes.basic.Rect({
+//     position: { x: x, y: y },
+//     size: { width: 100, height: 100 },
+//     attrs: {
+//       rect: { fill: 'black', stroke: 'black', 'class': 'table-diagram' },
+//       text: { text: 'textName', 'ref-y': 10, 'fill': '#FFFFFF', 'font-size': '18px', 'font-weight': 'bold' },
+//       nodeType: { value: 'table' },
+//       nodeName: { value: 'name' },
+//       columns: { value: [] }
+//     },
+//     z: 0
+//   })
+
+// const column = new joint.shapes.devs.Model({
+//     position: { x: x, y: y + 100 },
+//     size: { width: 100, height: 10 },
+//     attrs: {
+//       rect: { fill: 'green', stroke: 'orange', 'fill-opacity': 0, 'class': 'column-rect' },
+//       text: { text: ' ' },
+//       nodeType: { value: 'column' },
+//       colType: { value: 'type' },
+//       nodeName: { value: 'name' },
+//     },
+//     inPorts: [''],
+//     outPorts: [' '],
+//     ports: {
+//       groups: {
+//         'in': {
+//           attrs: {
+//             '.port-body': {
+//               fill: '#FFFFFF',
+//               stroke: 'purple'
+//             }
+//           }
+//         },
+//         'out': {
+//           attrs: {
+//             '.port-body': {
+//               fill: '#FFFFFF',
+//               stroke: 'purple'
+//             }
+//           }
+//         }
+//       }
+//     },
+//     z: 2
+//   })
+
+// console.log(table)
+// table.attributes.attrs.columns.value = [column]
+
+//       table.addTo(this.graph);
+
+//   var port = {
+//       // id: 'abc', // generated if `id` value is not present
+//       group: 'a',
+//       args: {}, // extra arguments for the port layout function, see `layout.Port` section
+//       label: {
+//           position: {
+//               name: 'right',
+//               args: { y: 6 } // extra arguments for the label layout function, see `layout.PortLabel` section
+//           },
+//           markup: '<text class="label-text" fill="blue"/>'
+//       },
+//       attrs: { text: { text: 'port1' } },
+//       markup: '<rect width="16" height="16" x="-8" strokegit ="red" fill="red"/>'
+//   };
+//       let rect = new joint.shapes.standard.Rectangle({
+//           position: { x, y},
+//           size: { width: 90, height: 90 },
+//           ports: {
+//               groups: {
+//                   'a': {}
+//               },
+//               items: [port]
+//           }
+//       });
+
+//             rect.addTo(this.graph);
+//       let a = rect.addPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+//        a = rect.addInPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+//        a = rect.addInPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+//        a = rect.addInPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+// a = rect.addOutPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+//        a = rect.addOutPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+//        a = rect.addOutPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
+
+
+var shape = new joint.shapes.devs.Model({
+    position: {
+        x,
+        y
+    },
+});
+shape.addTo(this.graph);
+let a = shape.addInPort('a')
+a = shape.addInPort('Hallo Welt')
+
+a = shape.addInPort('a')
+
+
+
     }
   },
   mounted() {
@@ -66,11 +168,10 @@ export default {
       width: '100%',
       height: '100%',
       gridSize: 10,
-      drawGrid: true,
-      drawGrid: { name: 'mesh', args: { color: 'black' }},
-      background: {
-        color: 'rgba(0, 0, 0, 0.1)'
-      }
+      drawGrid: {
+        name: 'mesh',
+        color: '#EEE'
+      },
     });
 
     this.graph = graph;
@@ -256,10 +357,10 @@ if (lastEle !== null) {
       context.fillStyle = color || '#AAAAAA';
       context.fill();
       // Finally, set the grid background image of the paper container element.
-      let gridBackgroundImage = canvas[0].toDataURL('image/png');
-      $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
+      // let gridBackgroundImage = canvas[0].toDataURL('image/png');
+      // $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
       if(typeof(offset) != 'undefined'){
-        $(paper.el.childNodes[0]).css('background-position', offset.x + 'px ' + offset.y + 'px');
+        $(paper.el.childNodes[1]).css('background-position', offset.x + 'px ' + offset.y + 'px');
       }
     }
 
@@ -272,6 +373,7 @@ if (lastEle !== null) {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container-modelling-canvas {
+  position: relative;
   flex: 1;
 /*  background-color:#fff;
   background-image: linear-gradient(white 0px, transparent 0px),
