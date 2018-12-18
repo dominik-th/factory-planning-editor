@@ -1,3 +1,5 @@
+'use strict';
+
 // fixes IE issues
 import 'es6-promise/auto'
 import Vue from 'vue'

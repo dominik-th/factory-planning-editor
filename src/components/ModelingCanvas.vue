@@ -9,6 +9,7 @@
 <script>
 import 'jointjs/dist/joint.css'
 import { Drop } from 'vue-drag-drop';
+import Util from '../jointjs/Util';
 
 export default {
   name: 'ModelingCanvas',
@@ -33,118 +34,31 @@ export default {
       let pan = this.panAndZoom.getPan();
       let x = (evt.clientX - pan.x - canvasRect.left) / this.panAndZoom.getZoom();
       let y = (evt.clientY - pan.y - canvasRect.top) / this.panAndZoom.getZoom();
-      // let rect = new joint.shapes.standard.Rectangle({
-      //   position: { x, y},
-      //   size: { width: 120, height: 90 },
-      // });
-      // rect.attr({
-      //   body: {
-      //     fill: 'blue'
-      //   },
-      //   label: {
-      //     text: moduleId,
-      //     fill: 'white'
-      //   }
-      // });
-//         let table = new joint.shapes.basic.Rect({
-//     position: { x: x, y: y },
-//     size: { width: 100, height: 100 },
-//     attrs: {
-//       rect: { fill: 'black', stroke: 'black', 'class': 'table-diagram' },
-//       text: { text: 'textName', 'ref-y': 10, 'fill': '#FFFFFF', 'font-size': '18px', 'font-weight': 'bold' },
-//       nodeType: { value: 'table' },
-//       nodeName: { value: 'name' },
-//       columns: { value: [] }
+
+
+new joint.shapes.qad.Question({
+            position: { x, y },
+            size: { width: 100, height: 70 },
+            question: 'text',
+            inPorts: [{ id: 'inn', label: 'Inn' }],
+            options: [
+                { id: 'yes', text: 'Yes' },
+                { id: 'no', text: 'No' }
+            ]
+        }).addTo(this.graph)
+
+
+// var shape = new joint.shapes.devs.Model({
+//     position: {
+//         x,
+//         y
 //     },
-//     z: 0
-//   })
+// });
+// shape.addTo(this.graph);
+// let a = shape.addInPort('a')
+// a = shape.addInPort('Hallo Welt')
 
-// const column = new joint.shapes.devs.Model({
-//     position: { x: x, y: y + 100 },
-//     size: { width: 100, height: 10 },
-//     attrs: {
-//       rect: { fill: 'green', stroke: 'orange', 'fill-opacity': 0, 'class': 'column-rect' },
-//       text: { text: ' ' },
-//       nodeType: { value: 'column' },
-//       colType: { value: 'type' },
-//       nodeName: { value: 'name' },
-//     },
-//     inPorts: [''],
-//     outPorts: [' '],
-//     ports: {
-//       groups: {
-//         'in': {
-//           attrs: {
-//             '.port-body': {
-//               fill: '#FFFFFF',
-//               stroke: 'purple'
-//             }
-//           }
-//         },
-//         'out': {
-//           attrs: {
-//             '.port-body': {
-//               fill: '#FFFFFF',
-//               stroke: 'purple'
-//             }
-//           }
-//         }
-//       }
-//     },
-//     z: 2
-//   })
-
-// console.log(table)
-// table.attributes.attrs.columns.value = [column]
-
-//       table.addTo(this.graph);
-
-//   var port = {
-//       // id: 'abc', // generated if `id` value is not present
-//       group: 'a',
-//       args: {}, // extra arguments for the port layout function, see `layout.Port` section
-//       label: {
-//           position: {
-//               name: 'right',
-//               args: { y: 6 } // extra arguments for the label layout function, see `layout.PortLabel` section
-//           },
-//           markup: '<text class="label-text" fill="blue"/>'
-//       },
-//       attrs: { text: { text: 'port1' } },
-//       markup: '<rect width="16" height="16" x="-8" strokegit ="red" fill="red"/>'
-//   };
-//       let rect = new joint.shapes.standard.Rectangle({
-//           position: { x, y},
-//           size: { width: 90, height: 90 },
-//           ports: {
-//               groups: {
-//                   'a': {}
-//               },
-//               items: [port]
-//           }
-//       });
-
-//             rect.addTo(this.graph);
-//       let a = rect.addPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
-//        a = rect.addInPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
-//        a = rect.addInPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
-//        a = rect.addInPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
-// a = rect.addOutPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
-//        a = rect.addOutPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
-//        a = rect.addOutPort({ markup: '<rect width="10" height="10" fill="brown"/>' })
-
-
-var shape = new joint.shapes.devs.Model({
-    position: {
-        x,
-        y
-    },
-});
-shape.addTo(this.graph);
-let a = shape.addInPort('a')
-a = shape.addInPort('Hallo Welt')
-
-a = shape.addInPort('a')
+// a = shape.addInPort('a')
 
 
 
@@ -158,6 +72,8 @@ a = shape.addInPort('a')
 
     let { joint, $ } = window;
     let gridsize = 10
+
+    require('../jointjs/init')
 
 // https://codepen.io/fxaeberard/pen/reGvjm
 
@@ -176,11 +92,10 @@ a = shape.addInPort('a')
 
     this.graph = graph;
 
-    let targetElement = $("#container-modelling-canvas")[0];
+    let targetElement = document.getElementById('container-modelling-canvas').children[2];
     let currentScale = 1;
     var that = this;
-    that.panAndZoom = window.svgPanZoom(targetElement.childNodes[2], {
-      viewportSelector: targetElement.childNodes[0].childNodes[0],
+    that.panAndZoom = window.svgPanZoom(targetElement, {
       fit: false,
       zoomScaleSensitivity: 1,
       maxZoom: 3,
