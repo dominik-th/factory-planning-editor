@@ -58,9 +58,10 @@ class Util {
             '.body': {
                 refWidth: '100%',
                 refHeight: '100%',
-                rx: '1%',
-                ry: '2%',
-                stroke: 'none',
+                rx: '0%',
+                ry: '0%',
+                stroke: '#000000',
+                strokeWidth: 1,
                 fill: {
                     type: 'linearGradient',
                     stops: [
@@ -110,8 +111,8 @@ class Util {
 
             // Options styling.
             '.option-rect': {
-                rx: 3,
-                ry: 3,
+                rx: 0,
+                ry: 0,
                 stroke: 'white',
                 strokeWidth: 1,
                 strokeOpacity: .5,
@@ -182,7 +183,6 @@ class Util {
                 offsetY += optionHeight;
 
                 var portY = offsetY - optionHeight / 2 + questionHeight;
-                console.log(that)
                 if (!that.getPort(option.id)) {
                     that.addPort({ group: 'out', id: option.id, args: { y: portY }});
                 } else {

@@ -17,9 +17,6 @@ export default {
     Drop
   },
   computed: {
-    modules() {
-      return JSON.stringify(this.$store.getters.planningModules)
-    }
   },
   data() {
     return {
@@ -35,17 +32,20 @@ export default {
       let x = (evt.clientX - pan.x - canvasRect.left) / this.panAndZoom.getZoom();
       let y = (evt.clientY - pan.y - canvasRect.top) / this.panAndZoom.getZoom();
 
+      let name = this.$store.getters.planningModules.filter((ele) => {
+        return ele.id === moduleId
+      })[0].name;
 
-new joint.shapes.qad.Question({
-            position: { x, y },
-            size: { width: 100, height: 70 },
-            question: 'text',
-            inPorts: [{ id: 'inn', label: 'Inn' }],
-            options: [
-                { id: 'yes', text: 'Yes' },
-                { id: 'no', text: 'No' }
-            ]
-        }).addTo(this.graph)
+      new joint.shapes.qad.Question({
+        position: { x, y },
+        size: { width: 100, height: 70 },
+        question: name,
+        inPorts: [{ id: 'inn', label: 'Inn' }],
+        options: [
+          { id: 'yes', text: 'Yes' },
+          { id: 'no', text: 'No' }
+        ]
+      }).addTo(this.graph)
 
 
 // var shape = new joint.shapes.devs.Model({
@@ -99,7 +99,7 @@ new joint.shapes.qad.Question({
       fit: false,
       zoomScaleSensitivity: 1,
       maxZoom: 3,
-      minZoom: 0.1,
+      minZoom: 0.05,
       dblClickZoomEnabled: false,
       panEnabled: true,
       onZoom: function(scale){
