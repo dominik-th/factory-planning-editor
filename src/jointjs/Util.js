@@ -2,6 +2,7 @@
 
 import 'jointjs/dist/joint.css';
 import joint from 'jointjs';
+import _ from 'lodash';
 
 class Util {
   static initShapes() {
@@ -142,7 +143,7 @@ class Util {
             var attrsUpdate = {};
             var questionHeight = this.get('questionHeight');
 
-            _.each(options, function(option, index) {
+            _.each(options, function(option) {
 
                 var selector = '.option-' + option.id;
 
@@ -234,7 +235,7 @@ class Util {
             this.$options.empty();
 
             var that = this;
-            _.each(this.model.get('options'), function(option, index) {
+            _.each(this.model.get('options'), function(option) {
 
                 var className = 'option-' + option.id;
                 var elOption = that.elOption.clone().addClass(className);

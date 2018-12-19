@@ -78,7 +78,7 @@ export default {
       localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
     });
 
-    graph.on('change:position', debounce(cell => {
+    graph.on('change:position', debounce(() => {
       for (let link of graph.getLinks()) {
         paper.findViewByModel(link).update();
       }

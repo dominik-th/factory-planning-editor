@@ -64,7 +64,7 @@ class Paper extends joint.dia.Paper {
     }
   }
 
-  panAnimate(position) {
+  // panAnimate(position) {
     // TODO
     // var amount = { x: 'a' }
     //   , animationTime = 300 // ms
@@ -87,7 +87,7 @@ class Paper extends joint.dia.Paper {
     //   var viewBox = this.viewport.getViewBox()
     // , offsetX = (this.width - (viewBox.width + viewBox.x * 2) * this.getZoom()) * 0.5
     // , offsetY = (this.height - (viewBox.height + viewBox.y * 2) * this.getZoom()) * 0.5
-  }
+  // }
 
   _setGrid(size, color, offset) {
     let $ = require('jquery')
@@ -117,7 +117,7 @@ class Paper extends joint.dia.Paper {
 }
 
 const validateConnection = (graph) => {
-  return (cellViewS, magnetS, cellViewT, magnetT, end, linkView) => {
+  return (cellViewS, magnetS, cellViewT, magnetT) => {
     // Link to the same cell is not allowed
     if (cellViewS === cellViewT) return false;
 
