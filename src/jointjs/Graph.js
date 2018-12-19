@@ -11,11 +11,25 @@ class Graph extends joint.dia.Graph {
   }
 
   addPlannungModule(position, name, informationTypes) {
-    this.addCell(new joint.shapes.fpe.Module({
+    let module = new joint.shapes.fpe.Module({
       position,
       question: name,
       options: informationTypes
-    }));
+    });
+    this.addCell(module);
+    return module.id;
+  }
+
+  removePlanningModule(id) {
+    this.getCell(id).remove();
+  }
+
+  updatePlanningModule(id, name, informationTypes) {
+
+  }
+
+  connectPlanningModules(sourceId, targetId, informationId) {
+
   }
 
 }
