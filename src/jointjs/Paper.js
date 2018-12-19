@@ -29,11 +29,11 @@ class Paper extends joint.dia.Paper {
     let targetElement = this.element.children[2];
     this.panZoom = svgPanZoom(targetElement, {
       fit: false,
-      zoomScaleSensitivity: 1,
-      maxZoom: 3,
-      minZoom: 0.05,
-      dblClickZoomEnabled: false,
       panEnabled: false,
+      minZoom: 0.05,
+      maxZoom: 3,
+      zoomScaleSensitivity: 1,
+      dblClickZoomEnabled: false,
       onZoom: scale => {
         this.scale = scale;
         this._setGrid(10 * 15 * this.scale, '#808080');
@@ -58,13 +58,13 @@ class Paper extends joint.dia.Paper {
     }
   }
 
-  pan(location) {
+  pan(position) {
     if (this.panZoom) {
-      this.panZoom.pan(location);
+      this.panZoom.pan(position);
     }
   }
 
-  panAnimate(location) {
+  panAnimate(position) {
     // TODO
     // var amount = { x: 'a' }
     //   , animationTime = 300 // ms

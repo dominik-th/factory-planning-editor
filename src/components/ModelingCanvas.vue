@@ -10,8 +10,6 @@
 <script>
 import { Drop } from 'vue-drag-drop';
 import debounce from 'lodash/debounce';
-import joint from 'jointjs';
-import Util from '../jointjs/Util';
 import Paper from '../jointjs/Paper';
 import Graph from '../jointjs/Graph';
 
@@ -49,15 +47,13 @@ export default {
         options.push({ id: outId + '', text: this.$store.getters.informationTypes[outId].name, payload: "OUT" });
       }
 
-      let obj = new joint.shapes.qad.Question({
-        position: { x: x - 100, y: y - 20 },
-        question: droppedModule.name,
+      this.graph.addPlannungModule(
+        // substracting these values to approximately center the module at the cursor
+        { x: x - 100, y: y - 20 },
+        droppedModule.name,
         options
-      }).addTo(this.graph);
+      );
     }
-  },
-  created() {
-    Util.initShapes()
   },
   mounted() {
     let canvas = this.$refs.modellingCanvas.$el;

@@ -5,7 +5,7 @@ import joint from 'jointjs';
 
 class Util {
   static initShapes() {
-    joint.dia.Element.define('qad.Question', {
+    joint.dia.Element.define('fpe.Module', {
       optionHeight: 30,
       questionHeight: 45,
       paddingBottom: 30,
@@ -203,7 +203,7 @@ class Util {
         }
     });
 
-    joint.shapes.qad.QuestionView = joint.dia.ElementView.extend({
+    joint.shapes.fpe.ModuleView = joint.dia.ElementView.extend({
 
         events: {
             'click .btn-add-option': 'onAddOption',
