@@ -9,6 +9,7 @@
 
 <script>
 import { Drop } from 'vue-drag-drop';
+import debounce from 'lodash/debounce';
 import joint from 'jointjs';
 import Util from '../jointjs/Util';
 import Paper from '../jointjs/Paper';
@@ -77,9 +78,15 @@ export default {
       paper.pan(windowProperties.offset)
     }
 
-    graph.on('change add remove', function() {
+    graph.on('change add remove', () => {
       localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
     });
+
+    graph.on('change:position', debounce(cell => {
+      for (let link of graph.getLinks()) {
+        paper.findViewByModel(link).update();
+      }
+    }, 500));
   }
 }
 
@@ -90,14 +97,6 @@ export default {
 .container-modelling-canvas {
   position: relative;
   flex: 1;
-/*  background-color:#fff;
-  background-image: linear-gradient(white 0px, transparent 0px),
-  linear-gradient(90deg, white 0px, transparent 0px),
-  linear-gradient(rgba(200,200,200,.3) 1px, transparent 1px),
-  linear-gradient(90deg, rgba(200,200,200,.3) 1px, transparent 1px);
-  background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
-  background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px
-  /*background-color: green;*/
 }
 </style>
 

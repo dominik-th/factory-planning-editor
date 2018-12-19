@@ -44,7 +44,7 @@ class Util {
         '.body': {
           refWidth: '100%',
           refHeight: '100%',
-          rx: '.8%',
+          rx: '.6%',
           ry: '.4%',
           stroke: '#000000',
           strokeWidth: 1,

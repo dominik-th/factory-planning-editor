@@ -22,7 +22,6 @@ class Paper extends joint.dia.Paper {
       markAvailable: true,
       defaultLink
     });
-    // this.setupSvgPanZoom(element);
     this.element = element;
   }
 
@@ -63,6 +62,31 @@ class Paper extends joint.dia.Paper {
     if (this.panZoom) {
       this.panZoom.pan(location);
     }
+  }
+
+  panAnimate(location) {
+    // TODO
+    // var amount = { x: 'a' }
+    //   , animationTime = 300 // ms
+    //   , animationStepTime = 15 // one frame per 30 ms
+    //   , animationSteps = animationTime / animationStepTime
+    //   , animationStep = 0
+    //   , intervalID = null
+    //   , stepX = location.x / animationSteps
+    //   , stepY = location.y / animationSteps
+
+    // intervalID = setInterval(() => {
+    //   if (animationStep++ < animationSteps) {
+    //     this.panZoom.panBy({x: stepX, y: stepY})
+    //   } else {
+    //     // Cancel interval
+    //     clearInterval(intervalID)
+    //   }
+    // }, animationStepTime)
+
+    //   var viewBox = this.viewport.getViewBox()
+    // , offsetX = (this.width - (viewBox.width + viewBox.x * 2) * this.getZoom()) * 0.5
+    // , offsetY = (this.height - (viewBox.height + viewBox.y * 2) * this.getZoom()) * 0.5
   }
 
   _setGrid(size, color, offset) {
