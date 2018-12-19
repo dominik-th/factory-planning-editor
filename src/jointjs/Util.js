@@ -1,7 +1,10 @@
 'use strict';
 
+import 'jointjs/dist/joint.css';
+import joint from 'jointjs';
+
 class Util {
-  static initShapes(joint) {
+  static initShapes() {
     joint.dia.Element.define('qad.Question', {
       optionHeight: 30,
       questionHeight: 45,
