@@ -3,130 +3,97 @@
 class Util {
   static initShapes(joint) {
     joint.dia.Element.define('qad.Question', {
-
-        optionHeight: 30,
-        questionHeight: 45,
-        paddingBottom: 30,
-        minWidth: 150,
-        ports: {
-            groups: {
-                'in': {
-                    position: 'top',
-                    attrs: {
-                        circle: {
-                            magnet: 'passive',
-                            stroke: 'white',
-                            fill: '#feb663',
-                            r: 14
-                        },
-                        text: {
-                            pointerEvents: 'none',
-                            fontSize: 12,
-                            fill: 'white'
-                        }
-                    },
-                    label: {
-                        position: {
-                            name: 'left',
-                            args: { x: 5 }
-                        }
-                    }
-                },
-                'out': {
-                    position: 'right',
-                    attrs: {
-                        'circle': {
-                            magnet: true,
-                            stroke: 'none',
-                            fill: '#31d0c6',
-                            r: 14
-                        }
-                    }
-                }
-            },
-            items: [{
-                group: 'in',
-                attrs: {
-                    text: { text: 'in' }
-                }
-            }]
-        },
-        attrs: {
-            '.': {
-                magnet: false
-            },
-            '.body': {
-                refWidth: '100%',
-                refHeight: '100%',
-                rx: '0%',
-                ry: '0%',
-                stroke: '#000000',
-                strokeWidth: 1,
-                fill: {
-                    type: 'linearGradient',
-                    stops: [
-                        { offset: '0%', color: '#FEB663' },
-                        { offset: '100%', color: '#31D0C6' }
-                    ],
-                    // Top-to-bottom gradient.
-                    attrs: { x1: '0%', y1: '0%', x2: '0%', y2: '100%' }
-                }
-            },
-            '.btn-add-option': {
-                refX: 10,
-                refDy: -22,
-                cursor: 'pointer',
-                fill: 'white'
-            },
-            '.btn-remove-option': {
-                xAlignment: 10,
-                yAlignment: 13,
-                cursor: 'pointer',
-                fill: 'white'
-            },
-            '.options': {
-                refX: 0
-            },
-
-            // Text styling.
-            text: {
-                fontFamily: 'Arial'
-            },
-            '.option-text': {
-                fontSize: 11,
-                fill: '#4b4a67',
-                refX: 30,
-                yAlignment: 'middle'
-            },
-            '.question-text': {
-                fill: 'white',
-                refX: '50%',
-                refY: 15,
-                fontSize: 15,
-                textAnchor: 'middle',
-                style: {
-                    textShadow: '1px 1px 0px gray'
-                }
-            },
-
-            // Options styling.
-            '.option-rect': {
-                rx: 0,
-                ry: 0,
-                stroke: 'white',
-                strokeWidth: 1,
-                strokeOpacity: .5,
-                fillOpacity: .5,
-                fill: 'white',
-                refWidth: '100%'
+      optionHeight: 30,
+      questionHeight: 45,
+      paddingBottom: 30,
+      minWidth: 200,
+      ports: {
+        groups: {
+          'in': {
+            position: 'left',
+            attrs: {
+              'circle': {
+                magnet: 'passive',
+                stroke: '#999',
+                fill: '#fff',
+                r: 10
+              }
             }
+          },
+          'out': {
+            position: 'right',
+            attrs: {
+              'circle': {
+                magnet: true,
+                stroke: '#999',
+                fill: '#fff',
+                r: 10
+              }
+            }
+          }
+        },
+      },
+      attrs: {
+        // this disables connection to the rectangle body
+        '.': {
+          magnet: false
+        },
+        '.body': {
+          refWidth: '100%',
+          refHeight: '100%',
+          rx: '.8%',
+          ry: '.4%',
+          stroke: '#000000',
+          strokeWidth: 1,
+          fill: {
+            type: 'linearGradient',
+            stops: [
+              { offset: '0%', color: '#FEB663' },
+              { offset: '100%', color: '#31D0C6' }
+            ],
+            // Top-to-bottom gradient.
+            attrs: { x1: '0%', y1: '0%', x2: '0%', y2: '100%' }
+          }
+        },
+
+        // Text styling.
+        text: {
+          fontFamily: 'Arial'
+        },
+        '.option-text': {
+          fontSize: 11,
+          fill: '#4b4a67',
+          refX: '50%',
+          yAlignment: 'middle',
+          textAnchor: 'middle',
+        },
+        '.question-text': {
+          fill: 'white',
+          refX: '50%',
+          refY: 15,
+          fontSize: 15,
+          textAnchor: 'middle',
+          style: {
+            textShadow: '1px 1px 0px gray'
+          }
+        },
+
+        // Options styling.
+        '.option-rect': {
+          rx: 0,
+          ry: 0,
+          stroke: 'black',
+          strokeWidth: .5,
+          strokeOpacity: 1,
+          fillOpacity: 0,
+          fill: 'white',
+          refWidth: '100%'
         }
+      }
     }, {
-
-        markup: '<rect class="body"/><text class="question-text"/><g class="options"></g><path class="btn-add-option" d="M5,0 10,0 10,5 15,5 15,10 10,10 10,15 5,15 5,10 0,10 0,5 5,5z"/>',
-        optionMarkup: '<g class="option"><rect class="option-rect"/><path class="btn-remove-option" d="M0,0 15,0 15,5 0,5z"/><text class="option-text"/></g>',
-
-        initialize: function() {
+      markup: '<rect class="body"/><text class="question-text"/><g class="options"></g>',
+      optionMarkup: '<g class="option"><rect class="option-rect"/><text class="option-text"/></g>',
+      initialize: function() {
 
             joint.dia.Element.prototype.initialize.apply(this, arguments);
             this.on('change:options', this.onChangeOptions, this);
@@ -172,7 +139,7 @@ class Util {
             var attrsUpdate = {};
             var questionHeight = this.get('questionHeight');
 
-            _.each(options, function(option) {
+            _.each(options, function(option, index) {
 
                 var selector = '.option-' + option.id;
 
@@ -184,7 +151,11 @@ class Util {
 
                 var portY = offsetY - optionHeight / 2 + questionHeight;
                 if (!that.getPort(option.id)) {
+                  if (option.payload && option.payload === 'IN') {
+                    that.addPort({ group: 'in', id: option.id, args: { y: portY }});
+                  } else {
                     that.addPort({ group: 'out', id: option.id, args: { y: portY }});
+                  }
                 } else {
                     that.portProp(option.id, 'args/y', portY);
                 }

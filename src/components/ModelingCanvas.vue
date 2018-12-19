@@ -32,36 +32,24 @@ export default {
       let x = (evt.clientX - pan.x - canvasRect.left) / this.panAndZoom.getZoom();
       let y = (evt.clientY - pan.y - canvasRect.top) / this.panAndZoom.getZoom();
 
-      let name = this.$store.getters.planningModules.filter((ele) => {
+      let droppedModule = this.$store.getters.planningModules.filter((ele) => {
         return ele.id === moduleId
-      })[0].name;
+      })[0];
 
-      new joint.shapes.qad.Question({
-        position: { x, y },
-        size: { width: 100, height: 70 },
-        question: name,
-        inPorts: [{ id: 'inn', label: 'Inn' }],
-        options: [
-          { id: 'yes', text: 'Yes' },
-          { id: 'no', text: 'No' }
-        ]
-      }).addTo(this.graph)
+      let options = [];
 
+      for (let inId of droppedModule.inputInformation) {
+        options.push({ id: inId + '', text: this.$store.getters.informationTypes[inId].name, payload: "IN" });
+      }
+      for (let outId of droppedModule.outputInformation) {
+        options.push({ id: outId + '', text: this.$store.getters.informationTypes[outId].name, payload: "OUT" });
+      }
 
-// var shape = new joint.shapes.devs.Model({
-//     position: {
-//         x,
-//         y
-//     },
-// });
-// shape.addTo(this.graph);
-// let a = shape.addInPort('a')
-// a = shape.addInPort('Hallo Welt')
-
-// a = shape.addInPort('a')
-
-
-
+      let obj = new joint.shapes.qad.Question({
+        position: { x: x - 100, y: y - 20 },
+        question: droppedModule.name,
+        options
+      }).addTo(this.graph);
     }
   },
   mounted() {
@@ -88,6 +76,47 @@ export default {
         name: 'mesh',
         color: '#EEE'
       },
+      linkPinning: false,
+      async: true,
+      snapLinks: { radius: 50 },
+      validateConnection: function(cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
+        // Link to the same cell is not allowed
+        if (cellViewS === cellViewT) return false;
+
+        // Target magnet has to be of input type
+        if (!magnetT || magnetT.getAttribute('port-group') !== 'in') return false;
+
+        // Do not allow links directed from input group
+        if (!magnetS || magnetS.getAttribute('port-group') === 'in') return false;
+
+        // Information types have to match
+        if (magnetS.getAttribute('port') !== magnetT.getAttribute('port')) return false;
+
+        // Input information already satisfied
+        let satisfied = graph.getConnectedLinks(cellViewT.model).filter(link => {
+          return link.get('target').port === magnetS.getAttribute('port');
+        }).length === 0;
+
+        return satisfied;
+      },
+      markAvailable: true,
+        //       defaultLink: new joint.dia.Link({
+        //     attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' } }
+        // }),
+      defaultLink: new joint.dia.Link({
+        router: { name: 'metro' },
+        connector: { name: 'rounded' },
+        attrs: {
+          '.connection': {
+            stroke: '#333333',
+            'stroke-width': 3
+          },
+          '.marker-target': {
+            fill: '#333333',
+            d: 'M 10 0 L 0 5 L 10 10 z'
+          },
+        }
+      }),
     });
 
     this.graph = graph;
@@ -121,7 +150,7 @@ export default {
       that.panAndZoom.pan(windowProperties.offset)
     }
 
-    graph.on('add', function() {
+    graph.on('change', function() {
       // console.log('xx')
       // console.log(graph.toJSON())
       localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
@@ -298,5 +327,19 @@ if (lastEle !== null) {
   background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
   background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px
   /*background-color: green;*/
+}
+</style>
+
+<!-- JointJS does not integrate that far in Vue js so unfortunately we cannot use scoped css attributes -->
+<style>
+/* port styling */
+.available-magnet {
+  fill: yellow;
+  transform: scale(1.25);
+}
+/* element styling */
+.available-cell rect {
+/*  stroke: green;
+  stroke-width: 5px;*/
 }
 </style>
