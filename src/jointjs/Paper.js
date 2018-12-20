@@ -133,9 +133,10 @@ const validateConnection = (graph) => {
     // Input information already satisfied
     let satisfied = graph.getConnectedLinks(cellViewT.model).filter(link => {
       return link.get('target').port === magnetS.getAttribute('port');
-    }).length === 0;
+    }).length !== 0;
+    if (satisfied) return false;
 
-    return satisfied;
+    return !graph.isSuccessor(cellViewT.model, cellViewS.model);
   }
 }
 
