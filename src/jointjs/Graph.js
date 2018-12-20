@@ -1,5 +1,6 @@
 import joint from 'jointjs';
 import Util from './Util';
+import C from './Constants';
 
 class Graph extends joint.dia.Graph {
 
@@ -10,14 +11,17 @@ class Graph extends joint.dia.Graph {
     }
   }
 
-  addPlannungModule(position, name, informationTypes) {
+  addPlanningModule(position, name, informationTypes) {
     let module = new joint.shapes.fpe.Module({
-      position,
+      position: {
+        x: roundNearest(C.GRID_SIZE, position.x),
+        y: roundNearest(C.GRID_SIZE, position.y)
+      },
       question: name,
       options: informationTypes
     });
     this.addCell(module);
-    return module.id;
+    return module;
   }
 
   removePlanningModule(id) {
@@ -32,6 +36,10 @@ class Graph extends joint.dia.Graph {
 
   }
 
+}
+
+const roundNearest = (n, value) => {
+  return Math.round(value / n) * n;
 }
 
 export default Graph;
