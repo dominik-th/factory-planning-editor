@@ -30,6 +30,7 @@ export default {
     importData: function(evt) {
       try {
         this.$store.commit('SET_FULL_STATE', JSON.parse(this.importString));
+        this.$root.$emit('clearModelingCanvas');
       } catch(e) {
         this.$notify({
           type: 'error',

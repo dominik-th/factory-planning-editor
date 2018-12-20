@@ -22,11 +22,40 @@ export default {
   },
   data() {
     return {
+      unsubscribeStoreMutations: this.$store.subscribe(this.handleMutationEvents),
       graph: null,
       paper: null
     }
   },
   methods: {
+    handleMutationEvents(mutation, state) {
+      // we cant subscribe to just one mutation so filter the mutation we actually want here
+      if (mutation.type === 'SET_PLANNING_MODULE') {
+        // find all modules which are placed in the canvas
+        for (let id in state.modeling.modules) {
+          let moduleId = state.modeling.modules[id].moduleId;
+          if (mutation.payload.id === moduleId) {
+            // and update these with the newest version of the module
+            let options = [];
+
+            for (let inId of state.planningModules[moduleId].inputInformation) {
+              options.push({ id: inId + '', text: this.$store.getters.informationTypes[inId].name, payload: "IN" });
+            }
+            for (let outId of state.planningModules[moduleId].outputInformation) {
+              options.push({ id: outId + '', text: this.$store.getters.informationTypes[outId].name, payload: "OUT" });
+            }
+            // todo: do this properly
+            let tmp = JSON.parse(JSON.stringify(state.modeling.modules[id]));
+            let plannedModule = this.graph.updatePlanningModule(id, state.planningModules[moduleId].name, options);
+            this.$store.commit('SET_MODELING_CELL', {
+              type: 'module',
+              id,
+              cell: tmp
+            });
+          }
+        }
+      }
+    },
     drop: function(moduleId, evt) {
       let canvas = this.$refs.modellingCanvas.$el;
       let canvasRect = canvas.getBoundingClientRect();
@@ -135,6 +164,13 @@ export default {
       paper.zoom(windowProperties.size / 150)
       paper.pan(windowProperties.offset)
     }
+
+    this.$root.$on('clearModelingCanvas', () => {
+      this.graph.clear();
+    })
+  },
+  beforeDestroy() {
+    this.unsubscribeStoreMutations();
   }
 }
 

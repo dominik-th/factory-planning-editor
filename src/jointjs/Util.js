@@ -45,19 +45,11 @@ class Util {
         '.body': {
           refWidth: '100%',
           refHeight: '100%',
-          rx: '.6%',
-          ry: '.4%',
+          rx: '.4%',
+          ry: '.8%',
           stroke: '#000000',
           strokeWidth: 1,
-          fill: {
-            type: 'linearGradient',
-            stops: [
-              { offset: '0%', color: '#FEB663' },
-              { offset: '100%', color: '#31D0C6' }
-            ],
-            // Top-to-bottom gradient.
-            attrs: { x1: '0%', y1: '0%', x2: '0%', y2: '100%' }
-          }
+          fill: '#ccc'
         },
 
         // Text styling.
@@ -72,14 +64,12 @@ class Util {
           textAnchor: 'middle',
         },
         '.question-text': {
-          fill: 'white',
+          fill: '#333',
+          fontWeight: 'bold',
           refX: '50%',
           refY: 15,
           fontSize: 15,
           textAnchor: 'middle',
-          style: {
-            textShadow: '1px 1px 0px gray'
-          }
         },
 
         // Options styling.

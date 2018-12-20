@@ -150,7 +150,7 @@ const defaultLink = new joint.dia.Link({
       'stroke-width': 3
     },
     '.marker-target': {
-      fill: '#ffffff',
+      fill: '#333333',
       d: 'M 10 0 L 0 5 L 10 10 z'
     },
   }
