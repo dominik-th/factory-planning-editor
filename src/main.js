@@ -26,7 +26,7 @@ Vue.use(BootstrapVue)
 Vue.use(Notifications, {componentName: 'AppNotifications'})
 
 const i18n = new VueI18n({
-  locale: 'de-DE', // set locale
+  locale: localStorage.getItem('locale') || 'de-DE', // set locale
   messages, // set locale messages
 })
 
