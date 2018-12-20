@@ -2,6 +2,7 @@
 
 import joint from 'jointjs';
 import svgPanZoom from 'svg-pan-zoom';
+import C from './Constants';
 
 class Paper extends joint.dia.Paper {
 
@@ -13,7 +14,7 @@ class Paper extends joint.dia.Paper {
       model: graph,
       width: '100%',
       height: '100%',
-      gridSize: 10,
+      gridSize: C.GRID_SIZE,
       drawGrid: { name: 'mesh', color: '#EEE' },
       async: true,
       linkPinning: false,
@@ -36,10 +37,10 @@ class Paper extends joint.dia.Paper {
       dblClickZoomEnabled: false,
       onZoom: scale => {
         this.scale = scale;
-        this._setGrid(10 * 15 * this.scale, '#808080');
+        this._setGrid(C.GRID_SIZE * 15 * this.scale, '#808080');
       },
       beforePan: (oldpan, newpan) => {
-        this._setGrid(10 * 15 * this.scale, '#808080', newpan);
+        this._setGrid(C.GRID_SIZE * 15 * this.scale, '#808080', newpan);
       }
     });
 
