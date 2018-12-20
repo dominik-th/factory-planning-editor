@@ -17,7 +17,7 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-clearOutdatedStore('0.0.1');
+clearOutdatedStore('0.0.1')
 library.add(fas)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

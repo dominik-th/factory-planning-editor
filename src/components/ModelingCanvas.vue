@@ -34,9 +34,7 @@ export default {
       let x = (evt.clientX - pan.x - canvasRect.left) / this.paper.panZoom.getZoom();
       let y = (evt.clientY - pan.y - canvasRect.top) / this.paper.panZoom.getZoom();
 
-      let droppedModule = this.$store.getters.planningModules.filter((ele) => {
-        return ele.id === moduleId
-      })[0];
+      let droppedModule = this.$store.getters.planningModules[moduleId];
 
       let options = [];
 

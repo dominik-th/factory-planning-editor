@@ -10,21 +10,21 @@
     <div class="repository-components">
       <drag
         class="repository-component"
-        v-for="(item, index) in modules"
+        v-for="(module, key) in modules"
         drop-effect="copy"
         :effect-allowed="['copy']"
-        :transfer-data="item.id"
-        :key="item.id"
-        :class="{'selected': item.id === selected}"
-        @click.native="selectModule(item.id)"
+        :transfer-data="key"
+        :key="key"
+        :class="{'selected': key === selected}"
+        @click.native="selectModule(key)"
         @dblclick.native="editSelectedModule"
       >
         <FuseHighlight
-          :result="item.name"
-          :indices="fuseIndices(index)"
+          :result="module.name"
+          :indices="fuseIndices(key)"
         />
         <div class="component-info">
-          {{ $tc('modal.in_information', item.inputInformation.length) }}<br />{{ $tc('modal.out_information', item.outputInformation.length) }}
+          {{ $tc('modal.in_information', module.inputInformation.length) }}<br />{{ $tc('modal.out_information', module.outputInformation.length) }}
         </div>
       </drag>
     </div>

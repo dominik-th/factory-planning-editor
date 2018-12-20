@@ -1,3 +1,4 @@
+import uuidv4 from 'uuid/v4'
 import Fuse from 'fuse.js'
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -6,12 +7,17 @@ import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
+  strict: process.env.NODE_ENV !== 'production',
   plugins: [createPersistedState({
     key: 'application_state'
   })],
   state: {
-    planningModules: [],
-    informationTypes: {}
+    planningModules: {},
+    informationTypes: {},
+    modeling: {
+      modules: {},
+      links: {}
+    }
   },
   mutations: {
     SET_FULL_STATE(state, importedState) {
@@ -22,43 +28,29 @@ export const store = new Vuex.Store({
     SET_PLANNING_MODULES(state, modules) {
       state.planningModules = modules;
     },
-    ADD_PLANNING_MODULE(state, module) {
-      // get highest id in use by planning modules
-      let max = state.planningModules.reduce((max, ele) => ele.id > max ? ele.id : max, 0);
-      state.planningModules.push({
-        id: max + 1,
-        ...module
-      });
+    SET_PLANNING_MODULE(state, { id, module }) {
+      Vue.set(state.planningModules, id, module);
     },
-    EDIT_PLANNING_MODULE(state, module) {
-      for (let i = 0; i < state.planningModules.length; i++) {
-        if (state.planningModules[i].id === module.id) {
-          Vue.set(state.planningModules, i, module);
-        }
-      }
-    },
-    REMOVE_PLANNING_MODULE(state, module) {
-      let id = module;
-      if (typeof(module) === 'object') {
-        id = module.id;
-      }
-      state.planningModules = state.planningModules.filter((module) => {
-        return module.id !== id;
-      });
+    REMOVE_PLANNING_MODULE(state, id) {
+      Vue.delete(state.planningModules, id);
     },
     SET_INFORMATION_TYPES(state, types) {
       state.informationTypes = types;
     },
-    ADD_INFORMATION_TYPE(state, { id, name }) {
+    SET_INFORMATION_TYPE(state, { id, name }) {
       Vue.set(state.informationTypes, id, {name});
     }
   },
   actions: {
-    addInformation({ commit, state }, name) {
-      // get highest id in use by information types
-      let max = Math.max(0, ...Object.keys(state.informationTypes));
-      commit('ADD_INFORMATION_TYPE', {id: max + 1, name});
-      return max + 1;
+    addPlanningModule({ commit }, module) {
+      let id = uuidv4();
+      commit('SET_PLANNING_MODULE', {id, module});
+      return id;
+    },
+    addInformation({ commit }, name) {
+      let id = uuidv4();
+      commit('SET_INFORMATION_TYPE', {id, name});
+      return id;
     }
   },
   getters: {
@@ -68,13 +60,12 @@ export const store = new Vuex.Store({
     planningModules(state) {
       return state.planningModules;
     },
-    planningModuleById(state) {
-      // todo: fix this method
-      return id => state.planningModules.filter(item => {
-        return item.id === id;
-      })[0];
+    searchablePlanningModules(state) {
+      return Object.keys(state.planningModules).map(key => {
+        return { id: key, ...state.planningModules[key] };
+      });
     },
-    filteredPlanningModules(state) {
+    filteredPlanningModules(state, getters) {
       let fuseOptions = {
         shouldSort: true,
         includeMatches: true,
@@ -85,7 +76,7 @@ export const store = new Vuex.Store({
           "name"
         ]
       };
-      let fuse = new Fuse(state.planningModules, fuseOptions);
+      let fuse = new Fuse(getters.searchablePlanningModules, fuseOptions);
       return keyword => fuse.search(keyword);
     },
     informationTypes(state) {

@@ -133,10 +133,10 @@ export default {
       // all the remaining existing information types which arent blacklisted
       let informationPool = [];
       for (let id in this.$store.getters.informationTypes) {
-        if (this.module.inputInformation.indexOf(parseInt(id)) < 0 &&
-            this.module.outputInformation.indexOf(parseInt(id)) < 0) {
+        if (this.module.inputInformation.indexOf(id) < 0 &&
+            this.module.outputInformation.indexOf(id) < 0) {
           informationPool.push({
-            id: parseInt(id),
+            id,
             ...this.$store.getters.informationTypes[id]
           });
         }
@@ -148,7 +148,7 @@ export default {
     this.$root.$on('modal.editModule', (moduleId) => {
       this.moduleId = moduleId;
       // clone module so we dont change vuex state directly
-      this.module = JSON.parse(JSON.stringify(this.$store.getters.planningModuleById(moduleId)));
+      this.module = JSON.parse(JSON.stringify(this.$store.getters.planningModules[moduleId]));
       this.$refs.myModalRef.show();
     });
     this.$root.$on('modal.createModule', () => {
@@ -175,7 +175,26 @@ export default {
       this.$refs.inputPicker.clear();
       this.$refs.outputPicker.clear();
     },
-    save: function(evt) {
+    createInputInformation: async function(name) {
+      this.module.inputInformation.push(await this.$store.dispatch('addInformation', name));
+    },
+    createOutputInformation: async function(name) {
+      this.module.outputInformation.push(await this.$store.dispatch('addInformation', name));
+    },
+    addInputInformation: function(id) {
+      this.module.inputInformation.push(id);
+    },
+    addOutputInformation: function(id) {
+      this.module.outputInformation.push(id);
+    },
+    removeInformation: function(type, id) {
+      if (type === 'in') {
+        this.module.inputInformation = this.module.inputInformation.filter(module => module !== id)
+      } else if (type === 'out') {
+        this.module.outputInformation = this.module.outputInformation.filter(module => module !== id)
+      }
+    },
+    save: async function(evt) {
       // empty names are not allowed
       if (!this.module.name) {
         this.$notify({
@@ -187,29 +206,10 @@ export default {
       }
       if (this.moduleId) {
         // update existing module
-        this.$store.commit('EDIT_PLANNING_MODULE', this.module);
+        this.$store.commit('SET_PLANNING_MODULE', { id: this.moduleId, module: this.module });
       } else {
         // create a new module
-        this.$store.commit('ADD_PLANNING_MODULE', this.module);
-      }
-    },
-    addInputInformation: function(id) {
-      this.module.inputInformation.push(id);
-    },
-    createInputInformation: async function(name) {
-      this.module.inputInformation.push(await this.$store.dispatch('addInformation', name));
-    },
-    addOutputInformation: function(id) {
-      this.module.outputInformation.push(id);
-    },
-    createOutputInformation: async function(name) {
-      this.module.outputInformation.push(await this.$store.dispatch('addInformation', name));
-    },
-    removeInformation: function(type, id) {
-      if (type === 'in') {
-        this.module.inputInformation = this.module.inputInformation.filter(module => module !== id)
-      } else if (type === 'out') {
-        this.module.outputInformation = this.module.outputInformation.filter(module => module !== id)
+        await this.$store.dispatch('addPlanningModule', this.module);
       }
     }
   }
