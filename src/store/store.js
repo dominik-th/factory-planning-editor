@@ -39,7 +39,31 @@ export const store = new Vuex.Store({
     },
     SET_INFORMATION_TYPE(state, { id, name }) {
       Vue.set(state.informationTypes, id, {name});
+    },
+    SET_MODELING_CELL(state, { type, id, cell }) {
+      switch(type) {
+        case 'module':
+          Vue.set(state.modeling.modules, id, cell);
+          break;
+        case 'link':
+          Vue.set(state.modeling.links, id, cell);
+          break;
+      }
+    },
+    REMOVE_MODELING_CELL(state, { type, id }) {
+      switch(type) {
+        case 'module':
+          Vue.delete(state.modeling.modules, id);
+          break;
+        case 'link':
+          Vue.delete(state.modeling.links, id);
+          break;
+      }
+    },
+    UPDATE_MODELING_POSITION(state, { id, position }) {
+      Vue.set(state.modeling.modules[id], 'position', position);
     }
+
   },
   actions: {
     addPlanningModule({ commit }, module) {

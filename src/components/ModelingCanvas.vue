@@ -45,12 +45,30 @@ export default {
         options.push({ id: outId + '', text: this.$store.getters.informationTypes[outId].name, payload: "OUT" });
       }
 
-      this.graph.addPlannungModule(
+      // put module on canvas
+      let plannedModule = this.graph.addPlanningModule(
         // substracting these values to approximately center the module at the cursor
         { x: x - 100, y: y - 20 },
         droppedModule.name,
         options
       );
+
+      // store information about the module in vuex store
+      // additional attributes are going to be stored there aswell
+      this.$store.commit('SET_MODELING_CELL', {
+        type: 'module',
+        id: plannedModule.get('id'),
+        cell: {
+          moduleId,
+          position: plannedModule.get('position'),
+          attributes: {
+            numEmployees: 0,
+            cost: 0,
+            duration: 0,
+            custom: []
+          }
+        }
+      });
     }
   },
   mounted() {
@@ -62,31 +80,66 @@ export default {
     this.graph = graph;
     this.paper = paper;
 
+    // fired when a link is connected a new target
+    // also happens when the link already existed and is just updated
+    graph.on('change:source change:target', (link) => {
+      if (link.get('source').id && link.get('target').id) {
+        this.$store.commit('SET_MODELING_CELL', {
+          type: 'link',
+          id: link.get('id'),
+          cell: {
+            informationId: link.get('target').port,
+            fromModule: link.get('source').id,
+            toModule: link.get('target').id
+          }
+        });
+      }
+    });
+
+    // fired when any cell on the canvas has been removed
+    graph.on('remove', (element) => {
+      switch (element.get('type')) {
+        case 'fpe.Module':
+          this.$store.commit('REMOVE_MODELING_CELL', {type: 'module', id: element.get('id')});
+          break;
+        case 'link':
+          this.$store.commit('REMOVE_MODELING_CELL', {type: 'link', id: element.get('id')});
+          break;
+      }
+    })
+
+    // fired when any cell on the canvas changed the position
+    graph.on('change:position', debounce((element) => {
+      // update the stored position in vuex store
+      if (element.get('type') === 'fpe.Module') {
+        this.$store.commit('UPDATE_MODELING_POSITION', {
+          id: element.get('id'),
+          position: element.get('position')
+        });
+      }
+      // redraw all links in case the cell has moved onto a link
+      for (let link of graph.getLinks()) {
+        paper.findViewByModel(link).update();
+      }
+    }, 500));
+
+    // persistency, todo... make this better
+    graph.on('change add remove', () => {
+      localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
+    });
     if (localStorage.getItem('graph')) {
       graph.fromJSON(JSON.parse(localStorage.getItem('graph')));
     }
-
     if (localStorage.getItem('window')) {
       let windowProperties = JSON.parse(localStorage.getItem('window'));
       paper.zoom(windowProperties.size / 150)
       paper.pan(windowProperties.offset)
     }
-
-    graph.on('change add remove', () => {
-      localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
-    });
-
-    graph.on('change:position', debounce(() => {
-      for (let link of graph.getLinks()) {
-        paper.findViewByModel(link).update();
-      }
-    }, 500));
   }
 }
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container-modelling-canvas {
   position: relative;
