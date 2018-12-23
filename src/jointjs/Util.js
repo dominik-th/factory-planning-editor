@@ -3,13 +3,200 @@
 import 'jointjs/dist/joint.css';
 import joint from 'jointjs';
 import _ from 'lodash';
+import C from './constants';
 
 class Util {
   static initShapes() {
     joint.dia.Element.define('fpe.Module', {
+      titleHeight: 45,
+      rowHeight: 30,
+      bottomHeight: 30,
+      moduleWidth: 200,
+      informations: {
+        input: [],
+        output: []
+      },
+      ports: {
+        groups: {
+          'in': {
+            position: 'left',
+            attrs: {
+              'circle': {
+                magnet: 'passive',
+                stroke: '#999',
+                fill: '#fff',
+                r: 10
+              }
+            }
+          },
+          'out': {
+            position: 'right',
+            attrs: {
+              'circle': {
+                magnet: true,
+                stroke: '#999',
+                fill: '#fff',
+                r: 10
+              }
+            }
+          }
+        },
+      },
+      attrs: {
+        text: {
+          fontFamily: 'Arial'
+        },
+        // this disables connection to the rectangle body
+        '.': {
+          magnet: false
+        },
+        '.body': {
+          refWidth: '100%',
+          refHeight: '100%',
+          rx: '5',
+          ry: '5',
+          stroke: '#000000',
+          strokeWidth: 1,
+          fill: '#ccc'
+        },
+        '.module-title': {
+          fill: '#333',
+          fontWeight: 'bold',
+          refX: '50%',
+          refY: 15,
+          fontSize: 15,
+          textAnchor: 'middle',
+        }
+      }
+    }, {
+      markup: '<rect class="body"/><text class="module-title"/><g class="information-table"></g>',
+      optionMarkup: '<g class="option"><rect class="option-rect"/><text class="option-text"/></g>',
+      initialize: function() {
+        joint.dia.Element.prototype.initialize.apply(this, arguments);
+        this.on('change:moduleTitle', () => {
+          this.attr('.module-title/text', this.get('moduleTitle') || '');
+          this.autoresize();
+        });
+        this.on('change:informations', this.onChangeInformations);
+
+        this.attr('.module-title/text', this.get('moduleTitle'), { silent: true });
+        this.attr('.information-table/refY', this.get('titleHeight'), { silent: true });
+
+        this.onChangeInformations();
+      },
+
+      onChangeInformations: function() {
+        let informations = this.get('informations');
+        let rowHeight = this.get('rowHeight');
+        let titleHeight = this.get('titleHeight');
+
+        // clean up previous ports which are not used anymore
+        let connectedPorts = this.getPorts();
+        for (let port of connectedPorts) {
+          let searchPool = [];
+          if (port.group === 'in') {
+            searchPool = informations.input;
+          } else if (port.group === 'out') {
+            searchPool = informations.output;
+          }
+          if (!searchPool.some(item => item.id === port.id)) {
+            // this will also remove any connected links
+            // and fire events accordingly
+            this.removePort(port.id)
+          }
+        }
+
+        // clean up previously added attributes
+        let attrs = this.get('attrs');
+        for (let selector in attrs) {
+          if (attrs[selector].dynamic) {
+            this.removeAttr(selector, { silent: true });
+          }
+        }
+
+        let informationSources = [
+          { group: 'in', data: informations.input },
+          { group: 'out', data: informations.output }
+        ];
+
+        let attrsUpdate = {};
+        for (let source of informationSources) {
+          let offsetY = 0;
+          for (let information of source.data) {
+            let selector = '.information-' + information.id;
+            attrsUpdate[selector] = { transform: `translate(0, ${offsetY})`, dynamic: true };
+            attrsUpdate[selector + ' .information-rect'] = { height: rowHeight, dynamic: true };
+            attrsUpdate[selector + ' .information-text'] = { text: information.text, dynamic: true, refY: rowHeight / 2 };
+            offsetY += rowHeight;
+            let portY = offsetY - rowHeight / 2 + titleHeight;
+            if (!this.getPort(information.id)) {
+              this.addPort({ group: source.group, id: information.id, args: { y: portY }});
+            } else {
+              this.portProp(information.id, 'args/y', portY);
+            }
+          }
+        }
+        this.attr(attrsUpdate);
+        this.autoresize();
+        // helpful link: http://svg-whiz.com/svg/table.svg
+      },
+
+      autoresize: function() {
+        let informations = this.get('informations');
+        let gap = this.get('bottomHeight');
+        let height = Math.max(informations.input.length, informations.output.length)
+          * this.get('rowHeight')
+          + this.get('titleHeight')
+          + gap;
+        this.resize(this.get('moduleWidth'), height);
+      }
+    });
+
+    joint.shapes.fpe.ModuleView = joint.dia.ElementView.extend({
+      initialize: function() {
+        joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+        this.listenTo(this.model, 'change:informations', this.renderInformations, this);
+      },
+
+      renderMarkup: function() {
+        joint.dia.ElementView.prototype.renderMarkup.apply(this, arguments);
+
+        // A holder for all the options.
+        this.$informationTable = this.$('.information-table');
+        // Create an SVG element representing one option. This element will
+        // be cloned in order to create more options.
+        this.elOption = joint.V(this.model.optionMarkup);
+
+        this.renderInformations();
+      },
+
+      renderInformations: function() {
+        this.$informationTable.empty();
+
+        var that = this;
+        _.each(this.model.get('informations'), function(option) {
+
+          var className = 'information-' + option.id;
+          var elOption = that.elOption.clone().addClass(className);
+          elOption.attr('information-id', option.id);
+          that.$informationTable.append(elOption.node);
+
+        }, that);
+
+        // Apply `attrs` to the newly created SVG elements.
+        this.update();
+      }
+    });
+
+// OLD
+    joint.dia.Element.define('fpe.OldModule', {
+      titleHeight: 45,
+      rowHeight: 30,
+      bottomHeight: 30,
+      moduleWidth: 200,
       optionHeight: 30,
       questionHeight: 45,
-      paddingBottom: 30,
+      paddingBottom: 0,
       minWidth: 200,
       ports: {
         groups: {
@@ -38,6 +225,9 @@ class Util {
         },
       },
       attrs: {
+        text: {
+          fontFamily: 'Arial'
+        },
         // this disables connection to the rectangle body
         '.': {
           magnet: false
@@ -45,25 +235,13 @@ class Util {
         '.body': {
           refWidth: '100%',
           refHeight: '100%',
-          rx: '.4%',
-          ry: '.8%',
+          rx: '5',
+          ry: '5',
           stroke: '#000000',
           strokeWidth: 1,
           fill: '#ccc'
         },
-
-        // Text styling.
-        text: {
-          fontFamily: 'Arial'
-        },
-        '.option-text': {
-          fontSize: 11,
-          fill: '#4b4a67',
-          refX: '50%',
-          yAlignment: 'middle',
-          textAnchor: 'middle',
-        },
-        '.question-text': {
+        '.module-title': {
           fill: '#333',
           fontWeight: 'bold',
           refX: '50%',
@@ -72,6 +250,13 @@ class Util {
           textAnchor: 'middle',
         },
 
+        '.option-text': {
+          fontSize: 11,
+          fill: '#4b4a67',
+          refX: '50%',
+          yAlignment: 'middle',
+          textAnchor: 'middle',
+        },
         // Options styling.
         '.option-rect': {
           rx: 0,
@@ -82,28 +267,26 @@ class Util {
           fillOpacity: 0,
           fill: 'white',
           refWidth: '100%'
+        },
+        '.test-line': {
+          refPoints: '10,10 20,10, 10,10',
+          fill: 'none',
+          stroke: 'black'
         }
       }
     }, {
-      markup: '<rect class="body"/><text class="question-text"/><g class="options"></g>',
-      optionMarkup: '<g class="option"><rect class="option-rect"/><text class="option-text"/></g>',
+      markup: '<rect class="body"/><text class="module-title"/><g class="options"></g>',
+      optionMarkup: '<g class="option"><polyline class="test-line" /><text class="option-text"/></g>',
       initialize: function() {
         joint.dia.Element.prototype.initialize.apply(this, arguments);
-        this.on('change:options', this.onChangeOptions, this);
-        this.on('change:question', function() {
-          this.attr('.question-text/text', this.get('question') || '');
+        this.on('change:moduleTitle', () => {
+          this.attr('.module-title/text', this.get('moduleTitle') || '');
           this.autoresize();
-        }, this);
+        });
+        this.on('change:options', this.onChangeOptions);
 
-        this.on('change:questionHeight', function() {
-          this.attr('.options/refY', this.get('questionHeight'), { silent: true });
-          this.autoresize();
-        }, this);
-
-        this.on('change:optionHeight', this.autoresize, this);
-
-        this.attr('.options/refY', this.get('questionHeight'), { silent: true });
-        this.attr('.question-text/text', this.get('question'), { silent: true });
+        this.attr('.module-title/text', this.get('moduleTitle'), { silent: true });
+        this.attr('.options/refY', this.get('titleHeight'), { silent: true });
 
         this.onChangeOptions();
       },
@@ -128,7 +311,7 @@ class Util {
         // Collect new attrs for the new options.
         var offsetY = 0;
         var attrsUpdate = {};
-        var questionHeight = this.get('questionHeight');
+        var questionHeight = this.get('titleHeight');
         _.each(options, function(option) {
           var selector = '.option-' + option.id;
           attrsUpdate[selector] = { transform: 'translate(0, ' + offsetY + ')', dynamic: true };
@@ -181,7 +364,7 @@ class Util {
       }
     });
 
-    joint.shapes.fpe.ModuleView = joint.dia.ElementView.extend({
+    joint.shapes.fpe.OldModuleView = joint.dia.ElementView.extend({
       events: {
         'click .btn-add-option': 'onAddOption',
         'click .btn-remove-option': 'onRemoveOption'
@@ -218,7 +401,7 @@ class Util {
         }, that);
 
         // Apply `attrs` to the newly created SVG elements.
-        this.update();
+        // this.update();
       },
 
       onAddOption: function() {
@@ -232,6 +415,7 @@ class Util {
         this.model.removeOption(joint.V(evt.target.parentNode).attr('option-id'));
       }
     });
+// OLD
   }
 }
 
