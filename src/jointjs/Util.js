@@ -11,7 +11,7 @@ class Util {
       titleHeight: 45,
       rowHeight: 30,
       bottomHeight: 30,
-      moduleWidth: 200,
+      moduleWidth: 400,
       informations: {
         input: [],
         output: []
@@ -66,11 +66,32 @@ class Util {
           refY: 15,
           fontSize: 15,
           textAnchor: 'middle',
+        },
+        '.information-table': {
+          refWidth: '100%'
+        },
+        '.table-row': {
+          refWidth: '100%',
+        },
+        '.table-cell': {
+          refWidth: '50%',
+          refX: '25%',
+          textAnchor: 'middle',
+          overflow: 'hidden',
+        },
+        '.cell-rect':  {
+          stroke: 'black',
+          strokeWidth: '1'
+        },
+        '.right': {
+          refX: '75%'
         }
       }
     }, {
       markup: '<rect class="body"/><text class="module-title"/><g class="information-table"></g>',
-      optionMarkup: '<g class="option"><rect class="option-rect"/><text class="option-text"/></g>',
+      rowMarkup: '<g class="table-row"></g>',
+      cellMarkup: '<g class="table-cell"><rect class="cell-rect"/><text class="cell-text"/></g>',
+
       initialize: function() {
         joint.dia.Element.prototype.initialize.apply(this, arguments);
         this.on('change:moduleTitle', () => {
@@ -125,8 +146,8 @@ class Util {
           for (let information of source.data) {
             let selector = '.information-' + information.id;
             attrsUpdate[selector] = { transform: `translate(0, ${offsetY})`, dynamic: true };
-            attrsUpdate[selector + ' .information-rect'] = { height: rowHeight, dynamic: true };
-            attrsUpdate[selector + ' .information-text'] = { text: information.text, dynamic: true, refY: rowHeight / 2 };
+            attrsUpdate[selector + ' .table-cell'] = { height: rowHeight, dynamic: true };
+            attrsUpdate[selector + ' .cell-text'] = { text: information.text, dynamic: true, refY: rowHeight / 2 };
             offsetY += rowHeight;
             let portY = offsetY - rowHeight / 2 + titleHeight;
             if (!this.getPort(information.id)) {
@@ -160,28 +181,48 @@ class Util {
 
       renderMarkup: function() {
         joint.dia.ElementView.prototype.renderMarkup.apply(this, arguments);
-
-        // A holder for all the options.
         this.$informationTable = this.$('.information-table');
-        // Create an SVG element representing one option. This element will
-        // be cloned in order to create more options.
-        this.elOption = joint.V(this.model.optionMarkup);
-
+        this.elRow = joint.V(this.model.rowMarkup);
+        this.elCell = joint.V(this.model.cellMarkup);
         this.renderInformations();
       },
 
       renderInformations: function() {
         this.$informationTable.empty();
 
-        var that = this;
-        _.each(this.model.get('informations'), function(option) {
+        let informations = this.model.get('informations');
+        let iterations = Math.max(informations.input.length, informations.output.length);
+        for (let i = 0; i < iterations; i++) {
+          let row = this.elRow.clone();
+          let cell = this.elCell.clone();
+          // console.log(this.elRow)
+          // console.log(this.elCell)
+          if (informations.input[i]) {
+            cell.addClass('information-' + informations.input[i].id)
+          } else {
 
-          var className = 'information-' + option.id;
-          var elOption = that.elOption.clone().addClass(className);
-          elOption.attr('information-id', option.id);
-          that.$informationTable.append(elOption.node);
+          }
+          row.append(cell);
+          cell = this.elCell.clone();
+          if (informations.output[i]) {
+            cell.addClass('information-' + informations.output[i].id)
+            cell.addClass('right')
+          } else {
 
-        }, that);
+          }
+          row.append(cell);
+          this.$informationTable.append(row.node);
+        }
+
+        // var that = this;
+        // _.each(this.model.get('informations'), function(option) {
+
+        //   var className = 'information-' + option.id;
+        //   var elOption = that.elOption.clone().addClass(className);
+        //   elOption.attr('information-id', option.id);
+        //   that.$informationTable.append(elOption.node);
+
+        // }, that);
 
         // Apply `attrs` to the newly created SVG elements.
         this.update();
