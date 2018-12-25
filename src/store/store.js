@@ -105,6 +105,9 @@ export const store = new Vuex.Store({
     },
     informationTypes(state) {
       return state.informationTypes;
+    },
+    modeling(state) {
+      return state.modeling;
     }
   }
 })
