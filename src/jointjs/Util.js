@@ -2,7 +2,6 @@
 
 import 'jointjs/dist/joint.css';
 import joint from 'jointjs';
-import _ from 'lodash';
 import * as C from './constants';
 
 class Util {
@@ -245,7 +244,6 @@ class Util {
         let rowHeight = this.model.get('rowHeight');
         let moduleWidth = this.model.get('moduleWidth');
         let informations = this.model.get('informations');
-        let numRows = Math.max(informations.input.length, informations.output.length);
 
         let informationSources = [
           { group: 'in', data: informations.input },
