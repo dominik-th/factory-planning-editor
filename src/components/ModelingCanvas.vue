@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { Drop } from 'vue-drag-drop';
 import debounce from 'lodash/debounce';
 import Paper from '../jointjs/Paper';
@@ -18,86 +19,34 @@ export default {
   components: {
     Drop
   },
-  computed: {
-  },
   data() {
     return {
-      unsubscribeStoreMutations: this.$store.subscribe(this.handleMutationEvents),
       graph: null,
       paper: null
     }
   },
-  methods: {
-    handleMutationEvents(mutation, state) {
-      // we cant subscribe to just one mutation so filter the mutation we actually want here
-      if (mutation.type === 'SET_PLANNING_MODULE') {
-        // find all modules which are placed in the canvas
-        for (let id in state.modeling.modules) {
-          let moduleId = state.modeling.modules[id].moduleId;
-          if (mutation.payload.id === moduleId) {
-            // and update these with the newest version of the module
-            let options = [];
-
-            for (let inId of state.planningModules[moduleId].inputInformation) {
-              options.push({ id: inId + '', text: this.$store.getters.informationTypes[inId].name, payload: "IN" });
-            }
-            for (let outId of state.planningModules[moduleId].outputInformation) {
-              options.push({ id: outId + '', text: this.$store.getters.informationTypes[outId].name, payload: "OUT" });
-            }
-            // todo: do this properly
-            let tmp = JSON.parse(JSON.stringify(state.modeling.modules[id]));
-            let plannedModule = this.graph.updatePlanningModule(id, state.planningModules[moduleId].name, options);
-            this.$store.commit('SET_MODELING_CELL', {
-              type: 'module',
-              id,
-              cell: tmp
-            });
-          }
-        }
-      }
+  computed: {
+    ...mapGetters({
+      statePlanningModules: 'planningModules',
+      stateInformationTypes: 'informationTypes',
+      stateModeling: 'modeling'
+    })
+  },
+  watch: {
+    statePlanningModules: {
+      handler: function(value, oldValue) {
+      },
+      deep: true
     },
-    drop: function(moduleId, evt) {
-      let canvas = this.$refs.modellingCanvas.$el;
-      let canvasRect = canvas.getBoundingClientRect();
-      let pan = this.paper.panZoom.getPan();
-      let x = (evt.clientX - pan.x - canvasRect.left) / this.paper.panZoom.getZoom();
-      let y = (evt.clientY - pan.y - canvasRect.top) / this.paper.panZoom.getZoom();
-
-      let droppedModule = this.$store.getters.planningModules[moduleId];
-
-      let options = [];
-
-      for (let inId of droppedModule.inputInformation) {
-        options.push({ id: inId + '', text: this.$store.getters.informationTypes[inId].name, payload: "IN" });
-      }
-      for (let outId of droppedModule.outputInformation) {
-        options.push({ id: outId + '', text: this.$store.getters.informationTypes[outId].name, payload: "OUT" });
-      }
-
-      // put module on canvas
-      let plannedModule = this.graph.addPlanningModule(
-        // substracting these values to approximately center the module at the cursor
-        { x: x - 100, y: y - 20 },
-        droppedModule.name,
-        options
-      );
-
-      // store information about the module in vuex store
-      // additional attributes are going to be stored there aswell
-      this.$store.commit('SET_MODELING_CELL', {
-        type: 'module',
-        id: plannedModule.get('id'),
-        cell: {
-          moduleId,
-          position: plannedModule.get('position'),
-          attributes: {
-            numEmployees: 0,
-            cost: 0,
-            duration: 0,
-            custom: []
-          }
-        }
-      });
+    stateInformationTypes: {
+      handler: function(value, oldValue) {
+      },
+      deep: true
+    },
+    stateModeling: {
+      handler: function(value, oldValue) {
+      },
+      deep: true
     }
   },
   mounted() {
@@ -169,11 +118,49 @@ export default {
       this.graph.clear();
     })
   },
-  beforeDestroy() {
-    this.unsubscribeStoreMutations();
+  methods: {
+    drop: function(moduleId, evt) {
+      let canvas = this.$refs.modellingCanvas.$el;
+      let canvasRect = canvas.getBoundingClientRect();
+      let pan = this.paper.panZoom.getPan();
+      let x = (evt.clientX - pan.x - canvasRect.left) / this.paper.panZoom.getZoom();
+      let y = (evt.clientY - pan.y - canvasRect.top) / this.paper.panZoom.getZoom();
+
+      let droppedModule = this.statePlanningModules[moduleId];
+      let informations = { input: [], output: [] };
+      for (let inId of droppedModule.inputInformation) {
+        informations.input.push({ id: inId, text: this.stateInformationTypes[inId].name });
+      }
+      for (let outId of droppedModule.outputInformation) {
+        informations.output.push({ id: outId, text: this.stateInformationTypes[outId].name });
+      }
+
+      let plannedModule = this.graph.addPlanningModule(
+        // substracting these values to approximately center the module at the cursor
+        { x: x - 100, y: y - 20 },
+        droppedModule.name,
+        informations
+      );
+
+      // store information about the module in vuex store
+      // additional attributes are going to be stored there aswell
+      this.$store.commit('SET_MODELING_CELL', {
+        type: 'module',
+        id: plannedModule.get('id'),
+        cell: {
+          moduleId,
+          position: plannedModule.get('position'),
+          attributes: {
+            numEmployees: 0,
+            cost: 0,
+            duration: 0,
+            custom: []
+          }
+        }
+      });
+    }
   }
 }
-
 </script>
 
 <style scoped>
