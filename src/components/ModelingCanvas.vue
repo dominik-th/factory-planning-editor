@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 import { Drop } from 'vue-drag-drop';
 import debounce from 'lodash/debounce';
 import Paper from '../jointjs/Paper';
@@ -21,6 +21,7 @@ export default {
   },
   data() {
     return {
+      unsubscribeStoreMutations: this.$store.subscribe(this.handleMutationEvents),
       graph: null,
       paper: null
     }
@@ -31,23 +32,6 @@ export default {
       stateInformationTypes: 'informationTypes',
       stateModeling: 'modeling'
     })
-  },
-  watch: {
-    statePlanningModules: {
-      handler: function(value, oldValue) {
-      },
-      deep: true
-    },
-    stateInformationTypes: {
-      handler: function(value, oldValue) {
-      },
-      deep: true
-    },
-    stateModeling: {
-      handler: function(value, oldValue) {
-      },
-      deep: true
-    }
   },
   mounted() {
     let canvas = this.$refs.modellingCanvas.$el;
@@ -118,6 +102,9 @@ export default {
       this.graph.clear();
     })
   },
+  beforeDestroy() {
+    this.unsubscribeStoreMutations();
+  },
   methods: {
     drop: function(moduleId, evt) {
       let canvas = this.$refs.modellingCanvas.$el;
@@ -158,6 +145,53 @@ export default {
           }
         }
       });
+    },
+    handleMutationEvents: function(mutation, state) {
+      switch(mutation.type) {
+        case 'SET_FULL_STATE':
+        case 'SET_PLANNING_MODULES':
+        case 'SET_INFORMATION_TYPES':
+          break;
+        case 'SET_PLANNING_MODULE':
+          this.updateModule(mutation.payload.id);
+          break;
+        case 'REMOVE_PLANNING_MODULE':
+          break;
+        case 'SET_INFORMATION_TYPE':
+          break;
+        case 'SET_MODELING_CELL':
+          break;
+        case 'REMOVE_MODELING_CELL':
+          break;
+        case 'UPDATE_MODELING_POSITION':
+          break;
+      }
+    },
+    updateModule(id) {
+      let cells = this.graph.getCells();
+      for (let cellId in this.stateModeling.modules) {
+        let moduleId = this.stateModeling.modules[cellId].moduleId
+        if (moduleId === id) {
+          this.graph.updatePlanningModule(
+            cellId,
+            this.statePlanningModules[moduleId].name,
+            {
+              input: this.statePlanningModules[moduleId].inputInformation.map(id => ({
+                id,
+                text: this.stateInformationTypes[id].name
+              })),
+              output: this.statePlanningModules[moduleId].outputInformation.map(id => ({
+                id,
+                text: this.stateInformationTypes[id].name
+              })),
+            }
+          )
+        }
+      }
+    },
+    removeModule(id) {
+    },
+    updateModelingCell(id) {
     }
   }
 }

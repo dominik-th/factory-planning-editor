@@ -29,16 +29,9 @@ class Graph extends joint.dia.Graph {
   }
 
   updatePlanningModule(id, name, informationTypes) {
-    // todo: this is too hacky but the shape itself has to be fixed first
-    let cachedCell = this.getCell(id);
-    this.getCell(id).remove();
-    let module = new joint.shapes.fpe.Module({
-      position: cachedCell.get('position'),
-      question: name,
-      options: informationTypes
-    });
-    module.set('id', id);
-    this.addCell(module);
+    let cell = this.getCell(id);
+    cell.set('moduleTitle', name);
+    cell.set('informations', informationTypes);
   }
 
   connectPlanningModules(sourceId, targetId, informationId) {
