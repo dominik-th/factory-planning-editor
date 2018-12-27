@@ -58,18 +58,6 @@ export default {
       }
     });
 
-    // fired when any cell on the canvas has been removed
-    graph.on('remove', (element) => {
-      switch (element.get('type')) {
-        case 'fpe.Module':
-          this.$store.commit('REMOVE_MODELING_CELL', {type: 'module', id: element.get('id')});
-          break;
-        case 'link':
-          this.$store.commit('REMOVE_MODELING_CELL', {type: 'link', id: element.get('id')});
-          break;
-      }
-    })
-
     // fired when any cell on the canvas changed the position
     graph.on('change:position', debounce((element) => {
       // update the stored position in vuex store
@@ -146,6 +134,12 @@ export default {
         }
       });
     },
+    sync: function() {
+      // remove links
+      // remove modules
+      // add/update modules
+      // add links
+    },
     handleMutationEvents: function(mutation, state) {
       switch(mutation.type) {
         case 'SET_FULL_STATE':
@@ -155,13 +149,10 @@ export default {
         case 'SET_PLANNING_MODULE':
           this.updateModule(mutation.payload.id);
           break;
-        case 'REMOVE_PLANNING_MODULE':
-          break;
-        case 'SET_INFORMATION_TYPE':
-          break;
         case 'SET_MODELING_CELL':
           break;
         case 'REMOVE_MODELING_CELL':
+          this.graph.removePlanningModule(mutation.payload.id);
           break;
         case 'UPDATE_MODELING_POSITION':
           break;
@@ -189,9 +180,7 @@ export default {
         }
       }
     },
-    removeModule(id) {
-    },
-    updateModelingCell(id) {
+    updateModelingCellPosition(id) {
     }
   }
 }

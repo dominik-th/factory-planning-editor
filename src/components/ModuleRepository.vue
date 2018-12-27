@@ -96,7 +96,7 @@ export default {
     },
     removeSelectedModule: function() {
       if (this.selected) {
-        this.$store.commit('REMOVE_PLANNING_MODULE', this.selected);
+        this.$store.dispatch('removePlanningModule', this.selected);
         this.selected = null;
       } else {
         this.$notify({

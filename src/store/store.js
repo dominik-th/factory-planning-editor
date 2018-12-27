@@ -71,10 +71,37 @@ export const store = new Vuex.Store({
       commit('SET_PLANNING_MODULE', {id, module});
       return id;
     },
-    addInformation({ commit }, name) {
+    async removePlanningModule({ commit, dispatch, state }, id) {
+      // remove all occurrences in the modeling
+      for (let cellId in state.modeling.modules) {
+        if (state.modeling.modules[cellId].moduleId === id) {
+          await dispatch('removeModelingModule', cellId);
+        }
+      }
+      // remove module from repository
+      commit('REMOVE_PLANNING_MODULE', id);
+    },
+    addInformation({ commit, state }, name) {
       let id = uuidv4();
       commit('SET_INFORMATION_TYPE', {id, name});
       return id;
+    },
+    removeModelingModule({ commit, state }, id) {
+      // remove all connected links
+      for (let linkId in state.modeling.links) {
+        let link = state.modeling.links[linkId]
+        if (link.fromModule === id || link.toModule === id) {
+          commit('REMOVE_MODELING_CELL', {
+            type: 'link',
+            id: linkId
+          });
+        }
+      }
+      // remove the module itself
+      commit('REMOVE_MODELING_CELL', {
+        type: 'module',
+        id
+      });
     }
   },
   getters: {
