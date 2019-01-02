@@ -60,10 +60,15 @@ export default {
   computed: {
     modules() {
       if (this.filter) {
+        let filteredModules = {};
         // the filtered list also contains meta information
         // check fuse.js docs for more information
-        return this.$store.getters.filteredPlanningModules(this.filter)
-          .map(result => result.item);
+        let fuseFilteredModules = this.$store.getters.filteredPlanningModules(this.filter);
+        // bring the search result in the same structure as the planning modules in store
+        for (let module of fuseFilteredModules) {
+          filteredModules[module.item.id] = module.item;
+        }
+        return filteredModules;
       } else {
         return this.$store.getters.planningModules;
       }
@@ -79,11 +84,12 @@ export default {
     }
   },
   methods: {
-    fuseIndices: function(index) {
+    fuseIndices: function(id) {
       if (this.filter) {
         // we only search the module.name key, thus there is only going to be one match
         // once we also search different keys (abbreviation maybe?), we have to modify this
-        return this.$store.getters.filteredPlanningModules(this.filter)[index].matches[0].indices;
+        // and include multiple matches
+        return this.$store.getters.filteredPlanningModules(this.filter).find(fuseResult => fuseResult.item.id === id).matches[0].indices;
       } else {
         return [];
       }
