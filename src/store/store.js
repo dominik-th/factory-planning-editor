@@ -16,7 +16,8 @@ export const store = new Vuex.Store({
     informationTypes: {},
     modeling: {
       modules: {},
-      links: {}
+      links: {},
+      selected: null
     }
   },
   mutations: {
@@ -62,8 +63,13 @@ export const store = new Vuex.Store({
     },
     UPDATE_MODELING_POSITION(state, { id, position }) {
       Vue.set(state.modeling.modules[id], 'position', position);
+    },
+    UPDATE_MODELING_ATTRIBUTE(state, { id, attribute, value }) {
+      Vue.set(state.modeling.modules[id].attributes, attribute, value);
+    },
+    SELECT_MODELING_MODULE(state, id) {
+      state.modeling.selected = id;
     }
-
   },
   actions: {
     addPlanningModule({ commit }, module) {
@@ -135,6 +141,15 @@ export const store = new Vuex.Store({
     },
     modeling(state) {
       return state.modeling;
+    },
+    selectedModelingModuleId(state) {
+      return state.modeling.selected;
+    },
+    selectedModelingModule(state) {
+      if (state.modeling.selected) {
+        return state.modeling.modules[state.modeling.selected];
+      }
+      return null;
     }
   }
 })
