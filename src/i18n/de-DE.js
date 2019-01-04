@@ -34,7 +34,9 @@ export default {
     'num_employees': 'Anzahl Mitarbeiter:',
     'cost': 'Kosten:',
     'duration': 'Dauer:',
-    'custom': 'Benutzerdefiniert {0}:'
+    'custom': 'Benutzerdefiniert {0}:',
+    'description': 'Beschreibung',
+    'value': 'Wert'
   },
   'i18n': {
     'select_language': 'Sprache auswählen',

@@ -34,7 +34,9 @@ export default {
     'num_employees': 'Number employees:',
     'cost': 'Cost:',
     'duration': 'Duration:',
-    'custom': 'Custom field {0}:'
+    'custom': 'Custom field {0}:',
+    'description': 'Description',
+    'value': 'Value'
   },
   'i18n': {
     'select_language': 'Select language',

@@ -65,13 +65,13 @@
             <b-form-input
               id="`custom${index}`"
               size="sm"
-              placeholder="Beschreibung"
               v-model="attribute.key"
+              :placeholder="$t('attributes.description')"
             />
             <b-form-textarea
               size="sm"
-              placeholder="Wert"
               v-model="attribute.value"
+              :placeholder="$t('attributes.value')"
               :rows="3"
               :max-rows="6"
             />
