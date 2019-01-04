@@ -24,7 +24,7 @@ export default {
       // ISO 3166-1-alpha-2 code for countrie codes
       languages: [
         { languageTag: 'en-US', countryCode: 'us' },
-        { languageTag: 'de-DE', countryCode: 'de' },
+        { languageTag: 'de-DE', countryCode: 'de' }
       ]
     }
   },
