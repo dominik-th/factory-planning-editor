@@ -8,12 +8,17 @@ export default {
     'import': 'Importieren',
     'save_to_file': 'Speichern unter...'
   },
+  'navbar': {
+    'import_json': 'JSON importieren',
+    'export_json': 'JSON exportieren',
+    'export_excel': 'Excel exportieren'
+  },
   'modal': {
-    import: {
-      title: 'Planung importieren'
+    'import': {
+      'title': 'Planung importieren'
     },
-    export: {
-      title: 'Planung exportieren'
+    'export': {
+      'title': 'Planung exportieren'
     },
     'information_picker_in': 'Eingangsinformationen suchen...',
     'information_picker_out': 'Ausgangsinformationen suchen...',
@@ -25,11 +30,16 @@ export default {
     'no_in_information': 'Füge dem Modul Eingangsinformationen hinzu!',
     'no_out_information': 'Füge dem Modul Ausgangsinformationen hinzu!'
   },
-  attributes: {
+  'attributes': {
     'num_employees': 'Anzahl Mitarbeiter:',
     'cost': 'Kosten:',
     'duration': 'Dauer:',
     'custom': 'Benutzerdefiniert {0}:'
+  },
+  'i18n': {
+    'select_language': 'Sprache auswählen',
+    'en-US': 'Englisch',
+    'de-DE': 'Deutsch'
   },
   'warning': {
     'empty_module_name': 'Der Name des Planungsmoduls darf keine leere Zeichenfolge sein!',

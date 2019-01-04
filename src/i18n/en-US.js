@@ -8,12 +8,17 @@ export default {
     'import': 'Import',
     'save_to_file': 'Save as...'
   },
+  'navbar': {
+    'import_json': 'Import JSON',
+    'export_json': 'Export JSON',
+    'export_excel': 'Export Excel'
+  },
   'modal': {
-    import: {
-      title: 'Import draft'
+    'import': {
+      'title': 'Import draft'
     },
-    export: {
-      title: 'Export draft'
+    'export': {
+      'title': 'Export draft'
     },
     'information_picker_in': 'Search input information...',
     'information_picker_out': 'Search output information...',
@@ -25,11 +30,16 @@ export default {
     'no_in_information': 'Add input information to the module!',
     'no_out_information': 'Add output information to the module!'
   },
-  attributes: {
+  'attributes': {
     'num_employees': 'Number employees:',
     'cost': 'Cost:',
     'duration': 'Duration:',
     'custom': 'Custom field {0}:'
+  },
+  'i18n': {
+    'select_language': 'Select language',
+    'en-US': 'English',
+    'de-DE': 'German'
   },
   'warning': {
     'empty_module_name': 'The name of the planning module cannot be empty!',
