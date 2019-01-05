@@ -6,7 +6,10 @@ export default {
     'filter': 'Filter...',
     'close': 'Close',
     'import': 'Import',
-    'save_to_file': 'Save as...'
+    'select_a_file': 'Choose a file...',
+    'browse_files': 'Browse',
+    'save_to_file': 'Save as...',
+    'or': 'Or'
   },
   'navbar': {
     'import_json': 'Import JSON',
@@ -15,10 +18,15 @@ export default {
   },
   'modal': {
     'import': {
-      'title': 'Import draft'
+      'title': 'Import draft',
+      'paste_json': 'Paste JSON string here...',
+      'upload_json_file': 'Upload JSON file:',
+      'select_example': 'Select example:'
     },
     'export': {
-      'title': 'Export draft'
+      'title': 'Export draft',
+      'doubleclick_copy': 'Double click to copy!',
+      'copied': 'Copied!'
     },
     'information_picker_in': 'Search input information...',
     'information_picker_out': 'Search output information...',

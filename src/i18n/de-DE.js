@@ -6,7 +6,10 @@ export default {
     'filter': 'Filter...',
     'close': 'Schließen',
     'import': 'Importieren',
-    'save_to_file': 'Speichern unter...'
+    'select_a_file': 'Wähle eine Datei aus...',
+    'browse_files': 'Durchsuchen',
+    'save_to_file': 'Speichern unter...',
+    'or': 'Oder'
   },
   'navbar': {
     'import_json': 'JSON importieren',
@@ -15,10 +18,15 @@ export default {
   },
   'modal': {
     'import': {
-      'title': 'Planung importieren'
+      'title': 'Planung importieren',
+      'paste_json': 'JSON hier einfügen...',
+      'upload_json_file': 'JSON-Datei hochladen:',
+      'select_example': 'Beispielplanung auswählen:'
     },
     'export': {
-      'title': 'Planung exportieren'
+      'title': 'Planung exportieren',
+      'doubleclick_copy': 'Doppelklick zum Kopieren!',
+      'copied': 'Kopiert!'
     },
     'information_picker_in': 'Eingangsinformationen suchen...',
     'information_picker_out': 'Ausgangsinformationen suchen...',
