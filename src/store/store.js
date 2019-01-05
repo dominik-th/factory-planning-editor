@@ -1,10 +1,10 @@
 import uuidv4 from 'uuid/v4'
 import Fuse from 'fuse.js'
 import Vue from 'vue'
-import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
@@ -21,10 +21,8 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
-    SET_FULL_STATE(state, importedState) {
-      for (let key in importedState) {
-        state[key] = importedState[key];
-      }
+    SAVE(state) {
+      // do nothing, triggers vuex persisted state
     },
     SET_PLANNING_MODULES(state, modules) {
       state.planningModules = modules;
@@ -108,6 +106,14 @@ export const store = new Vuex.Store({
         type: 'module',
         id
       });
+    },
+    moveModelingModule({ commit, state }, { id, position }) {
+      if (
+        state.modeling.modules[id] &&
+        state.modeling.modules[id].position !== position
+      ) {
+        commit('UPDATE_MODELING_POSITION', { id, position });
+      }
     }
   },
   getters: {
