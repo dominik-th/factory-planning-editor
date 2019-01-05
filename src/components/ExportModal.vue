@@ -1,9 +1,8 @@
 <template>
   <div>
     <b-modal
-      id="myModal"
       size="lg"
-      ref="myModalRef"
+      ref="exportModalRef"
       ok-variant="success"
       :title="$t('modal.export.title')"
       :ok-title="$t('generic.save_to_file')"
@@ -12,6 +11,7 @@
     >
       <div>
         <b-form-textarea
+          id="export-json-string"
           plaintext
           ref="textfield"
           :rows="9"
@@ -19,36 +19,59 @@
           @click.native="$event.target.select()"
           @dblclick.native="exportDataToClipboard"
         />
+        <b-tooltip
+          target="export-json-string"
+          placement="top"
+          triggers="focus"
+        >
+          {{ $t(tooltipLabel) }}
+        </b-tooltip>
       </div>
     </b-modal>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash/debounce';
+import saveAs from 'file-saver';
+
 export default {
   name: 'ExportModal',
+  data() {
+    return {
+      tooltipLabel: 'modal.export.doubleclick_copy',
+      // resetToolipLabel has to be defined in data to prevent issues when
+      // there are multiple instances of this component
+      // see https://stackoverflow.com/a/49780382
+      resetTooltipLabel: debounce(function() {
+        this.tooltipLabel = 'modal.export.doubleclick_copy';
+      }, 3000)
+    }
+  },
   computed: {
     applicationState() {
-      return JSON.stringify(this.$store.getters.fullState)
+      return JSON.stringify(this.$store.state);
     }
   },
   methods: {
     exportData: function(evt) {
-      // https://stackoverflow.com/a/18197341
-      this.$notify({
-        type: 'warn',
-        text: this.$t('warning.not_yet_implemented')
-      });
-      return evt.preventDefault();
+      let exportBlob = new Blob([this.applicationState], { type: 'application/json;charset=utf-8' });
+      let fileName = 'fpe_export_';
+      let now = new Date();
+      fileName += now.getFullYear();
+      fileName += (now.getMonth()+1).toString().padStart(2, '0');
+      fileName += (now.getDate()).toString().padStart(2, '0');
+      saveAs(exportBlob, fileName + '.json');
     },
     exportDataToClipboard: function() {
-      // assuming the textarea is selected
+      this.tooltipLabel = 'modal.export.copied';
       document.execCommand('copy');
+      this.resetTooltipLabel();
     }
   },
   mounted() {
     this.$root.$on('modal.export', () => {
-      this.$refs.myModalRef.show();
+      this.$refs.exportModalRef.show();
     });
   },
   beforeDestroy() {
@@ -58,6 +81,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>
