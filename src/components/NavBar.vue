@@ -19,7 +19,7 @@
             <font-awesome-icon icon="save" />
             {{ $t('navbar.export_json') }}
           </b-button>
-          <b-button variant="outline-success">
+          <b-button variant="outline-success" @click="exportExcel">
             <font-awesome-icon icon="table" />
             {{ $t('navbar.export_excel') }}
           </b-button>
@@ -32,9 +32,10 @@
 </template>
 
 <script>
-import ImportModal from './ImportModal.vue'
-import ExportModal from './ExportModal.vue'
-import LanguagePicker from './LanguagePicker.vue'
+import ImportModal from './ImportModal.vue';
+import ExportModal from './ExportModal.vue';
+import LanguagePicker from './LanguagePicker.vue';
+import { generateExcelSheet } from '../helpers/excel';
 
 export default {
   name: 'NavBar',
@@ -43,6 +44,17 @@ export default {
     ExportModal,
     LanguagePicker
   },
+  methods: {
+    async exportExcel() {
+      let exportBlob = await generateExcelSheet(this.$store.state);
+      let fileName = 'fpe_export_';
+      let now = new Date();
+      fileName += now.getFullYear();
+      fileName += (now.getMonth()+1).toString().padStart(2, '0');
+      fileName += (now.getDate()).toString().padStart(2, '0');
+      saveAs(exportBlob, fileName + '.xlsx');
+    }
+  }
 }
 </script>
 

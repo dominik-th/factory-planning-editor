@@ -13,6 +13,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.4",
     "bootstrap-vue": "^2.0.0-rc.11",
     "es6-promise": "^4.2.5",
+    "exceljs": "^1.6.3",
     "file-saver": "^2.0.0",
     "flag-icon-css": "^3.2.1",
     "fuse.js": "^3.3.0",
