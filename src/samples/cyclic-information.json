@@ -1,0 +1,50 @@
+{
+  "planningModules": {
+    "b842167a-4491-491b-9425-6aee88e0fee3": {
+      "inputInformation": [
+        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9"
+      ],
+      "outputInformation": [
+        "6fabf06e-5424-448b-b9dc-8e06edd8e379"
+      ],
+      "name": "Module A",
+      "abbreviation": null
+    },
+    "9b6b0f49-8182-4d3b-89d6-96ca1e05f118": {
+      "inputInformation": [
+        "6fabf06e-5424-448b-b9dc-8e06edd8e379"
+      ],
+      "outputInformation": [
+        "76f3e8c6-91d4-4565-aff8-198bd958674e"
+      ],
+      "name": "Module B",
+      "abbreviation": null
+    },
+    "919321c6-212e-4af3-bba1-395352c2c825": {
+      "inputInformation": [
+        "76f3e8c6-91d4-4565-aff8-198bd958674e"
+      ],
+      "outputInformation": [
+        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9"
+      ],
+      "name": "Module C",
+      "abbreviation": null
+    }
+  },
+  "informationTypes": {
+    "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9": {
+      "name": "a"
+    },
+    "6fabf06e-5424-448b-b9dc-8e06edd8e379": {
+      "name": "b"
+    },
+    "76f3e8c6-91d4-4565-aff8-198bd958674e": {
+      "name": "c"
+    }
+  },
+  "modeling": {
+    "modules": {},
+    "links": {},
+    "selected": null
+  }
+}
