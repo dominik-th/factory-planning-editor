@@ -2,7 +2,7 @@
   <div>
     <b-modal
       size="lg"
-      ref="myModalRef"
+      ref="importModalRef"
       :title="$t('modal.import.title')"
       :ok-title="$t('generic.import')"
       :cancel-title="$t('generic.cancel')"
@@ -12,38 +12,150 @@
         <b-form-textarea
           v-model="importString"
           :rows="9"
+          :placeholder="$t('modal.import.paste_json')"
+          @drop.native="dropFile"
+          @input="resetFields"
         />
+        <hr class="hr-text" :data-content="$t('generic.or').toUpperCase()">
+        <b-form-group
+          label-for="file-import"
+          :label="$t('modal.import.upload_json_file')"
+        >
+          <b-form-file
+            id="file-import"
+            ref="fileInput"
+            accept="application/json"
+            :placeholder="$t('generic.select_a_file')"
+            @input="handleFileUpload"
+          />
+        </b-form-group>
+        <b-form-group
+          label-for="example-import"
+          :label="$t('modal.import.select_example')"
+        >
+          <b-form-select
+            id="example-import"
+            v-model="selectedDraft"
+            :options="exampleDraftOptions"
+            @input="selectDraft"
+          />
+        </b-form-group>
       </div>
     </b-modal>
   </div>
 </template>
 
 <script>
+import drafts from '../drafts';
+
 export default {
   name: 'ImportModal',
   data() {
     return {
+      resetExceptions: [],
+      selectedDraft: null,
       importString: ''
     };
   },
+  computed: {
+    exampleDraftOptions: function() {
+      // generate the options for the select field
+      let draftOptions = Object.keys(drafts).map(key => {
+        let meta = [
+          this.$tc('example_drafts.meta.num_planningmodules', drafts[key].numModules),
+          this.$tc('example_drafts.meta.num_informations', drafts[key].numInformations),
+        ];
+        return {
+          text: `${this.$t(drafts[key].title)} <${meta.join(' | ')}>`,
+          value: key
+        }
+      });
+      draftOptions.unshift({
+        text: this.$t('modal.import.select_example_placeholder'),
+        value: null
+      });
+      return draftOptions;
+    }
+  },
   methods: {
+    // resets the input fields
+    resetFields: function() {
+      if (this.resetExceptions.indexOf('exampleInput') < 0) {
+        this.selectedDraft = null;
+      }
+      if (this.resetExceptions.indexOf('fileInput') < 0) {
+        this.$refs.fileInput.reset();
+      }
+      this.resetExceptions = [];
+    },
+    // loads sample into the text area
+    selectDraft(key) {
+      // key is undefined when we clear the select field
+      if (key) {
+        // load import string into the text area
+        this.importString = JSON.stringify(drafts[key].state);
+        // resetFields will be fired so add an exception to avoid clearing the just
+        // set field
+        this.resetExceptions.push('exampleInput');
+      }
+    },
+    // handles drop events on the text area
+    dropFile: function(evt) {
+      // if multiple files are dropped, we just pick the first one
+      this.handleFileUpload(evt.dataTransfer.files[0]);
+      evt.preventDefault();
+    },
+    // reads the file and if its json fill the text area
+    handleFileUpload(file) {
+      // when the user cancels the file browser dialog, file is going to be undefined
+      if (!file) return;
+      let reader = new FileReader();
+      reader.onload = e => {
+        try {
+          // only accept if the file actually contains json
+          this.importString = JSON.stringify(JSON.parse(e.target.result));
+          // resetFields will be fired so add an exception to avoid clearing the just
+          // set field
+          this.resetExceptions.push('fileInput');
+        } catch (e) {
+          this.$notify({
+            type: 'error',
+            text: this.$t('error.json_invalid')
+          });
+        }
+      };
+      // filter incorrect content types
+      if (file.type === 'application/json') {
+        reader.readAsText(file);
+      } else {
+        this.$notify({
+          type: 'error',
+          text: this.$t('error.mime_mismatch')
+        });
+      }
+    },
+    // parses the import string and puts it into vuex
     importData: function(evt) {
       try {
-        this.$store.commit('SET_FULL_STATE', JSON.parse(this.importString));
-        this.$root.$emit('clearModelingCanvas');
+        // any parsing issues with invalid json will throw an exception here
+        // todo: implement further validation to ensure a consistent state
+        this.$store.replaceState(JSON.parse(this.importString));
+        this.$store.commit('SAVE');
       } catch(e) {
+        // show notification to inform the user
         this.$notify({
           type: 'error',
           text: this.$t('error.json_invalid')
         });
+        // disable modal closing when import did not succeed
         return evt.preventDefault();
       }
     }
   },
   mounted() {
+    // initialize the event on when to show this modal
     this.$root.$on('modal.import', () => {
-      this.importString = '{"planningModules":{"f747dc34-e148-4fd8-acee-f96a2cc266c2":{"inputInformation":["3dc1f331-3af2-420f-806e-287c78839ff3","45dbd580-bab8-4190-b519-87383a384952","20f315a7-8500-4aa7-8f61-31279c955046"],"outputInformation":["582425bf-5ef5-4135-8fbd-390a3a7a462e","7e81618a-2507-4c84-be0a-adf8975429cc","ff9dcb00-b157-4734-a0e9-5df36ace09dc","aa9f1105-d226-471c-9608-43592f262577"],"name":"Arbeitsplatzgestaltung","abbreviation":null},"35642ce6-e7e3-4901-92fb-e798abdcd696":{"inputInformation":[],"outputInformation":[],"name":"Prozessplanung","abbreviation":null},"6b3401e6-91df-4109-83d2-307bb4db222a":{"inputInformation":[],"outputInformation":[],"name":"Außenanlagenplanung","abbreviation":null},"22151247-6753-453b-9d11-84b86ae4f71d":{"inputInformation":[],"outputInformation":[],"name":"Brandschutzplanung","abbreviation":null},"671da1bd-b9ce-4ccf-ae7e-17d65803fa6a":{"inputInformation":[],"outputInformation":[],"name":"Fassadenplanung","abbreviation":null},"5de85249-79a6-422d-a9c4-403d46c06d36":{"inputInformation":[],"outputInformation":[],"name":"Standortplanung","abbreviation":null}},"informationTypes":{"3dc1f331-3af2-420f-806e-287c78839ff3":{"name":"Arbeitsplan"},"45dbd580-bab8-4190-b519-87383a384952":{"name":"Detaillayout"},"20f315a7-8500-4aa7-8f61-31279c955046":{"name":"Gebäudeplanung"},"582425bf-5ef5-4135-8fbd-390a3a7a462e":{"name":"Anforderung an: Belichtung"},"7e81618a-2507-4c84-be0a-adf8975429cc":{"name":"Anforderung an: Akustik"},"ff9dcb00-b157-4734-a0e9-5df36ace09dc":{"name":"Anforderung an: Raumluft"},"aa9f1105-d226-471c-9608-43592f262577":{"name":"Arbeitsplatzlayout"}},"modeling":{"modules":{},"links":{}}}';
-      this.$refs.myModalRef.show();
+      this.$refs.importModalRef.show();
     });
   },
   beforeDestroy() {
@@ -55,4 +167,37 @@ export default {
 </script>
 
 <style scoped>
+/*
+  hr styling from
+  https://codepen.io/scottzirkel/pen/yNxNME
+*/
+.hr-text {
+  line-height: 1em;
+  position: relative;
+  outline: 0;
+  border: 0;
+  color: black;
+  text-align: center;
+  height: 1.5em;
+  opacity: .5;
+}
+.hr-text:before {
+  content: '';
+  background: linear-gradient(to right, transparent, #818078, transparent);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+}
+.hr-text:after {
+  content: attr(data-content);
+  position: relative;
+  display: inline-block;
+  color: black;
+  padding: 0 .5em;
+  line-height: 1.5em;
+  color: #818078;
+  background-color: #fcfcfa;
+}
 </style>

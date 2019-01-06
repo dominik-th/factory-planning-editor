@@ -30,6 +30,7 @@ export default {
   },
   computed: {
     componentId: function() {
+      // this app wide unique component id is provided by vue itself
       return this._uid.toString();
     }
   },
