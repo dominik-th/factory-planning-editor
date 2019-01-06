@@ -21,7 +21,8 @@ export default {
       'title': 'Planung importieren',
       'paste_json': 'JSON hier einfügen...',
       'upload_json_file': 'JSON-Datei hochladen:',
-      'select_example': 'Beispielplanung auswählen:'
+      'select_example': 'Beispielplanung auswählen:',
+      'select_example_placeholder': '-- Bitte eine Planung auswählen --'
     },
     'export': {
       'title': 'Planung exportieren',
@@ -51,6 +52,13 @@ export default {
     'en-US': 'Englisch',
     'de-DE': 'Deutsch'
   },
+  'example_drafts': {
+    'meta': {
+      'num_planningmodules': 'Keine Planungsmodule | 1 Planungsmodul | {count} Planungsmodule',
+      'num_informations': 'Keine Informationstypen | 1 Informationstyp | {count} Informationstypen'
+    },
+    'cyclic_information_flow': 'Zyklischer Informationsfluss'
+  },
   'warning': {
     'empty_module_name': 'Der Name des Planungsmoduls darf keine leere Zeichenfolge sein!',
     'empty_information_type': 'Der Informationstyp darf keine leere Zeichenfolge sein!',
@@ -58,6 +66,7 @@ export default {
     'not_yet_implemented': 'Diese Funktion wurde noch nicht implementiert.'
   },
   'error': {
-    'json_invalid': 'Der eingegebene JSON String ist ungültig!'
+    'json_invalid': 'Der eingegebene JSON String ist ungültig!',
+    'mime_mismatch': 'Die Datei weißt einen falschen Content-Typ auf!'
   }
 }

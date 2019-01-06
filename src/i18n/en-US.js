@@ -21,7 +21,8 @@ export default {
       'title': 'Import draft',
       'paste_json': 'Paste JSON string here...',
       'upload_json_file': 'Upload JSON file:',
-      'select_example': 'Select example:'
+      'select_example': 'Select example:',
+      'select_example_placeholder': '-- Please select an example draft --'
     },
     'export': {
       'title': 'Export draft',
@@ -51,6 +52,13 @@ export default {
     'en-US': 'English',
     'de-DE': 'German'
   },
+  'example_drafts': {
+    'meta': {
+      'num_planningmodules': 'No planning module | 1 planning module | {count} planning modules',
+      'num_informations': 'No information types | 1 information type | {count} information types'
+    },
+    'cyclic_information_flow': 'Cyclic information flow'
+  },
   'warning': {
     'empty_module_name': 'The name of the planning module cannot be empty!',
     'empty_information_type': 'The information type cannot be empty!',
@@ -58,6 +66,7 @@ export default {
     'not_yet_implemented': 'Function not yet implemented.'
   },
   'error': {
-    'json_invalid': 'The entered JSON string is invalid!'
+    'json_invalid': 'The entered JSON string is invalid!',
+    'mime_mismatch': 'The uploaded file doesn\'t have the correct content type!'
   }
 }
