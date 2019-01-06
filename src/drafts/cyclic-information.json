@@ -1,34 +1,34 @@
 {
   "planningModules": {
-    "b842167a-4491-491b-9425-6aee88e0fee3": {
-      "inputInformation": [
-        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9"
-      ],
-      "outputInformation": [
-        "6fabf06e-5424-448b-b9dc-8e06edd8e379"
-      ],
-      "name": "Module A",
-      "abbreviation": null
-    },
-    "9b6b0f49-8182-4d3b-89d6-96ca1e05f118": {
-      "inputInformation": [
-        "6fabf06e-5424-448b-b9dc-8e06edd8e379"
-      ],
-      "outputInformation": [
-        "76f3e8c6-91d4-4565-aff8-198bd958674e"
-      ],
-      "name": "Module B",
-      "abbreviation": null
-    },
     "919321c6-212e-4af3-bba1-395352c2c825": {
+      "abbreviation": null,
       "inputInformation": [
         "76f3e8c6-91d4-4565-aff8-198bd958674e"
-      ],
-      "outputInformation": [
-        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9"
       ],
       "name": "Module C",
-      "abbreviation": null
+      "outputInformation": [
+        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9"
+      ]
+    },
+    "9b6b0f49-8182-4d3b-89d6-96ca1e05f118": {
+      "abbreviation": null,
+      "inputInformation": [
+        "6fabf06e-5424-448b-b9dc-8e06edd8e379"
+      ],
+      "name": "Module B",
+      "outputInformation": [
+        "76f3e8c6-91d4-4565-aff8-198bd958674e"
+      ]
+    },
+    "b842167a-4491-491b-9425-6aee88e0fee3": {
+      "abbreviation": null,
+      "inputInformation": [
+        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9"
+      ],
+      "name": "Module A",
+      "outputInformation": [
+        "6fabf06e-5424-448b-b9dc-8e06edd8e379"
+      ]
     }
   },
   "informationTypes": {
@@ -43,8 +43,59 @@
     }
   },
   "modeling": {
-    "modules": {},
-    "links": {},
+    "links": {
+      "58e4f60a-b74c-4b65-8bc6-56e5daf8baf1": {
+        "fromModule": "b37d841e-f00f-418c-a99c-abfc075f5a50",
+        "informationId": "76f3e8c6-91d4-4565-aff8-198bd958674e",
+        "toModule": "c4bdb596-5824-4a47-8083-af43083378f3"
+      },
+      "fc94139b-ef8a-45db-8405-4dad195bfb5c": {
+        "fromModule": "7c4a2fc6-63d8-490d-bd23-04e76d167df0",
+        "informationId": "6fabf06e-5424-448b-b9dc-8e06edd8e379",
+        "toModule": "b37d841e-f00f-418c-a99c-abfc075f5a50"
+      }
+    },
+    "modules": {
+      "7c4a2fc6-63d8-490d-bd23-04e76d167df0": {
+        "attributes": {
+          "cost": 0,
+          "custom": {},
+          "duration": 0,
+          "numEmployees": 0
+        },
+        "moduleId": "b842167a-4491-491b-9425-6aee88e0fee3",
+        "position": {
+          "x": -420,
+          "y": -320
+        }
+      },
+      "b37d841e-f00f-418c-a99c-abfc075f5a50": {
+        "attributes": {
+          "cost": 0,
+          "custom": {},
+          "duration": 0,
+          "numEmployees": 0
+        },
+        "moduleId": "9b6b0f49-8182-4d3b-89d6-96ca1e05f118",
+        "position": {
+          "x": -250,
+          "y": -160
+        }
+      },
+      "c4bdb596-5824-4a47-8083-af43083378f3": {
+        "attributes": {
+          "cost": 0,
+          "custom": {},
+          "duration": 0,
+          "numEmployees": 0
+        },
+        "moduleId": "919321c6-212e-4af3-bba1-395352c2c825",
+        "position": {
+          "x": -80,
+          "y": 20
+        }
+      }
+    },
     "selected": null
   }
 }
