@@ -21,7 +21,7 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
-    SAVE(state) {
+    SAVE() {
       // do nothing, triggers vuex persisted state
     },
     SET_PLANNING_MODULES(state, modules) {
@@ -85,7 +85,7 @@ export const store = new Vuex.Store({
       // remove module from repository
       commit('REMOVE_PLANNING_MODULE', id);
     },
-    addInformation({ commit, state }, name) {
+    addInformation({ commit }, name) {
       let id = uuidv4();
       commit('SET_INFORMATION_TYPE', {id, name});
       return id;
