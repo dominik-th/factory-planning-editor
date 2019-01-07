@@ -40,5 +40,6 @@ body {
 .content {
   display: flex;
   flex: 1;
+  overflow-y: hidden;
 }
 </style>
