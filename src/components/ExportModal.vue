@@ -54,7 +54,7 @@ export default {
     }
   },
   methods: {
-    exportData: function(evt) {
+    exportData: function() {
       let exportBlob = new Blob([this.applicationState], { type: 'application/json;charset=utf-8' });
       let fileName = 'fpe_export_';
       let now = new Date();

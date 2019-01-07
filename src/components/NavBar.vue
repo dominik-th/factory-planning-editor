@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import saveAs from 'file-saver';
 import ImportModal from './ImportModal.vue';
 import ExportModal from './ExportModal.vue';
 import LanguagePicker from './LanguagePicker.vue';
