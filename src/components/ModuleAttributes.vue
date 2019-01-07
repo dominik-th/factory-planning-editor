@@ -140,7 +140,8 @@ export default {
     // }
   },
   watch: {
-    stateSelectedModelingModule: function(module) {
+    stateSelectedModelingModule: {
+      handler: function(module) {
       if (!module) return;
       // when the selected module has changed, pre fill the inputs
       let maskedNumEmployeed = conformToMask(
@@ -160,6 +161,8 @@ export default {
       this.duration = `${hours}:${minutes}`
 
       this.custom = JSON.parse(JSON.stringify(module.attributes.custom));
+      },
+      immediate: true
     },
     // watch all inputs to auto save any changes if input is valid
     numEmployees: function(value) {

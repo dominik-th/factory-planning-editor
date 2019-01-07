@@ -2,6 +2,7 @@
 
 import joint from 'jointjs';
 import svgPanZoom from 'svg-pan-zoom';
+import Link from './Link';
 import { GRID_SIZE } from './constants';
 
 class Paper extends joint.dia.Paper {
@@ -22,7 +23,7 @@ class Paper extends joint.dia.Paper {
       validateConnection: validateConnection(graph),
       markAvailable: true,
       highlighting: {
-        'default': {
+        default: {
           name: 'stroke',
           options: {
             padding: 0,
@@ -36,7 +37,7 @@ class Paper extends joint.dia.Paper {
           }
         }
       },
-      defaultLink
+      defaultLink: new Link()
     });
     this.element = element;
   }

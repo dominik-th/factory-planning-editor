@@ -11,8 +11,6 @@ class Util {
       rowHeight: C.ROW_HEIGHT,
       bottomHeight: C.BOTTOM_HEIGHT,
       moduleWidth: C.MODULE_WIDTH,
-      tableBackground: 'white',
-      tableStripe: '#eee',
       informations: {
         input: [],
         output: []
@@ -23,10 +21,7 @@ class Util {
             position: 'left',
             attrs: {
               'circle': {
-                magnet: 'passive',
-                stroke: '#999',
-                fill: '#fff',
-                r: 10
+                magnet: 'passive'
               }
             }
           },
@@ -34,45 +29,35 @@ class Util {
             position: 'right',
             attrs: {
               'circle': {
-                magnet: true,
-                stroke: '#999',
-                fill: '#fff',
-                r: 10
+                magnet: true
               }
             }
           }
         },
       },
       attrs: {
-        text: {
-          fontFamily: 'Arial'
-        },
         // this disables connection to the rectangle body
         '.': {
           magnet: false
         },
         '.body': {
           refWidth: '100%',
-          refHeight: '100%',
-          rx: '5',
-          ry: '5',
-          stroke: '#000000',
-          strokeWidth: 1,
-          fill: '#eee'
+          refHeight: '100%'
+        },
+        '.border': {
+          refWidth: '100%',
+          refHeight: '100%'
         },
         '.module-title': {
-          fill: '#333',
-          fontWeight: 'bold',
           refX: '50%',
-          refY: 15,
-          fontSize: 15,
-          textAnchor: 'middle',
+          refY: 15
         },
       }
     }, {
-      markup: '<rect class="body"/><text class="module-title"/><g class="information-table" shape-rendering="auto"></g>',
+      markup: '<g class="jointcell"><rect class="body"/><text class="module-title"/><g class="information-table" shape-rendering="auto" /><rect class="border" /></g>',
       fillMarkup: '<rect class="fill" />',
-      borderMarkup: '<path class="border" stroke-width="1" />',
+      stripeMarkup: '<rect class="stripe" />',
+      gridMarkup: '<path class="grid" />',
       textMarkup: '<text class="text" />',
 
       initialize: function() {
@@ -165,7 +150,8 @@ class Util {
         joint.dia.ElementView.prototype.renderMarkup.apply(this, arguments);
         this.$informationTable = this.$('.information-table');
         this.elFill = joint.V(this.model.fillMarkup);
-        this.elBorder = joint.V(this.model.borderMarkup);
+        this.elStripe = joint.V(this.model.stripeMarkup);
+        this.elGrid = joint.V(this.model.gridMarkup);
         this.elText = joint.V(this.model.textMarkup);
         this.renderInformations();
       },
@@ -174,7 +160,7 @@ class Util {
         this.$informationTable.empty();
         this._elements = [];
         this._renderStripes();
-        this._renderBorder();
+        this._renderGrid();
         this._renderValues();
         this.update();
       },
@@ -195,7 +181,6 @@ class Util {
 
         let fill = this.elFill.clone();
         this.$informationTable.append(fill.attr({
-          fill: this.model.get('tableBackground'),
           x: 0,
           y: 0,
           width: moduleWidth,
@@ -203,9 +188,8 @@ class Util {
         }).node);
 
         for (let i = 0; i < numRows; i += 2) {
-          let stripe = this.elFill.clone();
+          let stripe = this.elStripe.clone();
           this.$informationTable.append(stripe.attr({
-            fill: this.model.get('tableStripe'),
             x: 0,
             y: i * rowHeight,
             width: moduleWidth,
@@ -214,29 +198,28 @@ class Util {
         }
       },
 
-      _renderBorder: function() {
+      _renderGrid: function() {
         let rowHeight = this.model.get('rowHeight');
         let moduleWidth = this.model.get('moduleWidth');
         let informations = this.model.get('informations');
         let numRows = Math.max(informations.input.length, informations.output.length);
 
-        // outer border
-        let d = ['M 0 0'];
-        d.push('H', moduleWidth);
-        d.push('V', numRows * rowHeight);
-        d.push('H', 0);
-        d.push('V', 0);
-
         // inner grid
-        d.push('M', moduleWidth / 2, 0);
+        let d = ['M', moduleWidth / 2, 0];
         d.push('V', numRows * rowHeight);
+        d.push('M', 0, 0);
+        d.push('H', moduleWidth);
+        d.push('M', 0, numRows * rowHeight);
+        d.push('H', moduleWidth);
 
-        let border = this.elBorder.clone();
-        this.$informationTable.append(border.attr({
-          d: d.join(' '),
-          'stroke-width': 1,
-          stroke: 'black',
-          fill: 'none'
+        // outer grid left and right
+        d.push('M', 0, 0);
+        d.push('V', numRows * rowHeight);
+        d.push('M', moduleWidth, 0);
+        d.push('V', numRows * rowHeight);
+        let grid = this.elGrid.clone();
+        this.$informationTable.append(grid.attr({
+          d: d.join(' ')
         }).node);
       },
 
