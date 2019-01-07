@@ -114,30 +114,7 @@ export default {
     }),
     selectedModule: function() {
       return this.$store.state.modeling.modules[this.stateSelectedModelingModuleId];
-    },
-    // numEmployees: {
-    //   get() {
-    //     return this.attributeGetter('numEmployees', 0);
-    //   },
-    //   set(value) {
-    //     this.attributeSetter(value, 'numEmployees', value => isNaN(parseInt(value)) ? 0 : parseInt(value));
-    //   }
-    // },
-    // cost: {
-    //   get() {
-    //     return this.attributeGetter('cost', 0);
-    //   },
-    //   set(value) {
-    //     this.attributeSetter(value, 'cost', value => isNaN(parseFloat(value)) ? 0 : parseFloat(value));
-    //   }
-    // },
-    // // todo
-    // duration: {
-    //   get() {
-    //   },
-    //   set(value) {
-    //   }
-    // }
+    }
   },
   watch: {
     stateSelectedModelingModule: {
@@ -215,7 +192,9 @@ export default {
     maskMethod: function(raw) {
       let mask = [];
       let parts = raw.replace(/[^\d:]/g, '').split(':');
-      for (let char in parts[0]) mask.push(/\d/);
+      for (let i = 0; i < parts[0].length; i++) {
+        mask.push(/\d/);
+      }
       if (parts[1] && parts[1].length >= 3) mask.push(/\d/);
       mask.push(':', /\d/, /\d/);
       return mask;

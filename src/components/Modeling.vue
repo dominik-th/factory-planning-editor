@@ -16,7 +16,7 @@ export default {
         // todo
         return null;
       },
-      set: function(value) {
+      set: function() {
         // todo
       }
     }

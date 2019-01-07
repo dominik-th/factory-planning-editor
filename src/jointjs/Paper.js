@@ -24,16 +24,9 @@ class Paper extends joint.dia.Paper {
       markAvailable: true,
       highlighting: {
         default: {
-          name: 'stroke',
+          name: 'addClass',
           options: {
-            padding: 0,
-            rx: 3,
-            ry: 3,
-            attrs: {
-              'stroke-width': 5,
-              stroke: 'red',
-              'stroke-opacity': .5
-            }
+            className: 'highlighted'
           }
         }
       },
@@ -131,20 +124,5 @@ const validateConnection = (graph) => {
     return !graph.isSuccessor(cellViewT.model, cellViewS.model);
   }
 }
-
-const defaultLink = new joint.dia.Link({
-  router: { name: 'metro' },
-  connector: { name: 'rounded' },
-  attrs: {
-    '.connection': {
-      stroke: '#333333',
-      'stroke-width': 3
-    },
-    '.marker-target': {
-      fill: '#333333',
-      d: 'M 10 0 L 0 5 L 10 10 z'
-    },
-  }
-});
 
 export default Paper;
