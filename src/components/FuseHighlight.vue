@@ -9,7 +9,10 @@ export default {
     hightlight(text, indices) {
       // todo: improve this
       let highlighted = '';
-      let flatIndices = indices.flat().map((y,i) => i % 2 === 0 ? y : y+1);
+      let reducer = (acc, val) => acc.concat(val);
+      let flatIndices = indices
+        .reduce(reducer, [])
+        .map((y,i) => i % 2 === 0 ? y : y+1);
       let flatIndicesIndex = 0;
 
       [...text].forEach((char, index) => {
