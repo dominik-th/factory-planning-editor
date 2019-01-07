@@ -23,7 +23,7 @@ export default {
     return {
       graph: null,
       paper: null
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -60,11 +60,11 @@ export default {
       }
     },
     stateModeling: {
-      handler: "sync",
+      handler: 'sync',
       deep: true
     },
     statePlanningModules: {
-      handler: "sync",
+      handler: 'sync',
       deep: true
     }
   },
@@ -126,13 +126,15 @@ export default {
     });
 
     // fired when any cell on the canvas changed the position
-    graph.on('change:position', debounce(() => {
-      // redraw all links in case the cell has moved onto a link
-      for (let link of graph.getLinks()) {
-        paper.findViewByModel(link).update();
-      }
-    }, 500));
-
+    graph.on(
+      'change:position',
+      debounce(() => {
+        // redraw all links in case the cell has moved onto a link
+        for (let link of graph.getLinks()) {
+          paper.findViewByModel(link).update();
+        }
+      }, 500)
+    );
 
     // persistency, todo... make this better
     // graph.on('change add remove', () => {
@@ -143,35 +145,43 @@ export default {
     // }
     this.sync();
     if (this.stateSelectedModelingModuleId) {
-      this.paper.findViewByModel(
-        this.graph.getCell(this.stateSelectedModelingModuleId)
-      ).highlight();
+      this.paper
+        .findViewByModel(this.graph.getCell(this.stateSelectedModelingModuleId))
+        .highlight();
     }
     if (localStorage.getItem('window')) {
       let windowProperties = JSON.parse(localStorage.getItem('window'));
-      paper.zoom(windowProperties.size / 150)
-      paper.pan(windowProperties.offset)
+      paper.zoom(windowProperties.size / 150);
+      paper.pan(windowProperties.offset);
     }
 
     this.$root.$on('clearModelingCanvas', () => {
       this.graph.clear();
-    })
+    });
   },
   methods: {
     drop: function(moduleId, evt) {
       let canvas = this.$refs.modellingCanvas.$el;
       let canvasRect = canvas.getBoundingClientRect();
       let pan = this.paper.panZoom.getPan();
-      let x = (evt.clientX - pan.x - canvasRect.left) / this.paper.panZoom.getZoom();
-      let y = (evt.clientY - pan.y - canvasRect.top) / this.paper.panZoom.getZoom();
+      let x =
+        (evt.clientX - pan.x - canvasRect.left) / this.paper.panZoom.getZoom();
+      let y =
+        (evt.clientY - pan.y - canvasRect.top) / this.paper.panZoom.getZoom();
 
       let droppedModule = this.statePlanningModules[moduleId];
       let informations = { input: [], output: [] };
       for (let inId of droppedModule.inputInformation) {
-        informations.input.push({ id: inId, text: this.stateInformationTypes[inId].name });
+        informations.input.push({
+          id: inId,
+          text: this.stateInformationTypes[inId].name
+        });
       }
       for (let outId of droppedModule.outputInformation) {
-        informations.output.push({ id: outId, text: this.stateInformationTypes[outId].name });
+        informations.output.push({
+          id: outId,
+          text: this.stateInformationTypes[outId].name
+        });
       }
 
       let plannedModule = this.graph.addPlanningModule(
@@ -218,13 +228,19 @@ export default {
         let module = this.statePlanningModules[modelingModule.moduleId];
         let informations = { input: [], output: [] };
         for (let inId of module.inputInformation) {
-          informations.input.push({ id: inId, text: this.stateInformationTypes[inId].name });
+          informations.input.push({
+            id: inId,
+            text: this.stateInformationTypes[inId].name
+          });
         }
         for (let outId of module.outputInformation) {
-          informations.output.push({ id: outId, text: this.stateInformationTypes[outId].name });
+          informations.output.push({
+            id: outId,
+            text: this.stateInformationTypes[outId].name
+          });
         }
 
-        let element = this.graph.getCell(modelingModuleId)
+        let element = this.graph.getCell(modelingModuleId);
         // module in state but not on canvas
         if (!element) {
           element = this.graph.addPlanningModule(
@@ -247,15 +263,26 @@ export default {
         let modelingLink = modeling.links[modelingLinkId];
         let link = this.graph.getCell(modelingLinkId);
         if (!link) {
-          this.graph.connectPlanningModules(modelingLink.fromModule, modelingLink.toModule, modelingLink.informationId, modelingLinkId);
+          this.graph.connectPlanningModules(
+            modelingLink.fromModule,
+            modelingLink.toModule,
+            modelingLink.informationId,
+            modelingLinkId
+          );
         } else {
-          link.set('source', { id: modelingLink.fromModule, port: modelingLink.informationId });
-          link.set('target', { id: modelingLink.toModule, port: modelingLink.informationId });
+          link.set('source', {
+            id: modelingLink.fromModule,
+            port: modelingLink.informationId
+          });
+          link.set('target', {
+            id: modelingLink.toModule,
+            port: modelingLink.informationId
+          });
         }
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -305,7 +332,7 @@ export default {
   stroke: #777;
   stroke-width: 2px;
   fill: none;
-  transition: all .25s ease;
+  transition: all 0.25s ease;
 }
 .jointcell > .information-table > .grid {
   stroke: #333;
@@ -322,6 +349,6 @@ export default {
   stroke: #999;
   fill: #fff;
   r: 10px;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 </style>

@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import InformationPicker from './InformationPicker.vue'
+import InformationPicker from './InformationPicker.vue';
 export default {
   name: 'ModuleEditModal',
   components: {
@@ -117,11 +117,13 @@ export default {
         name: null,
         abbreviation: null
       }
-    }
+    };
   },
   computed: {
     title() {
-      return this.moduleId ? this.$t('modal.edit_module') : this.$t('modal.create_module')
+      return this.moduleId
+        ? this.$t('modal.edit_module')
+        : this.$t('modal.create_module');
     },
     informationBlacklist() {
       // blacklist consisting of all already assigned input and output information
@@ -133,8 +135,10 @@ export default {
       // all the remaining existing information types which arent blacklisted
       let informationPool = [];
       for (let id in this.$store.getters.informationTypes) {
-        if (this.module.inputInformation.indexOf(id) < 0 &&
-            this.module.outputInformation.indexOf(id) < 0) {
+        if (
+          this.module.inputInformation.indexOf(id) < 0 &&
+          this.module.outputInformation.indexOf(id) < 0
+        ) {
           informationPool.push({
             id,
             ...this.$store.getters.informationTypes[id]
@@ -142,13 +146,15 @@ export default {
         }
       }
       return informationPool;
-    },
+    }
   },
   mounted() {
-    this.$root.$on('modal.editModule', (moduleId) => {
+    this.$root.$on('modal.editModule', moduleId => {
       this.moduleId = moduleId;
       // clone module so we dont change vuex state directly
-      this.module = JSON.parse(JSON.stringify(this.$store.getters.planningModules[moduleId]));
+      this.module = JSON.parse(
+        JSON.stringify(this.$store.getters.planningModules[moduleId])
+      );
       this.$refs.myModalRef.show();
     });
     this.$root.$on('modal.createModule', () => {
@@ -159,7 +165,7 @@ export default {
         outputInformation: [],
         name: null,
         abbreviation: null
-      }
+      };
       this.$refs.myModalRef.show();
     });
   },
@@ -176,10 +182,14 @@ export default {
       this.$refs.outputPicker.clear();
     },
     createInputInformation: async function(name) {
-      this.module.inputInformation.push(await this.$store.dispatch('addInformation', name));
+      this.module.inputInformation.push(
+        await this.$store.dispatch('addInformation', name)
+      );
     },
     createOutputInformation: async function(name) {
-      this.module.outputInformation.push(await this.$store.dispatch('addInformation', name));
+      this.module.outputInformation.push(
+        await this.$store.dispatch('addInformation', name)
+      );
     },
     addInputInformation: function(id) {
       this.module.inputInformation.push(id);
@@ -189,9 +199,13 @@ export default {
     },
     removeInformation: function(type, id) {
       if (type === 'in') {
-        this.module.inputInformation = this.module.inputInformation.filter(module => module !== id)
+        this.module.inputInformation = this.module.inputInformation.filter(
+          module => module !== id
+        );
       } else if (type === 'out') {
-        this.module.outputInformation = this.module.outputInformation.filter(module => module !== id)
+        this.module.outputInformation = this.module.outputInformation.filter(
+          module => module !== id
+        );
       }
     },
     save: async function(evt) {
@@ -206,14 +220,17 @@ export default {
       }
       if (this.moduleId) {
         // update existing module
-        this.$store.commit('SET_PLANNING_MODULE', { id: this.moduleId, module: this.module });
+        this.$store.commit('SET_PLANNING_MODULE', {
+          id: this.moduleId,
+          module: this.module
+        });
       } else {
         // create a new module
         await this.$store.dispatch('addPlanningModule', this.module);
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -225,14 +242,14 @@ export default {
   font-size: 3em;
 }
 .repository-component {
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   user-select: none;
   border: 1px solid #999;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   text-align: center;
   min-height: 5rem;
   vertical-align: middle;
-  margin: .75rem .5rem .75rem .5rem;
+  margin: 0.75rem 0.5rem 0.75rem 0.5rem;
 }
 .information-trash {
   cursor: pointer;
@@ -242,14 +259,14 @@ export default {
 }
 .component-title {
   font-weight: bold;
-  margin: .5em .5em .2em .5em;
+  margin: 0.5em 0.5em 0.2em 0.5em;
   text-align: center;
 }
 .component-title input {
   text-align: center;
 }
 .component-info {
-  font-size: .7rem;
+  font-size: 0.7rem;
 }
 .module-edit-wrapper {
   display: flex;
@@ -259,7 +276,7 @@ export default {
   flex: 1;
 }
 .information-picker {
-  padding: 1.25em 0em .2em 0em;
+  padding: 1.25em 0em 0.2em 0em;
 }
 .information-list {
   /*max-height: 50vh;*/
@@ -267,8 +284,8 @@ export default {
   overflow-y: auto;
 }
 .information-list > .list-group > .list-group-item {
-  padding-top: .50rem;
-  padding-bottom: .50rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .information-list i {
   color: red;

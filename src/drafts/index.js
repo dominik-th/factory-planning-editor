@@ -5,7 +5,7 @@ let drafts = {
     title: 'cyclic_information_flow',
     state: cyclicInformationState
   }
-}
+};
 
 for (let draftId in drafts) {
   let draft = drafts[draftId];

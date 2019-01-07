@@ -24,7 +24,7 @@ library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(VueI18n);
 Vue.use(BootstrapVue);
-Vue.use(Notifications, {componentName: 'AppNotifications'});
+Vue.use(Notifications, { componentName: 'AppNotifications' });
 
 const i18n = new VueI18n({
   locale: localStorage.getItem('locale') || 'en-US', // set locale

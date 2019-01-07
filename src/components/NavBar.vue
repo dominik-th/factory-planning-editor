@@ -51,17 +51,20 @@ export default {
       let fileName = 'fpe_export_';
       let now = new Date();
       fileName += now.getFullYear();
-      fileName += (now.getMonth()+1).toString().padStart(2, '0');
-      fileName += (now.getDate()).toString().padStart(2, '0');
+      fileName += (now.getMonth() + 1).toString().padStart(2, '0');
+      fileName += now
+        .getDate()
+        .toString()
+        .padStart(2, '0');
       saveAs(exportBlob, fileName + '.xlsx');
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .btn {
-  margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 </style>

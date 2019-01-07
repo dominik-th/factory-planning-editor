@@ -1,6 +1,6 @@
-import uuidv4 from 'uuid/v4'
-import Fuse from 'fuse.js'
-import Vue from 'vue'
+import uuidv4 from 'uuid/v4';
+import Fuse from 'fuse.js';
+import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
@@ -8,9 +8,11 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
-  plugins: [createPersistedState({
-    key: 'application_state'
-  })],
+  plugins: [
+    createPersistedState({
+      key: 'application_state'
+    })
+  ],
   state: {
     planningModules: {},
     informationTypes: {},
@@ -37,10 +39,10 @@ export const store = new Vuex.Store({
       state.informationTypes = types;
     },
     SET_INFORMATION_TYPE(state, { id, name }) {
-      Vue.set(state.informationTypes, id, {name});
+      Vue.set(state.informationTypes, id, { name });
     },
     SET_MODELING_CELL(state, { type, id, cell }) {
-      switch(type) {
+      switch (type) {
         case 'module':
           Vue.set(state.modeling.modules, id, cell);
           break;
@@ -50,7 +52,7 @@ export const store = new Vuex.Store({
       }
     },
     REMOVE_MODELING_CELL(state, { type, id }) {
-      switch(type) {
+      switch (type) {
         case 'module':
           Vue.delete(state.modeling.modules, id);
           break;
@@ -72,7 +74,7 @@ export const store = new Vuex.Store({
   actions: {
     addPlanningModule({ commit }, module) {
       let id = uuidv4();
-      commit('SET_PLANNING_MODULE', {id, module});
+      commit('SET_PLANNING_MODULE', { id, module });
       return id;
     },
     async removePlanningModule({ commit, dispatch, state }, id) {
@@ -87,13 +89,13 @@ export const store = new Vuex.Store({
     },
     addInformation({ commit }, name) {
       let id = uuidv4();
-      commit('SET_INFORMATION_TYPE', {id, name});
+      commit('SET_INFORMATION_TYPE', { id, name });
       return id;
     },
     removeModelingModule({ commit, state }, id) {
       // remove all connected links
       for (let linkId in state.modeling.links) {
-        let link = state.modeling.links[linkId]
+        let link = state.modeling.links[linkId];
         if (link.fromModule === id || link.toModule === id) {
           commit('REMOVE_MODELING_CELL', {
             type: 'link',
@@ -135,9 +137,7 @@ export const store = new Vuex.Store({
         threshold: 0.6,
         location: 0,
         minMatchCharLength: 1,
-        keys: [
-          "name"
-        ]
+        keys: ['name']
       };
       let fuse = new Fuse(getters.searchablePlanningModules, fuseOptions);
       return keyword => fuse.search(keyword);
@@ -158,4 +158,4 @@ export const store = new Vuex.Store({
       return null;
     }
   }
-})
+});

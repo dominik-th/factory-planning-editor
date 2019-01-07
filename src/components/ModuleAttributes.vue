@@ -91,7 +91,7 @@
 <!-- https://www.smashingmagazine.com/2017/06/designing-efficient-web-forms/ -->
 <script>
 import { mapGetters } from 'vuex';
-import MaskedInput, {conformToMask} from 'vue-text-mask';
+import MaskedInput, { conformToMask } from 'vue-text-mask';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 export default {
@@ -105,7 +105,7 @@ export default {
       cost: '',
       duration: '',
       custom: {}
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -113,31 +113,37 @@ export default {
       stateSelectedModelingModule: 'selectedModelingModule'
     }),
     selectedModule: function() {
-      return this.$store.state.modeling.modules[this.stateSelectedModelingModuleId];
+      return this.$store.state.modeling.modules[
+        this.stateSelectedModelingModuleId
+      ];
     }
   },
   watch: {
     stateSelectedModelingModule: {
       handler: function(module) {
-      if (!module) return;
-      // when the selected module has changed, pre fill the inputs
-      let maskedNumEmployeed = conformToMask(
-        module.attributes.numEmployees.toString(),
-        this.maskMethod3
-      );
-      this.numEmployees = maskedNumEmployeed.conformedValue;
+        if (!module) return;
+        // when the selected module has changed, pre fill the inputs
+        let maskedNumEmployeed = conformToMask(
+          module.attributes.numEmployees.toString(),
+          this.maskMethod3
+        );
+        this.numEmployees = maskedNumEmployeed.conformedValue;
 
-      let maskedCost = conformToMask(
-        (module.attributes.cost / 100).toString().replace('.', ','),
-        this.maskMethod2
-      );
-      this.cost = maskedCost.conformedValue;
+        let maskedCost = conformToMask(
+          (module.attributes.cost / 100).toString().replace('.', ','),
+          this.maskMethod2
+        );
+        this.cost = maskedCost.conformedValue;
 
-      let hours = Math.floor(module.attributes.duration / 60).toString().padStart(2, '0');
-      let minutes = (module.attributes.duration % 60).toString().padStart(2, '0');
-      this.duration = `${hours}:${minutes}`
+        let hours = Math.floor(module.attributes.duration / 60)
+          .toString()
+          .padStart(2, '0');
+        let minutes = (module.attributes.duration % 60)
+          .toString()
+          .padStart(2, '0');
+        this.duration = `${hours}:${minutes}`;
 
-      this.custom = JSON.parse(JSON.stringify(module.attributes.custom));
+        this.custom = JSON.parse(JSON.stringify(module.attributes.custom));
       },
       immediate: true
     },
@@ -150,12 +156,14 @@ export default {
     },
     cost: function(value) {
       // parse 1.234.456,78 € format
-      let cents = parseFloat(value
-        // remove thousand separators
-        .replace('.', '')
-        // use international decimal separator
-        .replace(',', '.')
-      ) * 100;
+      let cents =
+        parseFloat(
+          value
+            // remove thousand separators
+            .replace('.', '')
+            // use international decimal separator
+            .replace(',', '.')
+        ) * 100;
       if (typeof cents === 'number' && !isNaN(cents)) {
         this.saveAttribute('cost', cents);
       }
@@ -182,7 +190,7 @@ export default {
       suffix: ' €',
       thousandsSeparatorSymbol: '.',
       allowDecimal: true,
-      decimalSymbol: ',',
+      decimalSymbol: ','
     }),
     maskMethod3: createNumberMask({
       prefix: '',
@@ -207,7 +215,8 @@ export default {
       }
     },
     attributeSetter: function(value, attribute, parseValue) {
-      if (this.selectedModule.attributes[attribute] === parseValue(value)) return;
+      if (this.selectedModule.attributes[attribute] === parseValue(value))
+        return;
       this.$store.commit('UPDATE_MODELING_ATTRIBUTE', {
         id: this.stateSelectedModelingModuleId,
         attribute: attribute,
@@ -215,7 +224,8 @@ export default {
       });
     },
     saveAttribute: function(attribute, value) {
-      if (this.stateSelectedModelingModule.attributes[attribute] === value) return;
+      if (this.stateSelectedModelingModule.attributes[attribute] === value)
+        return;
       this.$store.commit('UPDATE_MODELING_ATTRIBUTE', {
         id: this.stateSelectedModelingModuleId,
         attribute,
@@ -233,7 +243,7 @@ export default {
       this.$delete(this.custom, id);
     }
   }
-}
+};
 </script>
 
 <style scoped>

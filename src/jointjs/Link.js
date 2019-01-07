@@ -1,7 +1,6 @@
 import joint from 'jointjs';
 
 class Link extends joint.dia.Link {
-
   constructor(options, ...args) {
     // default options include:
     // thicker lines
@@ -18,12 +17,11 @@ class Link extends joint.dia.Link {
         '.marker-target': {
           fill: '#333333',
           d: 'M 10 0 L 0 5 L 10 10 z'
-        },
+        }
       }
     };
     super({ ...defaultOptions, ...options }, ...args);
   }
-
 }
 
 export default Link;

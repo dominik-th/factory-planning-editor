@@ -6,7 +6,6 @@ import Link from './Link';
 import { GRID_SIZE } from './constants';
 
 class Paper extends joint.dia.Paper {
-
   scale = 1;
 
   constructor(element, graph) {
@@ -75,11 +74,14 @@ class Paper extends joint.dia.Paper {
   }
 
   _setGrid(size, color, offset) {
-    let $ = require('jquery')
-    localStorage.setItem('window', JSON.stringify({
-      size,
-      offset
-    }));
+    let $ = require('jquery');
+    localStorage.setItem(
+      'window',
+      JSON.stringify({
+        size,
+        offset
+      })
+    );
     // Set grid size on the JointJS paper object (joint.dia.Paper instance)
     // this.options.gridsize = gridsize;
     // Draw a grid into the HTML 5 canvas and convert it to a data URI image
@@ -94,14 +96,16 @@ class Paper extends joint.dia.Paper {
     // Finally, set the grid background image of the paper container element.
     // let gridBackgroundImage = canvas[0].toDataURL('image/png');
     // $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
-    if(typeof(offset) != 'undefined'){
-      $(this.el.childNodes[1]).css('background-position', offset.x + 'px ' + offset.y + 'px');
+    if (typeof offset != 'undefined') {
+      $(this.el.childNodes[1]).css(
+        'background-position',
+        offset.x + 'px ' + offset.y + 'px'
+      );
     }
   }
-
 }
 
-const validateConnection = (graph) => {
+const validateConnection = graph => {
   return (cellViewS, magnetS, cellViewT, magnetT) => {
     // Link to the same cell is not allowed
     if (cellViewS === cellViewT) return false;
@@ -113,16 +117,18 @@ const validateConnection = (graph) => {
     if (!magnetS || magnetS.getAttribute('port-group') === 'in') return false;
 
     // Information types have to match
-    if (magnetS.getAttribute('port') !== magnetT.getAttribute('port')) return false;
+    if (magnetS.getAttribute('port') !== magnetT.getAttribute('port'))
+      return false;
 
     // Input information already satisfied
-    let satisfied = graph.getConnectedLinks(cellViewT.model).filter(link => {
-      return link.get('target').port === magnetS.getAttribute('port');
-    }).length !== 0;
+    let satisfied =
+      graph.getConnectedLinks(cellViewT.model).filter(link => {
+        return link.get('target').port === magnetS.getAttribute('port');
+      }).length !== 0;
     if (satisfied) return false;
 
     return !graph.isSuccessor(cellViewT.model, cellViewS.model);
-  }
-}
+  };
+};
 
 export default Paper;

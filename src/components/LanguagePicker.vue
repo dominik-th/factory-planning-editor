@@ -26,7 +26,7 @@ export default {
         { languageTag: 'en-US', countryCode: 'us' },
         { languageTag: 'de-DE', countryCode: 'de' }
       ]
-    }
+    };
   },
   computed: {
     componentId: function() {
@@ -40,5 +40,5 @@ export default {
       localStorage.setItem('locale', languageTag);
     }
   }
-}
+};
 </script>

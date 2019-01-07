@@ -7,12 +7,11 @@ export default {
   name: 'FuseHighlight',
   filters: {
     hightlight(text, indices) {
-      // todo: improve this
       let highlighted = '';
       let reducer = (acc, val) => acc.concat(val);
       let flatIndices = indices
         .reduce(reducer, [])
-        .map((y,i) => i % 2 === 0 ? y : y+1);
+        .map((y, i) => (i % 2 === 0 ? y : y + 1));
       let flatIndicesIndex = 0;
 
       [...text].forEach((char, index) => {
@@ -21,11 +20,11 @@ export default {
           flatIndicesIndex++;
         }
         highlighted += char
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
       });
 
       return highlighted;
@@ -41,7 +40,7 @@ export default {
       default: () => []
     }
   }
-}
+};
 </script>
 
 <style scoped>

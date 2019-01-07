@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import FuseHighlight from './FuseHighlight'
-import ModuleEditModal from './ModuleEditModal.vue'
+import FuseHighlight from './FuseHighlight';
+import ModuleEditModal from './ModuleEditModal.vue';
 
 import { Drag } from 'vue-drag-drop';
 
@@ -63,7 +63,9 @@ export default {
         let filteredModules = {};
         // the filtered list also contains meta information
         // check fuse.js docs for more information
-        let fuseFilteredModules = this.$store.getters.filteredPlanningModules(this.filter);
+        let fuseFilteredModules = this.$store.getters.filteredPlanningModules(
+          this.filter
+        );
         // bring the search result in the same structure as the planning modules in store
         for (let module of fuseFilteredModules) {
           filteredModules[module.item.id] = module.item;
@@ -74,14 +76,13 @@ export default {
       }
     }
   },
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       selected: null,
       modal: null,
       filter: ''
-    }
+    };
   },
   methods: {
     fuseIndices: function(id) {
@@ -89,7 +90,9 @@ export default {
         // we only search the module.name key, thus there is only going to be one match
         // once we also search different keys (abbreviation maybe?), we have to modify this
         // and include multiple matches
-        return this.$store.getters.filteredPlanningModules(this.filter).find(fuseResult => fuseResult.item.id === id).matches[0].indices;
+        return this.$store.getters
+          .filteredPlanningModules(this.filter)
+          .find(fuseResult => fuseResult.item.id === id).matches[0].indices;
       } else {
         return [];
       }
@@ -98,7 +101,7 @@ export default {
       this.$root.$emit('modal.createModule');
     },
     selectModule: function(id) {
-      this.selected = id
+      this.selected = id;
     },
     removeSelectedModule: function() {
       if (this.selected) {
@@ -122,7 +125,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -149,26 +152,26 @@ export default {
   flex: 1 !important;
 }
 .repository-component {
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
   border: 1px solid #999;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   text-align: center;
   min-height: 5rem;
   vertical-align: middle;
-  margin: .75rem .5rem .75rem .5rem;
+  margin: 0.75rem 0.5rem 0.75rem 0.5rem;
 }
 .repository-component.selected {
-  box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
   border-color: #28a745;
-  background-color: rgba(0, 255, 0, .1);
+  background-color: rgba(0, 255, 0, 0.1);
 }
 .component-title {
   font-weight: bold;
 }
 .component-info {
-  font-size: .7rem;
+  font-size: 0.7rem;
 }
 .repository-filter {
   padding: 5px;

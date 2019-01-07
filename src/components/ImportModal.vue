@@ -62,13 +62,19 @@ export default {
       // generate the options for the select field
       let draftOptions = Object.keys(drafts).map(key => {
         let meta = [
-          this.$tc('example_drafts.meta.num_planningmodules', drafts[key].numModules),
-          this.$tc('example_drafts.meta.num_informations', drafts[key].numInformations),
+          this.$tc(
+            'example_drafts.meta.num_planningmodules',
+            drafts[key].numModules
+          ),
+          this.$tc(
+            'example_drafts.meta.num_informations',
+            drafts[key].numInformations
+          )
         ];
         return {
           text: `${this.$t(drafts[key].title)} <${meta.join(' | ')}>`,
           value: key
-        }
+        };
       });
       draftOptions.unshift({
         text: this.$t('modal.import.select_example_placeholder'),
@@ -141,7 +147,7 @@ export default {
         // todo: implement further validation to ensure a consistent state
         this.$store.replaceState(JSON.parse(this.importString));
         this.$store.commit('SAVE');
-      } catch(e) {
+      } catch (e) {
         // show notification to inform the user
         this.$notify({
           type: 'error',
@@ -163,7 +169,7 @@ export default {
     // otherwise it could cause duplicate responses on remounting (live reloading for example)
     this.$root.$off('modal.import');
   }
-}
+};
 </script>
 
 <style scoped>
@@ -179,7 +185,7 @@ export default {
   color: black;
   text-align: center;
   height: 1.5em;
-  opacity: .5;
+  opacity: 0.5;
 }
 .hr-text:before {
   content: '';
@@ -195,7 +201,7 @@ export default {
   position: relative;
   display: inline-block;
   color: black;
-  padding: 0 .5em;
+  padding: 0 0.5em;
   line-height: 1.5em;
   color: #818078;
   background-color: #fcfcfa;

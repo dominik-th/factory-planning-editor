@@ -4,7 +4,6 @@ import Util from './Util';
 import { GRID_SIZE } from './constants';
 
 class Graph extends joint.dia.Graph {
-
   constructor(...args) {
     super(...args);
     if (!joint.shapes.fpe || !joint.shapes.fpe.Module) {
@@ -48,11 +47,10 @@ class Graph extends joint.dia.Graph {
     this.addCell(link);
     return link;
   }
-
 }
 
 const roundNearest = (n, value) => {
   return Math.round(value / n) * n;
-}
+};
 
 export default Graph;

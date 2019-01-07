@@ -46,7 +46,8 @@ export async function generateExcelSheet(state) {
     { state: 'frozen', xSplit: 1, ySplit: 1, topLeftCell: 'B2' }
   ];
 
-  let mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  let mimeType =
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
   let data = await workbook.xlsx.writeBuffer();
   return new Blob([data], { type: mimeType });
 }

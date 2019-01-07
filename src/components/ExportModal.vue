@@ -46,7 +46,7 @@ export default {
       resetTooltipLabel: debounce(function() {
         this.tooltipLabel = 'modal.export.doubleclick_copy';
       }, 3000)
-    }
+    };
   },
   computed: {
     applicationState() {
@@ -55,12 +55,17 @@ export default {
   },
   methods: {
     exportData: function() {
-      let exportBlob = new Blob([this.applicationState], { type: 'application/json;charset=utf-8' });
+      let exportBlob = new Blob([this.applicationState], {
+        type: 'application/json;charset=utf-8'
+      });
       let fileName = 'fpe_export_';
       let now = new Date();
       fileName += now.getFullYear();
-      fileName += (now.getMonth()+1).toString().padStart(2, '0');
-      fileName += (now.getDate()).toString().padStart(2, '0');
+      fileName += (now.getMonth() + 1).toString().padStart(2, '0');
+      fileName += now
+        .getDate()
+        .toString()
+        .padStart(2, '0');
       saveAs(exportBlob, fileName + '.json');
     },
     exportDataToClipboard: function() {
@@ -79,5 +84,5 @@ export default {
     // otherwise it could cause duplicate responses on remounting (live reloading for example)
     this.$root.$off('modal.export');
   }
-}
+};
 </script>

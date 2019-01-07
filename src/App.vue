@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import NavBar from './components/NavBar.vue'
-import ModuleRepository from './components/ModuleRepository.vue'
-import ModuleAttributes from './components/ModuleAttributes.vue'
-import Modeling from './components/Modeling.vue'
+import NavBar from './components/NavBar.vue';
+import ModuleRepository from './components/ModuleRepository.vue';
+import ModuleAttributes from './components/ModuleAttributes.vue';
+import Modeling from './components/Modeling.vue';
 
 export default {
   name: 'app',
@@ -24,7 +24,7 @@ export default {
     ModuleRepository,
     ModuleAttributes
   }
-}
+};
 </script>
 
 <style>
@@ -32,7 +32,7 @@ body {
   height: 100vh;
 }
 .app {
-  transition: .1s;
+  transition: 0.1s;
   display: flex;
   flex-direction: column;
   height: 100vh;

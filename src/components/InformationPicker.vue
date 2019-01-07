@@ -67,21 +67,25 @@ export default {
       query: '',
       focus: false,
       hover: false
-    }
+    };
   },
   computed: {
     filteredInformation() {
       // todo: better search with fuse
       if (this.query.length === 0) return [];
-      return this.pool.filter((ele) => {
-        return ele.name.toLowerCase().indexOf(this.query.trim().toLowerCase()) >= 0
+      return this.pool.filter(ele => {
+        return (
+          ele.name.toLowerCase().indexOf(this.query.trim().toLowerCase()) >= 0
+        );
       });
     },
     isBlacklisted() {
       // check if current query is in the (via props given) blacklist
-      return this.blacklist.findIndex((ele) => {
-        return ele.toLowerCase() === this.query.trim().toLowerCase();
-      }) >= 0;
+      return (
+        this.blacklist.findIndex(ele => {
+          return ele.toLowerCase() === this.query.trim().toLowerCase();
+        }) >= 0
+      );
     }
   },
   mounted() {
@@ -116,12 +120,12 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
 .information-picker {
-  padding: 1.25em 0em .2em 0em;
+  padding: 1.25em 0em 0.2em 0em;
 }
 .information-picker-add-icon {
   transition: all 0.5s;
@@ -138,16 +142,16 @@ export default {
   display: block;
   float: left;
   min-width: 10rem;
-  padding: .5rem 0;
-  margin: .175rem 0 0;
+  padding: 0.5rem 0;
+  margin: 0.175rem 0 0;
   font-size: 1rem;
   color: #212529;
   text-align: left;
   list-style: none;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid rgba(0,0,0,.15);
-  border-radius: .25rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
 }
 .dropdown-list.hidden {
   display: none;

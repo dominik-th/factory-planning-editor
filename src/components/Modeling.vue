@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ModelingCanvas from './ModelingCanvas.vue'
+import ModelingCanvas from './ModelingCanvas.vue';
 
 export default {
   name: 'Modeling',
@@ -21,6 +21,5 @@ export default {
       }
     }
   }
-}
+};
 </script>
-
