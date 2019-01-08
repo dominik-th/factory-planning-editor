@@ -133,7 +133,8 @@ export default {
   flex-direction: column;
   display: flex;
   align-items: stretch;
-  width: 13rem;
+  min-width: 13rem;
+  max-width: 16rem;
   border-right: 2px solid rgba(68, 68, 68, 0.25);
 }
 .repository-components {
@@ -152,6 +153,7 @@ export default {
   flex: 1 !important;
 }
 .repository-component {
+  overflow: hidden;
   transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;

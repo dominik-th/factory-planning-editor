@@ -285,7 +285,11 @@ class Util {
               width: moduleWidth / 2,
               height: rowHeight
             };
-            text.attr(bbox).text(information.text);
+            let clippedText =
+              information.text.length > 20
+                ? information.text.substr(0, 28) + '...'
+                : information.text;
+            text.attr(bbox).text(clippedText);
             this.$informationTable.append(text.node);
 
             this._elements.push([

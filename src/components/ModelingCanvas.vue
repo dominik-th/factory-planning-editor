@@ -208,7 +208,7 @@ export default {
         }
       });
     },
-    sync: function() {
+    sync: async function() {
       let modeling = this.stateModeling;
       // remove obsolete links
       let graphLinks = this.graph.getLinks();

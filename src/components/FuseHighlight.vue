@@ -1,5 +1,5 @@
 <template>
-  <span :inner-html.prop="result | hightlight(indices)"></span>
+  <span class="fuse-highlight" :inner-html.prop="result | hightlight(indices)"></span>
 </template>
 
 <script>
@@ -44,4 +44,9 @@ export default {
 </script>
 
 <style scoped>
+.fuse-highlight {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
 </style>

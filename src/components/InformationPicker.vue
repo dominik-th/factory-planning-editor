@@ -156,4 +156,8 @@ export default {
 .dropdown-list.hidden {
   display: none;
 }
+.dropdown-item {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 </style>
