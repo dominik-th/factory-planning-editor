@@ -18,7 +18,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'flag-icon-css/css/flag-icon.min.css';
 
-clearOutdatedStore('0.0.1');
+clearOutdatedStore('0.0.2');
 library.add(fas);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
