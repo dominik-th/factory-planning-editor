@@ -47,6 +47,7 @@
 
 <script>
 import drafts from '../drafts';
+import { importExcelSheet } from '@/helpers/excel';
 
 export default {
   name: 'ImportModal',
@@ -112,7 +113,7 @@ export default {
       evt.preventDefault();
     },
     // reads the file and if its json fill the text area
-    handleFileUpload(file) {
+    handleFileUpload: async function(file) {
       // when the user cancels the file browser dialog, file is going to be undefined
       if (!file) return;
       let reader = new FileReader();
@@ -130,9 +131,17 @@ export default {
           });
         }
       };
+
+      let excelTypes = [
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-excel.sheet.macroEnabled.12'
+      ];
       // filter incorrect content types
       if (file.type === 'application/json') {
         reader.readAsText(file);
+      } else if (excelTypes.indexOf(file.type) >= 0) {
+        this.importString = JSON.stringify(await importExcelSheet(file));
+        this.resetExceptions.push('fileInput');
       } else {
         this.$notify({
           type: 'error',

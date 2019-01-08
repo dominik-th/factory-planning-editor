@@ -1,4 +1,5 @@
 import ExcelJS from 'exceljs/dist/es5/exceljs.browser';
+import uuidv4 from 'uuid/v4';
 
 export async function generateExcelSheet(state) {
   // create workbook and add worksheet
@@ -51,3 +52,101 @@ export async function generateExcelSheet(state) {
   let data = await workbook.xlsx.writeBuffer();
   return new Blob([data], { type: mimeType });
 }
+
+export async function importExcelSheet(file) {
+  let informations = [];
+  let modules = [];
+
+  let workbook = await readExcelFileAsync(file);
+  let worksheet = workbook.getWorksheet(1);
+  let informationRow = worksheet.getRow(1);
+  for (let i = 2; informationRow.getCell(i).value !== null; i++) {
+    informations[i] = {
+      id: uuidv4(),
+      name: parseCellValue(informationRow.getCell(i).value),
+      abbreviation: null
+    };
+  }
+  let moduleValues = worksheet.getColumn(1).values;
+  for (let i = 2; moduleValues !== null && i < moduleValues.length; i++) {
+    modules[i] = {
+      id: uuidv4(),
+      name: parseCellValue(moduleValues[i]),
+      abbreviation: null,
+      inputInformation: [],
+      outputInformation: []
+    };
+  }
+
+  for (let i = 0; i < modules.length; i++) {
+    if (!modules[i]) continue;
+    for (let u = 0; u < informations.length; u++) {
+      if (!informations[u]) continue;
+
+      let cell = worksheet.getRow(i).getCell(u);
+      if (!cell.value) continue;
+
+      if (cell.value === 'LE' || cell.value === 'GE') {
+        modules[i].inputInformation.push(informations[u].id);
+      } else if (cell.value === 'LA') {
+        modules[i].outputInformation.push(informations[u].id);
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Invalid value: ${modules[i].name} - ${informations[u].name}`
+        );
+      }
+    }
+  }
+
+  let state = {
+    planningModules: {},
+    informationTypes: {},
+    modeling: {
+      modules: {},
+      links: {},
+      selected: null
+    }
+  };
+
+  for (let i = 0; i < modules.length; i++) {
+    if (!modules[i]) continue;
+    state.planningModules[modules[i].id] = {
+      name: modules[i].name,
+      abbreviation: modules[i].abbreviation,
+      inputInformation: modules[i].inputInformation,
+      outputInformation: modules[i].outputInformation
+    };
+  }
+
+  for (let i = 0; i < informations.length; i++) {
+    if (!informations[i]) continue;
+    state.informationTypes[informations[i].id] = {
+      name: informations[i].name,
+      abbreviation: informations[i].abbreviation
+    };
+  }
+  return state;
+}
+
+function readExcelFileAsync(file) {
+  return new Promise((resolve, reject) => {
+    let fileReader = new FileReader();
+    fileReader.onload = async evt => {
+      // sometimes the Workbook xlsx load function is really slow, prepare for a few secs wait
+      let workbook = await new ExcelJS.Workbook().xlsx.load(evt.target.result);
+      resolve(workbook);
+    };
+    fileReader.onerror = reject;
+    fileReader.readAsArrayBuffer(file);
+  });
+}
+
+let parseCellValue = value => {
+  if (typeof value === 'string') {
+    return value;
+  } else if (value.richText) {
+    return value.richText.map(part => part.text).join(' ');
+  }
+  return 'PARSING ERROR';
+};
