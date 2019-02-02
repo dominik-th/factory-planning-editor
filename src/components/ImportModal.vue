@@ -136,10 +136,11 @@ export default {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'application/vnd.ms-excel.sheet.macroEnabled.12'
       ];
+      excelTypes.map(type => type.toLocaleLowerCase());
       // filter incorrect content types
       if (file.type === 'application/json') {
         reader.readAsText(file);
-      } else if (excelTypes.indexOf(file.type) >= 0) {
+      } else if (excelTypes.indexOf(file.type.toLocaleLowerCase()) >= 0) {
         this.importString = JSON.stringify(await importExcelSheet(file));
         this.resetExceptions.push('fileInput');
       } else {
