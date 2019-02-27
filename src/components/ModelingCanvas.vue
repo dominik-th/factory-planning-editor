@@ -3,7 +3,9 @@
     class="container-modelling-canvas"
     id="container-modelling-canvas"
     ref="modellingCanvas"
+    v-shortkey="{up: ['+'], down: ['-']}"
     @drop="drop"
+    @shortkey.native="zoom"
   />
 </template>
 
@@ -43,20 +45,6 @@ export default {
       if (newval) {
         cellView = this.paper.findViewByModel(this.graph.getCell(newval));
         cellView.highlight();
-        // cellView.highlight(cellView.el , {
-        //   highlighter: {
-        //     name: 'stroke',
-        //     options: {
-        //       padding: 10,
-        //       rx: 3,
-        //       ry: 3,
-        //       attrs: {
-        //         'stroke-width': 1,
-        //         stroke: 'red'
-        //       }
-        //     }
-        //   }
-        // });
       }
     },
     stateModeling: {
@@ -160,6 +148,16 @@ export default {
     });
   },
   methods: {
+    zoom: function(evt) {
+      switch (evt.srcKey) {
+        case 'up':
+          this.paper.zoomBy(1.1);
+          break;
+        case 'down':
+          this.paper.zoomBy(0.9);
+          break;
+      }
+    },
     drop: function(moduleId, evt) {
       let canvas = this.$refs.modellingCanvas.$el;
       let canvasRect = canvas.getBoundingClientRect();
