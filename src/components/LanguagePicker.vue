@@ -7,6 +7,7 @@
       <b-dropdown-item
         v-for="{ languageTag, countryCode } in languages"
         :key="languageTag"
+        :id="languageTag"
         @click="changeLanguage(languageTag)"
       >
         <span :class="`flag-icon flag-icon-${countryCode}`" /> {{ $t(`i18n.${languageTag}`) }}
