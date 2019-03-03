@@ -4,5 +4,5 @@ module.exports = {
       hints: false
     }
   },
-  baseUrl: './',
+  baseUrl: './'
 };

@@ -14,10 +14,9 @@ const i18n = new VueI18n({
 });
 
 describe('LanguagePicker.vue', () => {
-
   beforeEach(() => {
     localStorage.clear();
-  })
+  });
 
   it('renders in english by default', () => {
     const wrapper = shallowMount(LanguagePicker, {
@@ -46,5 +45,4 @@ describe('LanguagePicker.vue', () => {
     wrapper.vm.changeLanguage(locale);
     expect(localStorage.getItem('locale')).toBe(locale);
   });
-
 });
