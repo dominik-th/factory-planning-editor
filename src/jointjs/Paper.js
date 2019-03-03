@@ -67,6 +67,30 @@ class Paper extends joint.dia.Paper {
     }
   }
 
+  zoomBy(scale) {
+    if (this.panZoom) {
+      this.panZoom.zoomBy(scale);
+    }
+  }
+
+  zoomIn() {
+    if (this.panZoom) {
+      this.panZoom.zoomIn();
+    }
+  }
+
+  zoomOut() {
+    if (this.panZoom) {
+      this.panZoom.zoomOut();
+    }
+  }
+
+  zoomAtPointBy(scale, position) {
+    if (this.panZoom) {
+      this.panZoom.zoomAtPointBy(scale, position);
+    }
+  }
+
   pan(position) {
     if (this.panZoom) {
       this.panZoom.pan(position);
