@@ -29,6 +29,12 @@ export default {
       doubleclick_copy: 'Doppelklick zum Kopieren!',
       copied: 'Kopiert!'
     },
+    informations: {
+      title: 'Informationstypen',
+      in_use: 'In Verwendung',
+      potential_global: 'Globale Informationen',
+      unused: 'Nicht in Verwendung'
+    },
     information_picker_in: 'Eingangsinformationen suchen...',
     information_picker_out: 'Ausgangsinformationen suchen...',
     module_placeholder: 'Modulname',
@@ -47,7 +53,8 @@ export default {
     duration: 'Dauer:',
     custom: 'Benutzerdefiniert {0}:',
     description: 'Beschreibung',
-    value: 'Wert'
+    value: 'Wert',
+    delete: 'Modul löschen'
   },
   i18n: {
     select_language: 'Sprache auswählen',

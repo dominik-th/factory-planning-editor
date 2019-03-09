@@ -29,6 +29,12 @@ export default {
       doubleclick_copy: 'Double click to copy!',
       copied: 'Copied!'
     },
+    informations: {
+      title: 'Information types',
+      in_use: 'In use',
+      potential_global: 'Potential Global',
+      unused: 'Unused'
+    },
     information_picker_in: 'Search input information...',
     information_picker_out: 'Search output information...',
     module_placeholder: 'Module name',
@@ -47,7 +53,8 @@ export default {
     duration: 'Duration:',
     custom: 'Custom field {0}:',
     description: 'Description',
-    value: 'Value'
+    value: 'Value',
+    delete: 'Delete Module'
   },
   i18n: {
     select_language: 'Select language',

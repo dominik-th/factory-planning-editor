@@ -7,6 +7,7 @@
       <ModuleAttributes />
     </div>
     <AppNotifications position="bottom left" />
+    <InformationEditorModal />
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import NavBar from './components/NavBar.vue';
 import ModuleRepository from './components/ModuleRepository.vue';
 import ModuleAttributes from './components/ModuleAttributes.vue';
 import Modeling from './components/Modeling.vue';
+import InformationEditorModal from './components/InformationEditorModal.vue';
 
 export default {
   name: 'app',
@@ -22,7 +24,8 @@ export default {
     NavBar,
     Modeling,
     ModuleRepository,
-    ModuleAttributes
+    ModuleAttributes,
+    InformationEditorModal
   }
 };
 </script>
