@@ -77,6 +77,10 @@
             />
           </b-form-group>
         </b-form>
+        <b-button block variant="danger" size="sm" @click="deleteModule">
+          <font-awesome-icon icon="trash-alt" />
+          {{ $t('attributes.delete') }}
+        </b-button>
       </div>
       <div class="repository-actions">
         <b-button-group size="sm">
@@ -185,6 +189,13 @@ export default {
     }
   },
   methods: {
+    deleteModule: function() {
+      this.$store.dispatch(
+        'removeModelingModule',
+        this.stateSelectedModelingModuleId
+      );
+      this.$store.commit('SELECT_MODELING_MODULE', null);
+    },
     maskMethod2: createNumberMask({
       prefix: '',
       suffix: ' €',
