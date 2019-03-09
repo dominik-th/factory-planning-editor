@@ -34,12 +34,7 @@
                 v-for="information of mapInformationArr(allPotentialGlobalInformation)"
                 :key="information.id"
               >
-                <b-form-checkbox
-                  name="flavour3"
-                  key="option.value"
-                >
-                  {{ information.data.name }}
-                </b-form-checkbox>
+                <GlobalToggle :information="information" />
               </b-list-group-item>
             </b-list-group>
           </b-tab>
@@ -50,8 +45,13 @@
 </template>
 
 <script>
+import GlobalToggle from './GlobalToggle.vue';
+
 export default {
   name: 'InformationEditorModal',
+  components: {
+    GlobalToggle
+  },
   data() {
     return {};
   },

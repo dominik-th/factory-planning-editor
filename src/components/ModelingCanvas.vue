@@ -57,6 +57,10 @@ export default {
     statePlanningModules: {
       handler: 'sync',
       deep: true
+    },
+    stateInformationTypes: {
+      handler: 'sync',
+      deep: true
     }
   },
   mounted() {

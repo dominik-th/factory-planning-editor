@@ -41,6 +41,9 @@ export const store = new Vuex.Store({
     SET_INFORMATION_TYPE(state, { id, name }) {
       Vue.set(state.informationTypes, id, { name });
     },
+    SET_GLOBAL(state, { id, value }) {
+      Vue.set(state.informationTypes[id], 'global', value);
+    },
     SET_MODELING_CELL(state, { type, id, cell }) {
       switch (type) {
         case 'module':
