@@ -1,12 +1,13 @@
 <template>
-  <drop
-    class="container-modelling-canvas"
-    id="container-modelling-canvas"
-    ref="modellingCanvas"
-    v-shortkey="{up: ['+'], down: ['-']}"
-    @drop="drop"
-    @shortkey.native="zoom"
-  />
+  <div class="container-modelling-canvas">
+    <drop
+      ref="modellingCanvas"
+      v-shortkey="{up: ['arrowup'], down: ['arrowdown']}"
+      @drop="drop"
+      @shortkey.native="zoom"
+    />
+    <FloatingActionButton @click.native="$root.$emit('modal.informations')" />
+  </div>
 </template>
 
 <script>
@@ -15,11 +16,13 @@ import { Drop } from 'vue-drag-drop';
 import debounce from 'lodash/debounce';
 import Paper from '../jointjs/Paper';
 import Graph from '../jointjs/Graph';
+import FloatingActionButton from './FloatingActionButton.vue';
 
 export default {
   name: 'ModelingCanvas',
   components: {
-    Drop
+    Drop,
+    FloatingActionButton
   },
   data() {
     return {
