@@ -96,7 +96,7 @@ class Util {
             } else if (port.group === 'out') {
               searchPool = informations.output;
             }
-            if (!searchPool.some(item => item.id === port.id)) {
+            if (!searchPool.some(item => item.id === port.id && !item.global)) {
               // this will also remove any connected links
               // and fire events accordingly
               this.removePort(port.id);
@@ -135,6 +135,9 @@ class Util {
                 refY: rowHeight / 2
               };
               offsetY += rowHeight;
+              if (information.global) {
+                continue;
+              }
               let portY = offsetY - rowHeight / 2 + titleHeight;
               if (!this.getPort(information.id)) {
                 this.addPort({

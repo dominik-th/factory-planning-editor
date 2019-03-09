@@ -235,6 +235,7 @@ export default {
         for (let inId of module.inputInformation) {
           informations.input.push({
             id: inId,
+            global: this.stateInformationTypes[inId].global,
             text: this.stateInformationTypes[inId].name
           });
         }
