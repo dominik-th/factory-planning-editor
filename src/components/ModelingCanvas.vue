@@ -326,6 +326,10 @@ export default {
   font-family: 'Arial';
   fill: black;
 }
+.jointcell text.global {
+  fill: green;
+  font-weight: bold;
+}
 .jointcell > .module-title {
   font-weight: bold;
   font-size: 12pt;

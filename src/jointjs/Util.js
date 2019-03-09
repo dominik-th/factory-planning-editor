@@ -120,20 +120,20 @@ class Util {
           for (let source of informationSources) {
             let offsetY = 0;
             for (let information of source.data) {
-              let selector = '.information-' + information.id;
-              attrsUpdate[selector] = {
-                transform: `translate(0, ${offsetY})`,
-                dynamic: true
-              };
-              attrsUpdate[selector + ' .table-cell'] = {
-                height: rowHeight,
-                dynamic: true
-              };
-              attrsUpdate[selector + ' .cell-text'] = {
-                text: information.text,
-                dynamic: true,
-                refY: rowHeight / 2
-              };
+              // let selector = '.information-' + information.id;
+              // attrsUpdate[selector] = {
+              //   transform: `translate(0, ${offsetY})`,
+              //   dynamic: true
+              // };
+              // attrsUpdate[selector + ' .table-cell'] = {
+              //   height: rowHeight,
+              //   dynamic: true
+              // };
+              // attrsUpdate[selector + ' .cell-text'] = {
+              //   text: information.text,
+              //   dynamic: true,
+              //   refY: rowHeight / 2
+              // };
               offsetY += rowHeight;
               if (information.global) {
                 continue;
@@ -150,7 +150,7 @@ class Util {
               }
             }
           }
-          this.attr(attrsUpdate);
+          // this.attr(attrsUpdate);
           this.autoresize();
         },
 
@@ -292,6 +292,10 @@ class Util {
               information.text.length > 20
                 ? information.text.substr(0, 28) + '...'
                 : information.text;
+            if (information.global) {
+              // clippedText = '[GE] ' + clippedText;
+              text.addClass('global');
+            }
             text.attr(bbox).text(clippedText);
             this.$informationTable.append(text.node);
 
