@@ -116,7 +116,7 @@ class Util {
             { group: 'out', data: informations.output }
           ];
 
-          let attrsUpdate = {};
+          // let attrsUpdate = {};
           for (let source of informationSources) {
             let offsetY = 0;
             for (let information of source.data) {
