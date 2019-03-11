@@ -46,8 +46,10 @@
 </template>
 
 <script>
+import Ajv from 'ajv';
 import drafts from '../drafts';
 import { importExcelSheet } from '@/helpers/excel';
+import jsonSchema from '@/helpers/schema.json';
 
 export default {
   name: 'ImportModal',
@@ -152,11 +154,18 @@ export default {
     },
     // parses the import string and puts it into vuex
     importData: function(evt) {
+      let ajv = new Ajv();
+      let validate = ajv.compile(jsonSchema);
       try {
         // any parsing issues with invalid json will throw an exception here
-        // todo: implement further validation to ensure a consistent state
-        this.$store.replaceState(JSON.parse(this.importString));
-        this.$store.commit('SAVE');
+        let importState = JSON.parse(this.importString);
+        if (validate(importState)) {
+          // there should be checks if the entered state also is in a consistent state
+          this.$store.replaceState(JSON.parse(this.importString));
+          this.$store.commit('SAVE');
+        } else {
+          throw new Exception('Entered JSON did not validate against JSON schema!')
+        }
       } catch (e) {
         // show notification to inform the user
         this.$notify({
