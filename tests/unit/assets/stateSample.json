@@ -1,0 +1,40 @@
+{
+    "informationTypes": {
+        "03e3641b-d50d-473c-9e9f-d236baa7c0d8": {
+            "name": "Kennzahlen"
+        },
+        "816471a2-2a0f-41a6-a231-71bbedb215dd": {
+            "name": "Referenzprodukte"
+        },
+        "f2dd03ec-a0de-43a4-bc16-e2b9d103fbcf": {
+            "name": "Planungsanlass"
+        },
+        "f5fcac2a-ab68-4f5a-8269-ce8b9d4e5e6a": {
+            "name": "Prozesszeiten"
+        }
+    },
+    "modeling": {
+        "links": {},
+        "modules": {},
+        "selected": null
+    },
+    "planningModules": {
+        "480885be-9813-4ac0-8891-cedd52817574": {
+            "abbreviation": null,
+            "inputInformation": [
+                "03e3641b-d50d-473c-9e9f-d236baa7c0d8",
+                "f2dd03ec-a0de-43a4-bc16-e2b9d103fbcf"
+            ],
+            "name": "Zielplanung",
+            "outputInformation": []
+        },
+        "a49e3bff-6a7a-4665-a908-da04c0e94aa8": {
+            "abbreviation": null,
+            "inputInformation": [],
+            "name": "Prozessplanung",
+            "outputInformation": [
+                "f5fcac2a-ab68-4f5a-8269-ce8b9d4e5e6a"
+            ]
+        }
+    }
+}
