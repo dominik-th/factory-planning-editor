@@ -1,7 +1,6 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
+import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import BootstrapVue from 'bootstrap-vue';
-import { store } from '@/store/store';
 import GlobalToggle from '@/components/GlobalToggle.vue';
 
 const localVue = createLocalVue();

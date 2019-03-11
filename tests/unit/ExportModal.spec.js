@@ -1,8 +1,7 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import VueI18n from 'vue-i18n';
 import BootstrapVue from 'bootstrap-vue';
-import FileSaver from 'file-saver';
 import messages from '@/i18n';
 import ExportModal from '@/components/ExportModal.vue';
 
@@ -49,13 +48,4 @@ describe('ExportModal.vue', () => {
     });
     expect(wrapper.vm.$refs.textfield.value).toBe(JSON.stringify(state));
   });
-
-  // it('displays the stringified vuex store', () => {
-  //   const wrapper = mount(ExportModal, {
-  //     i18n,
-  //     store,
-  //     localVue
-  //   });
-  //   expect(wrapper.vm.$refs.textfield.value).toBe(JSON.stringify(state));
-  // });
 });

@@ -1,7 +1,10 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
+import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import VueI18n from 'vue-i18n';
 import BootstrapVue from 'bootstrap-vue';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import messages from '@/i18n';
 import InformationEditorModal from '@/components/InformationEditorModal.vue';
 import stateSample from './assets/stateSample.json';
@@ -10,6 +13,8 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(VueI18n);
 localVue.use(BootstrapVue);
+library.add(fas);
+localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 const i18n = new VueI18n({
   locale: 'en-US',
