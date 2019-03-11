@@ -43,6 +43,7 @@ export default {
       // resetToolipLabel has to be defined in data to prevent issues when
       // there are multiple instances of this component
       // see https://stackoverflow.com/a/49780382
+      // call resetTooltipLabel to reset it 3 sec after the call
       resetTooltipLabel: debounce(function() {
         this.tooltipLabel = 'modal.export.doubleclick_copy';
       }, 3000)
@@ -55,9 +56,11 @@ export default {
   },
   methods: {
     exportData: function() {
+      // downloadable data blob with the state
       let exportBlob = new Blob([this.applicationState], {
         type: 'application/json;charset=utf-8'
       });
+      // filename should be like this: fpe_export_20190206.json
       let fileName = 'fpe_export_';
       let now = new Date();
       fileName += now.getFullYear();
@@ -66,15 +69,18 @@ export default {
         .getDate()
         .toString()
         .padStart(2, '0');
+      // initiating the download
       saveAs(exportBlob, fileName + '.json');
     },
     exportDataToClipboard: function() {
       this.tooltipLabel = 'modal.export.copied';
+      // copies selected text to clipboard
       document.execCommand('copy');
       this.resetTooltipLabel();
     }
   },
   mounted() {
+    // subscribe on $root so the modal can be opened from anywhere inside the application
     this.$root.$on('modal.export', () => {
       this.$refs.exportModalRef.show();
     });
