@@ -195,6 +195,11 @@ export const store = new Vuex.Store({
           ...new Set(getters.allOutputInformation)
         ])
       ];
+    },
+    allGlobalInformation(state) {
+      return Object.keys(state.informationTypes).filter(
+        ele => state.informationTypes[ele].global
+      );
     }
   }
 });

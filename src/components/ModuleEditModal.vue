@@ -65,8 +65,8 @@
             <InformationPicker
               ref="outputPicker"
               :placeholder="$t('modal.information_picker_out')"
-              :pool="informationPool"
-              :blacklist="informationBlacklist"
+              :pool="informationPoolOutput"
+              :blacklist="informationBlacklistOutput"
               @add-information="addOutputInformation"
               @create-information="createOutputInformation"
             />
@@ -131,6 +131,11 @@ export default {
         .concat(this.module.outputInformation)
         .map(id => this.$store.getters.informationTypes[id].name);
     },
+    informationBlacklistOutput() {
+      return this.$store.getters.allGlobalInformation
+        .map(id => this.$store.state.informationTypes[id].name)
+        .concat(this.informationBlacklist);
+    },
     informationPool() {
       // all the remaining existing information types which arent blacklisted
       let informationPool = [];
@@ -146,6 +151,9 @@ export default {
         }
       }
       return informationPool;
+    },
+    informationPoolOutput() {
+      return this.informationPool.filter(information => !information.global);
     }
   },
   mounted() {
