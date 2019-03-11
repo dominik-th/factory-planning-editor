@@ -30,6 +30,8 @@ describe('FloatingActionButton.vue', () => {
         icon: 'wrench'
       }
     });
-    expect(wrapper.find(FontAwesomeIcon).attributes('data-icon')).toBe('wrench');
+    expect(wrapper.find(FontAwesomeIcon).attributes('data-icon')).toBe(
+      'wrench'
+    );
   });
 });

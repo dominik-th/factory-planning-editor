@@ -34,7 +34,7 @@ describe('ImportModal.vue', () => {
     };
     mutations = {
       SAVE: jest.fn()
-    }
+    };
     store = new Vuex.Store({
       state,
       mutations
@@ -49,8 +49,8 @@ describe('ImportModal.vue', () => {
     });
     const sampleState = {
       informationTypes: {
-        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9": {
-          name: "Prozesszeiten"
+        '3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9': {
+          name: 'Prozesszeiten'
         }
       },
       planningModules: {},
@@ -59,11 +59,13 @@ describe('ImportModal.vue', () => {
         links: {},
         selected: null
       }
-    }
+    };
     wrapper.vm.importString = JSON.stringify(sampleState);
     wrapper.vm.importData();
     expect(mutations.SAVE).toHaveBeenCalled();
-    expect(JSON.stringify(wrapper.vm.$store.state)).toBe(JSON.stringify(sampleState));
+    expect(JSON.stringify(wrapper.vm.$store.state)).toBe(
+      JSON.stringify(sampleState)
+    );
   });
 
   it('should import deny invalid json', () => {
@@ -74,8 +76,8 @@ describe('ImportModal.vue', () => {
     });
     const sampleState = {
       informationTypes: {
-        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9": {
-          name: "Prozesszeiten"
+        '3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9': {
+          name: 'Prozesszeiten'
         }
       },
       planningModules: {},
@@ -84,7 +86,7 @@ describe('ImportModal.vue', () => {
         links: {},
         selected: null
       }
-    }
+    };
     wrapper.vm.importString = 'invalid' + JSON.stringify(sampleState);
     wrapper.vm.importData(new Event('click'));
     expect(mutations.SAVE).not.toHaveBeenCalled();

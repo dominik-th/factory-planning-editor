@@ -171,7 +171,8 @@ export const store = new Vuex.Store({
     allInputInformation(state) {
       let inputInformation = new Set();
       for (let planningModuleId in state.planningModules) {
-        for (let id of state.planningModules[planningModuleId].inputInformation) {
+        for (let id of state.planningModules[planningModuleId]
+          .inputInformation) {
           inputInformation.add(id);
         }
       }
@@ -180,7 +181,8 @@ export const store = new Vuex.Store({
     allOutputInformation(state) {
       let outputInformation = new Set();
       for (let planningModuleId in state.planningModules) {
-        for (let id of state.planningModules[planningModuleId].outputInformation) {
+        for (let id of state.planningModules[planningModuleId]
+          .outputInformation) {
           outputInformation.add(id);
         }
       }

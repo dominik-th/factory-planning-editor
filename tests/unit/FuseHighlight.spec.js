@@ -19,11 +19,7 @@ describe('FuseHighlight.vue', () => {
       localVue,
       propsData: {
         result: 'Prozessplanung',
-        indices: [
-          [0, 2],
-          [4, 5],
-          [7, 10]
-        ]
+        indices: [[0, 2], [4, 5], [7, 10]]
       }
     });
     let highlighted = wrapper.find('span').findAll('b');

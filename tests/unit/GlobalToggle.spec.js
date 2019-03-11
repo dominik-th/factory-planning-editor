@@ -8,7 +8,6 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(BootstrapVue);
 
-
 describe('ExportModal.vue', () => {
   let state;
   let mutations;
@@ -17,7 +16,7 @@ describe('ExportModal.vue', () => {
   beforeEach(() => {
     mutations = {
       SET_GLOBAL: jest.fn()
-    }
+    };
     state = {
       informationTypes: {
         'fb823d02-b546-4b09-8849-4172181b0b89': {
@@ -25,7 +24,7 @@ describe('ExportModal.vue', () => {
           global: false
         }
       }
-    }
+    };
     store = new Vuex.Store({
       state,
       mutations

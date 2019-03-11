@@ -164,7 +164,9 @@ export default {
           this.$store.replaceState(JSON.parse(this.importString));
           this.$store.commit('SAVE');
         } else {
-          throw new Exception('Entered JSON did not validate against JSON schema!')
+          throw new Exception(
+            'Entered JSON did not validate against JSON schema!'
+          );
         }
       } catch (e) {
         // show notification to inform the user

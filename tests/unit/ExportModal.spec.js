@@ -16,7 +16,7 @@ const i18n = new VueI18n({
   messages
 });
 
-jest.mock('file-saver', ()=>({saveAs: jest.fn()}))
+jest.mock('file-saver', () => ({ saveAs: jest.fn() }));
 
 describe('ExportModal.vue', () => {
   let state;
@@ -25,8 +25,8 @@ describe('ExportModal.vue', () => {
   beforeEach(() => {
     state = {
       informationTypes: {
-        "3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9": {
-          name: "Prozesszeiten"
+        '3b77e15b-96f2-4e3b-80d6-a2e6c789d1e9': {
+          name: 'Prozesszeiten'
         }
       },
       planningModules: {},

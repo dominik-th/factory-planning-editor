@@ -25,7 +25,7 @@ describe('InformationEditorModal.vue', () => {
     state = stateSample;
     mutations = {
       SAVE: jest.fn()
-    }
+    };
     store = new Vuex.Store({
       state,
       mutations
@@ -56,9 +56,7 @@ describe('InformationEditorModal.vue', () => {
     });
     expect(wrapper.vm.informationNotInUse.length).toBe(1);
     expect(wrapper.vm.informationNotInUse).toEqual(
-      expect.arrayContaining([
-        '816471a2-2a0f-41a6-a231-71bbedb215dd'
-      ])
+      expect.arrayContaining(['816471a2-2a0f-41a6-a231-71bbedb215dd'])
     );
   });
 
