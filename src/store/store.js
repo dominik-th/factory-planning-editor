@@ -72,6 +72,9 @@ export const store = new Vuex.Store({
     },
     SELECT_MODELING_MODULE(state, id) {
       state.modeling.selected = id;
+    },
+    DELETE_INFORMATION(state, id) {
+      Vue.delete(state.informationTypes, id);
     }
   },
   actions: {
@@ -94,6 +97,11 @@ export const store = new Vuex.Store({
       let id = uuidv4();
       commit('SET_INFORMATION_TYPE', { id, name });
       return id;
+    },
+    deleteInformation({ commit, getters }, id) {
+      if (getters.allUsedInformation.indexOf(id) < 0) {
+        commit('DELETE_INFORMATION', id);
+      }
     },
     removeModelingModule({ commit, state }, id) {
       // remove all connected links
@@ -159,6 +167,32 @@ export const store = new Vuex.Store({
         return state.modeling.modules[state.modeling.selected];
       }
       return null;
+    },
+    allInputInformation(state) {
+      let inputInformation = new Set();
+      for (let planningModuleId in state.planningModules) {
+        for (let id of state.planningModules[planningModuleId].inputInformation) {
+          inputInformation.add(id);
+        }
+      }
+      return [...inputInformation];
+    },
+    allOutputInformation(state) {
+      let outputInformation = new Set();
+      for (let planningModuleId in state.planningModules) {
+        for (let id of state.planningModules[planningModuleId].outputInformation) {
+          outputInformation.add(id);
+        }
+      }
+      return [...outputInformation];
+    },
+    allUsedInformation(state, getters) {
+      return [
+        ...new Set([
+          ...new Set(getters.allInputInformation),
+          ...new Set(getters.allOutputInformation)
+        ])
+      ];
     }
   }
 });

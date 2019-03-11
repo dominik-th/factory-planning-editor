@@ -21,10 +21,16 @@
           <b-tab :title="$t('modal.informations.unused')">
             <b-list-group class="information-list">
               <b-list-group-item
+                class="d-flex justify-content-between align-items-center"
                 v-for="information of mapInformationArr(informationNotInUse)"
                 :key="information.id"
               >
                 {{ information.data.name }}
+                <font-awesome-icon
+                  class="text-danger information-trash"
+                  icon="trash-alt"
+                  @click="$store.dispatch('deleteInformation', information.id)"
+                />
               </b-list-group-item>
             </b-list-group>
           </b-tab>
