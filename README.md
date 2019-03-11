@@ -1,4 +1,4 @@
-# factory-planning-editor
+# Factory-Planning-Editor
 
 ## Project setup
 ```

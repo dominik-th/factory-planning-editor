@@ -7,6 +7,9 @@
       <ModuleAttributes />
     </div>
     <AppNotifications position="bottom left" />
+    <ImportModal />
+    <ExportModal />
+    <ModuleEditModal />
     <InformationEditorModal />
   </div>
 </template>
@@ -16,6 +19,9 @@ import NavBar from './components/NavBar.vue';
 import ModuleRepository from './components/ModuleRepository.vue';
 import ModuleAttributes from './components/ModuleAttributes.vue';
 import Modeling from './components/Modeling.vue';
+import ImportModal from './components/ImportModal.vue';
+import ExportModal from './components/ExportModal.vue';
+import ModuleEditModal from './components/ModuleEditModal.vue';
 import InformationEditorModal from './components/InformationEditorModal.vue';
 
 export default {
@@ -25,6 +31,9 @@ export default {
     Modeling,
     ModuleRepository,
     ModuleAttributes,
+    ImportModal,
+    ExportModal,
+    ModuleEditModal,
     InformationEditorModal
   }
 };

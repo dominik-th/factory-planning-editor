@@ -26,23 +26,17 @@
         </b-nav-form>
       </b-navbar-nav>
     </b-navbar>
-    <ImportModal />
-    <ExportModal />
   </div>
 </template>
 
 <script>
 import saveAs from 'file-saver';
-import ImportModal from './ImportModal.vue';
-import ExportModal from './ExportModal.vue';
 import LanguagePicker from './LanguagePicker.vue';
 import { generateExcelSheet } from '../helpers/excel';
 
 export default {
   name: 'NavBar',
   components: {
-    ImportModal,
-    ExportModal,
     LanguagePicker
   },
   methods: {

@@ -40,13 +40,11 @@
         <b-button @click="removeSelectedModule"><font-awesome-icon icon="minus" /></b-button>
       </b-button-group>
     </div>
-    <ModuleEditModal />
   </div>
 </template>
 
 <script>
 import FuseHighlight from './FuseHighlight';
-import ModuleEditModal from './ModuleEditModal.vue';
 
 import { Drag } from 'vue-drag-drop';
 
@@ -54,7 +52,6 @@ export default {
   name: 'ModelRepository',
   components: {
     FuseHighlight,
-    ModuleEditModal,
     Drag
   },
   computed: {
