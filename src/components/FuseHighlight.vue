@@ -8,6 +8,7 @@ export default {
   filters: {
     hightlight(text, indices) {
       let highlighted = '';
+      // flatten the indices from [[0,1], [2,3]] to [0,1,2,3]
       let reducer = (acc, val) => acc.concat(val);
       let flatIndices = indices
         .reduce(reducer, [])
@@ -16,9 +17,12 @@ export default {
 
       [...text].forEach((char, index) => {
         if (index === flatIndices[flatIndicesIndex]) {
+          // highlight using the <b> bold tag
+          // every even index in flatIndices starts the highlighting of a sequence
           highlighted += flatIndicesIndex % 2 === 0 ? '<b>' : '</b>';
           flatIndicesIndex++;
         }
+        // escape potentially dangerous characters
         highlighted += char
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')

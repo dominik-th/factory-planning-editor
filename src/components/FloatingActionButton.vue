@@ -8,6 +8,7 @@
 export default {
   name: 'FloatingActionButton',
   props: {
+    // any fontawesome icon title
     icon: {
       type: String,
       default: 'bars'
