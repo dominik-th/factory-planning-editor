@@ -73,11 +73,10 @@ export default {
       }
     }
   },
-  mounted() {},
   data() {
+    // initial state, none selected, filter empty
     return {
       selected: null,
-      modal: null,
       filter: ''
     };
   },
@@ -95,6 +94,7 @@ export default {
       }
     },
     addModule: function() {
+      // show modal ModuleEditModal.vue
       this.$root.$emit('modal.createModule');
     },
     selectModule: function(id) {
@@ -102,7 +102,9 @@ export default {
     },
     removeSelectedModule: function() {
       if (this.selected) {
+        // remove selected module from vuex store
         this.$store.dispatch('removePlanningModule', this.selected);
+        // remove selection
         this.selected = null;
       } else {
         this.$notify({
@@ -113,6 +115,7 @@ export default {
     },
     editSelectedModule: function() {
       if (this.selected) {
+        // show modal ModuleEditModal.vue
         this.$root.$emit('modal.editModule', this.selected);
       } else {
         this.$notify({

@@ -3,7 +3,7 @@
     <NavBar />
     <div class="content">
       <ModuleRepository />
-      <Modeling />
+      <ModelingCanvas />
       <ModuleAttributes />
     </div>
     <AppNotifications position="bottom left" />
@@ -18,7 +18,7 @@
 import NavBar from './components/NavBar.vue';
 import ModuleRepository from './components/ModuleRepository.vue';
 import ModuleAttributes from './components/ModuleAttributes.vue';
-import Modeling from './components/Modeling.vue';
+import ModelingCanvas from './components/ModelingCanvas.vue';
 import ImportModal from './components/ImportModal.vue';
 import ExportModal from './components/ExportModal.vue';
 import ModuleEditModal from './components/ModuleEditModal.vue';
@@ -28,7 +28,7 @@ export default {
   name: 'app',
   components: {
     NavBar,
-    Modeling,
+    ModelingCanvas,
     ModuleRepository,
     ModuleAttributes,
     ImportModal,

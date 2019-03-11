@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     async exportExcel() {
+      // actual excel generation is in a separate helper function
       let exportBlob = await generateExcelSheet(this.$store.state);
       let fileName = 'fpe_export_';
       let now = new Date();
@@ -50,6 +51,7 @@ export default {
         .getDate()
         .toString()
         .padStart(2, '0');
+      // initiate the download
       saveAs(exportBlob, fileName + '.xlsx');
     }
   }

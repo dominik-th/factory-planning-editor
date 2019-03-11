@@ -112,6 +112,7 @@ export default {
     };
   },
   computed: {
+    // import getters from vuex
     ...mapGetters({
       stateSelectedModelingModuleId: 'selectedModelingModuleId',
       stateSelectedModelingModule: 'selectedModelingModule'
@@ -124,9 +125,10 @@ export default {
   },
   watch: {
     stateSelectedModelingModule: {
+      // called when the selected module has changed
       handler: function(module) {
         if (!module) return;
-        // when the selected module has changed, pre fill the inputs
+        // when the selected module has changed, pre fill the inputs with existing data
         let maskedNumEmployeed = conformToMask(
           module.attributes.numEmployees.toString(),
           this.maskMethod3
@@ -153,13 +155,14 @@ export default {
     },
     // watch all inputs to auto save any changes if input is valid
     numEmployees: function(value) {
+      // parse number with thousand separators
       let parsedValue = parseInt(value.replace('.', ''));
       if (typeof parsedValue === 'number' && !isNaN(parsedValue)) {
         this.saveAttribute('numEmployees', parseInt(value.replace('.', '')));
       }
     },
     cost: function(value) {
-      // parse 1.234.456,78 € format
+      // parse currency 1.234.456,78 € format
       let cents =
         parseFloat(
           value
@@ -190,12 +193,15 @@ export default {
   },
   methods: {
     deleteModule: function() {
+      // delete selected module from vuex store
       this.$store.dispatch(
         'removeModelingModule',
         this.stateSelectedModelingModuleId
       );
+      // deselect the module
       this.$store.commit('SELECT_MODELING_MODULE', null);
     },
+
     maskMethod2: createNumberMask({
       prefix: '',
       suffix: ' €',
@@ -218,39 +224,29 @@ export default {
       mask.push(':', /\d/, /\d/);
       return mask;
     },
-    attributeGetter: function(attribute, defaultValue) {
-      if (this.selectedModule.attributes[attribute]) {
-        return this.selectedModule.attributes[attribute];
-      } else {
-        return defaultValue;
-      }
-    },
-    attributeSetter: function(value, attribute, parseValue) {
-      if (this.selectedModule.attributes[attribute] === parseValue(value))
-        return;
-      this.$store.commit('UPDATE_MODELING_ATTRIBUTE', {
-        id: this.stateSelectedModelingModuleId,
-        attribute: attribute,
-        value: parseValue(value)
-      });
-    },
     saveAttribute: function(attribute, value) {
+      // if attribute hasnt change, skip it
       if (this.stateSelectedModelingModule.attributes[attribute] === value)
         return;
+      // put value into vuex store
       this.$store.commit('UPDATE_MODELING_ATTRIBUTE', {
         id: this.stateSelectedModelingModuleId,
         attribute,
+        // deep clone value
         value: JSON.parse(JSON.stringify(value))
       });
     },
     addCustomAttribute: function() {
+      // generate index for new custom attribute
       let max = Math.max(0, ...Object.keys(this.custom));
+      // keep reactivity on this.custom, so use this.$set instead of writing the attribute directly
       this.$set(this.custom, max + 1, {
         key: '',
         value: ''
       });
     },
     removeCustomAttribute: function(id) {
+      // keep reactivity when deleting
       this.$delete(this.custom, id);
     }
   }

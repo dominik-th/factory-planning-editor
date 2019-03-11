@@ -23,6 +23,7 @@ export default {
     return {
       // https://tools.ietf.org/html/rfc5646 for language tags
       // ISO 3166-1-alpha-2 code for countrie codes
+      // list of all available languages
       languages: [
         { languageTag: 'en-US', countryCode: 'us' },
         { languageTag: 'de-DE', countryCode: 'de' }
@@ -32,6 +33,8 @@ export default {
   computed: {
     componentId: function() {
       // this app wide unique component id is provided by vue itself
+      // required for the dropdown menu to have an unique anchorpoint and
+      // support multiple instances of this component
       return this._uid.toString();
     }
   },

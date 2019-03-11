@@ -3,6 +3,11 @@ import Link from './Link';
 import Util from './Util';
 import { GRID_SIZE } from './constants';
 
+/**
+ * Extended joint Graph class
+ * support easy adding and connecting
+ * plannung modules
+ */
 class Graph extends joint.dia.Graph {
   constructor(...args) {
     super(...args);

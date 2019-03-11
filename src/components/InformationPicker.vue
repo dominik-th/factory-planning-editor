@@ -49,10 +49,12 @@
 export default {
   name: 'InformationPicker',
   props: {
+    // pool of informations which will be suggested
     pool: {
       type: Array,
       default: () => []
     },
+    // blacklist of names, which are not allowed to be submitted
     blacklist: {
       type: Array,
       default: () => []
@@ -71,6 +73,7 @@ export default {
   },
   computed: {
     filteredInformation() {
+      // generate suggestions for user entered string
       // todo: better search with fuse
       if (this.query.length === 0) return [];
       return this.pool.filter(ele => {
@@ -79,6 +82,7 @@ export default {
         );
       });
     },
+
     isBlacklisted() {
       // check if current query is in the (via props given) blacklist
       return (
@@ -89,6 +93,7 @@ export default {
     }
   },
   mounted() {
+    // after submitted user data clear the input
     this.$on('create-information', function() {
       this.query = '';
     });

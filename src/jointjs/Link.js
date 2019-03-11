@@ -1,5 +1,9 @@
 import joint from 'jointjs';
 
+/**
+ * Style default Links
+ * and add metro routing
+ */
 class Link extends joint.dia.Link {
   constructor(options, ...args) {
     // default options include:

@@ -5,6 +5,10 @@ import svgPanZoom from 'svg-pan-zoom';
 import Link from './Link';
 import { GRID_SIZE } from './constants';
 
+/**
+ * Extend jointjs Paper class
+ * with pan and zoom and appropriate api
+ */
 class Paper extends joint.dia.Paper {
   scale = 1;
 
@@ -36,6 +40,7 @@ class Paper extends joint.dia.Paper {
 
   enableSvgPanZoom() {
     let targetElement = this.element.children[2];
+    // add svgPanZoom package
     this.panZoom = svgPanZoom(targetElement, {
       fit: false,
       panEnabled: false,

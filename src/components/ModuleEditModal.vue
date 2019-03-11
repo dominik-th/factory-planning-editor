@@ -121,6 +121,9 @@ export default {
   },
   computed: {
     title() {
+      // this modal is reused for creating new modules
+      // and editing existing ones
+      // use modal title accordingly
       return this.moduleId
         ? this.$t('modal.edit_module')
         : this.$t('modal.create_module');
@@ -132,6 +135,7 @@ export default {
         .map(id => this.$store.getters.informationTypes[id].name);
     },
     informationBlacklistOutput() {
+      // same as blacklist, but also include global information
       return this.$store.getters.allGlobalInformation
         .map(id => this.$store.state.informationTypes[id].name)
         .concat(this.informationBlacklist);
@@ -153,10 +157,12 @@ export default {
       return informationPool;
     },
     informationPoolOutput() {
+      // informationPool without global informations
       return this.informationPool.filter(information => !information.global);
     }
   },
   mounted() {
+    // show modal when the event is fired (edit existing)
     this.$root.$on('modal.editModule', moduleId => {
       this.moduleId = moduleId;
       // clone module so we dont change vuex state directly
@@ -165,6 +171,7 @@ export default {
       );
       this.$refs.myModalRef.show();
     });
+    // show modal when the event is fired (create new)
     this.$root.$on('modal.createModule', () => {
       // create a blank module which will be filled in this modal
       this.moduleId = null;

@@ -4,6 +4,9 @@ import 'jointjs/dist/joint.css';
 import joint from 'jointjs';
 import * as C from './constants';
 
+/**
+ * Setup custom joinjs shapes
+ */
 class Util {
   static initShapes() {
     joint.dia.Element.define(
@@ -116,24 +119,9 @@ class Util {
             { group: 'out', data: informations.output }
           ];
 
-          // let attrsUpdate = {};
           for (let source of informationSources) {
             let offsetY = 0;
             for (let information of source.data) {
-              // let selector = '.information-' + information.id;
-              // attrsUpdate[selector] = {
-              //   transform: `translate(0, ${offsetY})`,
-              //   dynamic: true
-              // };
-              // attrsUpdate[selector + ' .table-cell'] = {
-              //   height: rowHeight,
-              //   dynamic: true
-              // };
-              // attrsUpdate[selector + ' .cell-text'] = {
-              //   text: information.text,
-              //   dynamic: true,
-              //   refY: rowHeight / 2
-              // };
               offsetY += rowHeight;
               if (information.global) {
                 continue;
@@ -150,7 +138,6 @@ class Util {
               }
             }
           }
-          // this.attr(attrsUpdate);
           this.autoresize();
         },
 

@@ -20,7 +20,9 @@ export default {
       get() {
         return this.$store.state.informationTypes[this.information.id].global;
       },
+      // override setter to automatically inform vuex about changes
       set(value) {
+        // vuex timetraveling sets this value so this condition prevents an unnecessary commit
         if (
           value !==
           this.$store.state.informationTypes[this.information.id].global

@@ -31,6 +31,7 @@ export default {
     };
   },
   computed: {
+    // import getters from vuex
     ...mapGetters({
       statePlanningModules: 'planningModules',
       stateInformationTypes: 'informationTypes',
@@ -50,14 +51,17 @@ export default {
         cellView.highlight();
       }
     },
+    // watch modeling for changes and synchronize jointjs
     stateModeling: {
       handler: 'sync',
       deep: true
     },
+    // watch planningmodules for changes and synchronize jointjs
     statePlanningModules: {
       handler: 'sync',
       deep: true
     },
+    // watch informations for changes and synchronize jointjs
     stateInformationTypes: {
       handler: 'sync',
       deep: true
@@ -74,9 +78,11 @@ export default {
 
     // fired on a single click on any module in the canvas
     paper.on('element:pointerclick', cellView => {
+      // set selected module in vuex store
       this.$store.commit('SELECT_MODELING_MODULE', cellView.model.id);
     });
 
+    // module drag end
     paper.on('element:pointerup', cellView => {
       let element = this.graph.getCell(cellView.model.id);
       // update the stored position in vuex store
@@ -111,8 +117,10 @@ export default {
       }
     });
 
+    // fired when any cell is removed from canvas
     graph.on('remove', cell => {
       if (cell.isLink() && this.stateModeling.links[cell.id]) {
+        // inform vuex store about removed links
         this.$store.commit('REMOVE_MODELING_CELL', {
           type: 'link',
           id: cell.id
@@ -131,19 +139,15 @@ export default {
       }, 500)
     );
 
-    // persistency, todo... make this better
-    // graph.on('change add remove', () => {
-    //   localStorage.setItem('graph', JSON.stringify(graph.toJSON()))
-    // });
-    // if (localStorage.getItem('graph')) {
-    //   graph.fromJSON(JSON.parse(localStorage.getItem('graph')));
-    // }
+    // intitial synchronize on after mount
     this.sync();
+    // initial set selected module because the watcher does not trigger intitially
     if (this.stateSelectedModelingModuleId) {
       this.paper
         .findViewByModel(this.graph.getCell(this.stateSelectedModelingModuleId))
         .highlight();
     }
+    // restore zoom level and window position from localstorage
     if (localStorage.getItem('window')) {
       let windowProperties = JSON.parse(localStorage.getItem('window'));
       paper.zoom(windowProperties.size / 150);
@@ -155,6 +159,7 @@ export default {
     });
   },
   methods: {
+    // zoom by step (from shortcuts)
     zoom: function(evt) {
       switch (evt.srcKey) {
         case 'up':
@@ -165,15 +170,18 @@ export default {
           break;
       }
     },
+    // handler to add dropped modules to the canvas
     drop: function(moduleId, evt) {
       let canvas = this.$refs.modellingCanvas.$el;
       let canvasRect = canvas.getBoundingClientRect();
       let pan = this.paper.panZoom.getPan();
+      // calculate mouse drop position on canvas, considering pan and zoom
       let x =
         (evt.clientX - pan.x - canvasRect.left) / this.paper.panZoom.getZoom();
       let y =
         (evt.clientY - pan.y - canvasRect.top) / this.paper.panZoom.getZoom();
 
+      // load information about dropped module
       let droppedModule = this.statePlanningModules[moduleId];
       let informations = { input: [], output: [] };
       for (let inId of droppedModule.inputInformation) {
@@ -189,6 +197,7 @@ export default {
         });
       }
 
+      // place module on canvas / add it to jointjs
       let plannedModule = this.graph.addPlanningModule(
         // substracting these values to approximately center the module at the cursor
         { x: x - 100, y: y - 20 },
@@ -213,6 +222,7 @@ export default {
         }
       });
     },
+    // synchronize full vuex store to jointjs
     sync: async function() {
       let modeling = this.stateModeling;
       // remove obsolete links

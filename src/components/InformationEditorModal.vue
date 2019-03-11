@@ -65,6 +65,7 @@ export default {
     allInformation() {
       return Object.keys(this.$store.state.informationTypes);
     },
+    // all informations in use as either input or output information
     informationInUse() {
       return [
         ...new Set([
@@ -73,6 +74,7 @@ export default {
         ])
       ];
     },
+    // existing informations which are neither input nor output information
     informationNotInUse() {
       return this.allInformation.filter(id => {
         return this.informationInUse.indexOf(id) < 0;
@@ -98,6 +100,7 @@ export default {
       }
       return [...outputInformation];
     },
+    // all input informations that never occur as output information
     allPotentialGlobalInformation() {
       return this.allInputInformation.filter(id => {
         return this.allOutputInformation.indexOf(id) < 0;
@@ -105,6 +108,7 @@ export default {
     }
   },
   methods: {
+    // maps array of information ids to the actual information
     mapInformationArr(arr) {
       let mapped = arr.map(id => {
         return {
@@ -116,6 +120,7 @@ export default {
     }
   },
   mounted() {
+    // subscribe on $root so the modal can be opened from anywhere inside the application
     this.$root.$on('modal.informations', () => {
       this.$refs.informationEditorModalRef.show();
     });

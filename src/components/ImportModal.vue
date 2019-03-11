@@ -79,6 +79,7 @@ export default {
           value: key
         };
       });
+      // add title for the dropdown as first element
       draftOptions.unshift({
         text: this.$t('modal.import.select_example_placeholder'),
         value: null
@@ -138,6 +139,7 @@ export default {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'application/vnd.ms-excel.sheet.macroEnabled.12'
       ];
+      // capitalization is not consistent across operating systems, so we chose lowercase
       excelTypes.map(type => type.toLocaleLowerCase());
       // filter incorrect content types
       if (file.type === 'application/json') {
@@ -152,7 +154,7 @@ export default {
         });
       }
     },
-    // parses the import string and puts it into vuex
+    // parses the import string from the textarea and puts it into vuex
     importData: function(evt) {
       let ajv = new Ajv();
       let validate = ajv.compile(jsonSchema);
