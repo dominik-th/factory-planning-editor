@@ -26,13 +26,17 @@ export async function generateExcelSheet(state) {
     let module = state.planningModules[moduleId];
     for (let inId of module.inputInformation) {
       let cell = moduleRow.getCell(informationIds.indexOf(inId) + 2);
-      cell.value = 'LE';
       cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      cell.value = 'LE';
       cell.fill = {
         type: 'pattern',
         pattern: 'solid',
         fgColor: { argb: '00A9D08E' } // light green
       };
+      if (state.informationTypes[inId].global) {
+        cell.value = 'GE';
+        cell.fill.fgColor = { argb: '00F4AA42' }; // orange
+      }
     }
     for (let outId of module.outputInformation) {
       let cell = moduleRow.getCell(informationIds.indexOf(outId) + 2);
@@ -82,7 +86,7 @@ export async function generateExcelSheet(state) {
     );
   }
 
-  // thirs worksheet for connection between modeling modules
+  // third worksheet for connection between modeling modules
   let modelingLinksWs = workbook.addWorksheet('Modeling-Links');
   modelingLinksWs.getRow(1).getCell(1).value = 'From (row number)';
   modelingLinksWs.getRow(1).getCell(2).value = 'To (row number)';
@@ -107,6 +111,10 @@ export async function generateExcelSheet(state) {
 export async function importExcelSheet(file) {
   let informations = [];
   let modules = [];
+  let modeling = {
+    modules: [],
+    links: []
+  };
 
   let workbook = await readExcelFileAsync(file);
   let worksheet = workbook.getWorksheet(1);
@@ -139,6 +147,10 @@ export async function importExcelSheet(file) {
 
       if (cell.value === 'LE' || cell.value === 'GE') {
         modules[i].inputInformation.push(informations[u].id);
+        // add global flag to GE marked informations
+        if (cell.value === 'GE') {
+          informations[u].global = true;
+        }
       } else if (cell.value === 'LA') {
         modules[i].outputInformation.push(informations[u].id);
       } else {
@@ -150,6 +162,45 @@ export async function importExcelSheet(file) {
     }
   }
 
+  // parse modeling sheets
+  let modelingModulesWs = workbook.getWorksheet(2);
+  let iterator = 2;
+  let modelingModuleValues = modelingModulesWs.getRow(iterator).values;
+  while (modelingModuleValues.length > 0) {
+    modeling.modules[iterator] = {
+      id: uuidv4(),
+      moduleId: modules[parseInt(modelingModuleValues[1])].id,
+      position: {
+        x: parseInt(modelingModuleValues[2]),
+        y: parseInt(modelingModuleValues[3])
+      },
+      attributes: {
+        numEmployees: parseInt(modelingModuleValues[4]),
+        cost: parseInt(modelingModuleValues[5]),
+        duration: parseInt(modelingModuleValues[6]),
+        custom: JSON.parse(modelingModuleValues[7])
+      }
+    };
+    iterator++;
+    modelingModuleValues = modelingModulesWs.getRow(iterator).values;
+  }
+
+  // parse modeling links
+  let modelingLinksWs = workbook.getWorksheet(3);
+  iterator = 2;
+  let modelingLinkValues = modelingLinksWs.getRow(iterator).values;
+  while (modelingLinkValues.length > 0) {
+    modeling.links[iterator] = {
+      id: uuidv4(),
+      fromModule: modeling.modules[parseInt(modelingLinkValues[1])].id,
+      toModule: modeling.modules[parseInt(modelingLinkValues[2])].id,
+      informationId: informations[parseInt(modelingLinkValues[3])].id
+    };
+    iterator++;
+    modelingLinkValues = modelingLinksWs.getRow(iterator).values;
+  }
+
+  // create empty state in the same schema as our vuex state
   let state = {
     planningModules: {},
     informationTypes: {},
@@ -160,6 +211,7 @@ export async function importExcelSheet(file) {
     }
   };
 
+  // format modules
   for (let i = 0; i < modules.length; i++) {
     if (!modules[i]) continue;
     state.planningModules[modules[i].id] = {
@@ -170,13 +222,36 @@ export async function importExcelSheet(file) {
     };
   }
 
+  // format information types
   for (let i = 0; i < informations.length; i++) {
     if (!informations[i]) continue;
     state.informationTypes[informations[i].id] = {
       name: informations[i].name,
-      abbreviation: informations[i].abbreviation
+      abbreviation: informations[i].abbreviation,
+      global: informations[i].global
     };
   }
+
+  // format modeling modules
+  for (let i = 0; i < modeling.modules.length; i++) {
+    if (!modeling.modules[i]) continue;
+    state.modeling.modules[modeling.modules[i].id] = {
+      moduleId: modeling.modules[i].moduleId,
+      position: modeling.modules[i].position,
+      attributes: modeling.modules[i].attributes
+    };
+  }
+
+  // format modeling links
+  for (let i = 0; i < modeling.links.length; i++) {
+    if (!modeling.links[i]) continue;
+    state.modeling.links[modeling.links[i].id] = {
+      fromModule: modeling.links[i].fromModule,
+      toModule: modeling.links[i].toModule,
+      informationId: modeling.links[i].informationId
+    };
+  }
+
   return state;
 }
 
