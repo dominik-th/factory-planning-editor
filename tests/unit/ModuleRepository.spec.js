@@ -44,7 +44,7 @@ describe('ModuleRepository.vue', () => {
           outputInformation: []
         }
       }),
-      filteredPlanningModules: (filter) => {
+      filteredPlanningModules: () => {
         return () => [
           {
             item: {
@@ -63,7 +63,7 @@ describe('ModuleRepository.vue', () => {
               }
             ]
           }
-        ]
+        ];
       }
     };
 
