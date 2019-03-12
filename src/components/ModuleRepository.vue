@@ -24,7 +24,9 @@
           :indices="fuseIndices(key)"
         />
         <div class="component-info">
-          {{ $tc('modal.in_information', module.inputInformation.length) }}<br />{{ $tc('modal.out_information', module.outputInformation.length) }}
+          {{ $tc('modal.in_information', module.inputInformation.length) }}
+          <br />
+          {{ $tc('modal.out_information', module.outputInformation.length) }}
         </div>
       </drag>
     </div>

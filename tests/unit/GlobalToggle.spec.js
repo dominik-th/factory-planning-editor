@@ -7,7 +7,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(BootstrapVue);
 
-describe('ExportModal.vue', () => {
+describe('GlobalToggle.vue', () => {
   let state;
   let mutations;
   let store;

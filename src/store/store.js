@@ -60,7 +60,7 @@ export const mutations = {
   DELETE_INFORMATION(state, id) {
     Vue.delete(state.informationTypes, id);
   }
-}
+};
 
 export const actions = {
   addPlanningModule({ commit }, module) {
@@ -70,7 +70,7 @@ export const actions = {
   },
   async removePlanningModule({ commit, getters, dispatch, state }, id) {
     // remove selection if it is highlighted in the modeling
-    if (state.modeling.modules[state.modeling.selected].moduleId) {
+    if (getters.selectedModelingModule.moduleId) {
       commit('SELECT_MODELING_MODULE', null);
     }
     // remove all occurrences in the modeling
@@ -117,7 +117,7 @@ export const actions = {
       commit('UPDATE_MODELING_POSITION', { id, position });
     }
   }
-}
+};
 
 export const getters = {
   fullState(state) {
@@ -161,8 +161,7 @@ export const getters = {
   allInputInformation(state) {
     let inputInformation = new Set();
     for (let planningModuleId in state.planningModules) {
-      for (let id of state.planningModules[planningModuleId]
-        .inputInformation) {
+      for (let id of state.planningModules[planningModuleId].inputInformation) {
         inputInformation.add(id);
       }
     }
@@ -191,7 +190,7 @@ export const getters = {
       ele => state.informationTypes[ele].global
     );
   }
-}
+};
 
 export const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
