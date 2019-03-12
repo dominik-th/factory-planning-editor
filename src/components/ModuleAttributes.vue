@@ -116,12 +116,7 @@ export default {
     ...mapGetters({
       stateSelectedModelingModuleId: 'selectedModelingModuleId',
       stateSelectedModelingModule: 'selectedModelingModule'
-    }),
-    selectedModule: function() {
-      return this.$store.state.modeling.modules[
-        this.stateSelectedModelingModuleId
-      ];
-    }
+    })
   },
   watch: {
     stateSelectedModelingModule: {
