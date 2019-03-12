@@ -87,7 +87,7 @@ export default {
       // check if current query is in the (via props given) blacklist
       return (
         this.blacklist.findIndex(ele => {
-          return ele.toLowerCase() === this.query.trim().toLowerCase();
+          return ele.trim().toLowerCase() === this.query.trim().toLowerCase();
         }) >= 0
       );
     }
@@ -116,7 +116,7 @@ export default {
       if (!this.isBlacklisted) {
         // search if the query is identical to one of the information in pool
         for (let information of this.pool) {
-          if (information.name.toLowerCase() === this.query) {
+          if (information.name.toLowerCase() === this.query.toLowerCase()) {
             return this.$emit('add-information', information.id);
           }
         }
