@@ -31,7 +31,7 @@ Bei Ausführung der kompilierten Datei, direkt im Webbrowser (ohne Webserver), m
 ### Tests ausführen
 Die geschriebenen Tests können mit dem folgenden Befehl ausgeführt werden:
 ```
-npm run test
+npm run test:unit
 ```
 
 ### Lint
