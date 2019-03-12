@@ -85,7 +85,10 @@ export const actions = {
   // and clear the selection on the canvas
   async removePlanningModule({ commit, getters, dispatch, state }, id) {
     // remove selection if it is highlighted in the modeling
-    if (getters.selectedModelingModule.moduleId) {
+    if (
+      getters.selectedModelingModule &&
+      getters.selectedModelingModule.moduleId
+    ) {
       commit('SELECT_MODELING_MODULE', null);
     }
     // remove all occurrences in the modeling
