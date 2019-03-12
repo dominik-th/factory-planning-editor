@@ -9,6 +9,7 @@
       :ok-title="$t('generic.save')"
       :cancel-title="$t('generic.cancel')"
       @ok="save"
+      @hidden="clearModal"
       @show="clearInformationPicker"
     >
       <div>
@@ -191,6 +192,15 @@ export default {
     this.$root.$off('modal.createModule');
   },
   methods: {
+    clearModal: function() {
+      this.moduleId = null;
+      this.module = {
+        inputInformation: [],
+        outputInformation: [],
+        name: null,
+        abbreviation: null
+      };
+    },
     clearInformationPicker: function() {
       // the modal component itself is never unmounted so we clear previous data manually
       this.$refs.inputPicker.clear();
