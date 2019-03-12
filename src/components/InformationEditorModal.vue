@@ -138,4 +138,7 @@ export default {
   max-height: 500px;
   overflow-y: scroll;
 }
+.information-trash {
+  cursor: pointer;
+}
 </style>
