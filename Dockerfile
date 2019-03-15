@@ -5,6 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+RUN find ./dist -name "*.map" -type f -delete
 
 # production stage
 FROM nginx:1.15.7-alpine as production-stage
